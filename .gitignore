@@ -174,4 +174,4 @@ cython_debug/
 *.eml
 *.md.bak
 
-output/
+outputs/
