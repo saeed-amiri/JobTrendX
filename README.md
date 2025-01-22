@@ -16,7 +16,7 @@ The project is starting with looking at the StepStone's job ads and than it will
 # Structure:
     JobTrendX/
         ├── data                                # Store raw .eml files here
-        │   └── test.eml                        # Igonred
+        │   └── test.eml                        # Ignored
         ├── environment.yml                     # Conda
         ├── outputs                             # Hydra outputs. Ignored
         ├── README.md                           # Project overview and plan
