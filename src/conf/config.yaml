@@ -1,0 +1,12 @@
+defaults:
+  - _self_  
+  - defaults@defaults.hydra: hydra
+  - defaults@defaults.email_processing: email_processing
+  - defaults@defaults.paths: paths
+  - defaults@defaults.analysis: analysis
+  - defaults@defaults.visualization: visualization
+
+app:
+    name: "JobTrendX"
+    version: "0.1.0"
+    mode: "development"
