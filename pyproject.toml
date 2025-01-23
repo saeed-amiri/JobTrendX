@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jobtrendx"
+version = "0.1.0"
+description = "Job Trend Analysis"
+authors = [{ name = "Saeed Amiri" }]
+dependencies = [
+    "pytest",
+    "hydra-core",
+    "pandas",
+]
+
+[tool.setuptools]
+packages = ["jobtrendx"]
+package-dir = {"" = "src"}
