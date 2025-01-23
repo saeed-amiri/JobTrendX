@@ -23,10 +23,10 @@ def check_log_file(log_name: str) -> str:
         file for file in os.listdir('.') if re.match(fr'{log_name}\.\d+', file)
         ]
     if log_files:
-        pattern: str = fr'{log_name}\\.(\d+)'
+        pattern: str = fr'{log_name}\.(\d+)'
         counts: list[int] = [
-            int(re.search(pattern, file).group(1)) for file in log_files if
-            re.search(pattern, file)]
+            int(match.group(1)) for file in log_files if (
+                match := re.search(pattern, file))]
         count = max(counts) + 1
     else:
         count = 1
