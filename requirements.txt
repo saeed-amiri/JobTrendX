@@ -1,43 +1,8 @@
-antlr4-python3-runtime @ file:///home/conda/feedstock_root/build_artifacts/antlr-python-runtime-meta_1638309185939/work
-astroid==3.3.8
-beautifulsoup4==4.12.3
-contourpy @ file:///home/conda/feedstock_root/build_artifacts/contourpy_1731428302318/work
-cycler @ file:///home/conda/feedstock_root/build_artifacts/cycler_1733332471406/work
-dill==0.3.9
-fonttools @ file:///home/conda/feedstock_root/build_artifacts/fonttools_1737491214620/work
-hydra-core @ file:///home/conda/feedstock_root/build_artifacts/hydra-core_1736934708722/work
-IMAPClient==3.0.1
-iniconfig==2.0.0
-isort==5.13.2
--e git+https://github.com/saeed-amiri/JobTrendX.git@9e8dc82b4e3cb4843d9e34b2b50b3bfea70b15d4#egg=jobtrendx
-kiwisolver @ file:///home/conda/feedstock_root/build_artifacts/kiwisolver_1725459255340/work
-matplotlib==3.10.0
-mccabe==0.7.0
-munkres==1.1.4
-mypy==1.14.1
-mypy-extensions==1.0.0
-numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1737331041031/work/dist/numpy-2.2.2-cp313-cp313-linux_x86_64.whl#sha256=010290188fd9addcaca3d5f16bf5e00e3a89c7ad38f803db33494907f4cf9634
-omegaconf @ file:///home/conda/feedstock_root/build_artifacts/omegaconf_1670575376789/work
-packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1733203243479/work
-pandas @ file:///home/conda/feedstock_root/build_artifacts/pandas_1726878403859/work
-pillow @ file:///home/conda/feedstock_root/build_artifacts/pillow_1735929688808/work
-platformdirs==4.3.6
-pluggy==1.5.0
-pycodestyle==2.12.1
-pylint==3.3.3
-pyparsing @ file:///home/conda/feedstock_root/build_artifacts/pyparsing_1735698276679/work
-PySide6==6.8.1
-pytest==8.3.4
-python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1733215673016/work
-pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1706886791323/work
-PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1737454647378/work
-setuptools==75.1.0
-shiboken6==6.8.1
-six @ file:///home/conda/feedstock_root/build_artifacts/six_1733380938961/work
-soupsieve==2.6
-tomlkit==0.13.2
-tornado @ file:///home/conda/feedstock_root/build_artifacts/tornado_1732615881993/work
-typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1733188668063/work
-tzdata @ file:///home/conda/feedstock_root/build_artifacts/python-tzdata_1737541069190/work
-wheel==0.44.0
-wordcloud==1.9.4
+pytest
+hydra-core
+pandas
+numpy
+matplotlib
+pillow
+wordcloud
+PyYAML
