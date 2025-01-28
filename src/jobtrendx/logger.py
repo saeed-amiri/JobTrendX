@@ -12,7 +12,7 @@ import os
 import re
 import logging
 import datetime
-from .colors_text import TextColor as bcolors
+from . import colors_text as ct
 
 
 def check_log_file(log_name: str) -> str:
@@ -32,8 +32,8 @@ def check_log_file(log_name: str) -> str:
         count = 1
 
     new_log_file: str = fr'{log_name}.{count}'
-    print(f'{bcolors.OKBLUE}{__name__}: The log file `{new_log_file}` '
-          f'is prepared{bcolors.ENDC}')
+    print(f'{ct.OKBLUE}{__name__}: The log file `{new_log_file}` '
+          f'is prepared{ct.ENDC}')
     return new_log_file
 
 
