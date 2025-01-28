@@ -14,3 +14,11 @@ def check_directory(directory: str) -> None | bool:
               f"exists, exit!{ct.ENDC}\n")
         sys.exit(1)
     return True
+
+
+def check_dir_not_empty(directory: str) -> None | bool:
+    "Check if the directory is not empty"
+    if not any(Path(directory).iterdir()):
+        print(f"{ct.FAIL}Directory `{directory}` is empty, exit!{ct.ENDC}\n")
+        sys.exit(1)
+    return True
