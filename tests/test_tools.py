@@ -13,13 +13,13 @@ from jobtrendx.tools import check_directory
 
 
 def test_check_directory_exists() -> None:
-    "Test if the check_directory function exists"
+    "Test if the check_directory returns True correctly"
     with patch.object(Path, 'exists', return_value=True):
         assert check_directory('test_dir') is True
 
 
 def test_check_directory_not_exists() -> None:
-    "Test if the check_directory function exists"
+    "Test if the check_directory exit correctly"
     with patch.object(Path, 'exists', return_value=False):
         with pytest.raises(SystemExit) as exit_info:
             check_directory('test_dir')
