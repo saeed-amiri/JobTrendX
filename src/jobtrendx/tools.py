@@ -26,4 +26,24 @@ def check_dir_not_empty(directory: str) -> None | bool:
 
 def returns_all_files_in_dir(directory: str) -> list[str]:
     """Return all files in the directory"""
-    return [file.name for file in Path(directory).iterdir() if file.is_file()]
+    return [
+        file.name
+        for file in Path(directory).iterdir()
+        if file.is_file()
+        ]
+
+
+def returns_eml_files(eml_name_list: list[str],
+                      extension: str = 'eml'
+                      ) -> list[str]:
+    """Filter and return the file names that match the
+    specified extension."""
+    # Ensure the extension has a leading dot and convert it to lower case.
+    ext = f".{extension.lstrip('.')}".lower()
+
+    # Filter files using pathlib to check file extension.
+    return [
+        file
+        for file in eml_name_list
+        if Path(file).suffix.lower() == ext
+        ]
