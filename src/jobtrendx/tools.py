@@ -22,3 +22,8 @@ def check_dir_not_empty(directory: str) -> None | bool:
         print(f"{ct.FAIL}Directory `{directory}` is empty, exit!{ct.ENDC}\n")
         sys.exit(1)
     return True
+
+
+def returns_all_files_in_dir(directory: str) -> list[str]:
+    """Return all files in the directory"""
+    return [file.name for file in Path(directory).iterdir() if file.is_file()]
