@@ -27,6 +27,7 @@ class EmailProcessor:
         tools.check_directory(self.email_dir)
         tools.check_dir_not_empty(self.email_dir)
         all_files: list[str] = tools.returns_all_files_in_dir(self.email_dir)
+        eml_files: list[str] = tools.returns_eml_files(all_files, 'eml')
 
 
 if __name__ == "__main__":
