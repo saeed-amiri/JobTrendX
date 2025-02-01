@@ -10,7 +10,7 @@ from unittest.mock import patch
 import pytest
 
 from jobtrendx.tools import check_directory, check_dir_not_empty, \
-    returns_all_files_in_dir
+    returns_all_files_in_dir, returns_eml_files
 
 
 def test_check_directory_exists() -> None:
@@ -53,3 +53,14 @@ def test_returns_all_files_in_dir() -> None:
             # Adjust expected value to a list of strings because the
             # function returns file names.
             assert returns_all_files_in_dir('test_dir') == ['email1.eml']
+
+
+def test_returns_eml_files() -> None:
+    """
+    Test that returns_eml_files correctly filters file names by extension.
+    """
+    fake_files = ['email1.eml', 'not_email.txt']
+    fake_extension = 'eml'
+    expected = ['email1.eml']
+
+    assert returns_eml_files(fake_files, fake_extension) == expected
