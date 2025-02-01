@@ -9,7 +9,8 @@ from unittest.mock import patch
 
 import pytest
 
-from jobtrendx.tools import check_directory, check_dir_not_empty
+from jobtrendx.tools import check_directory, check_dir_not_empty, \
+    returns_all_files_in_dir
 
 
 def test_check_directory_exists() -> None:
@@ -40,3 +41,15 @@ def test_check_dir_not_empty_not_contains() -> None:
             check_dir_not_empty('test_dir')
         assert exit_info.type == SystemExit
         assert exit_info.value.code == 1
+
+
+def test_returns_all_files_in_dir() -> None:
+    """Test if it returns the files."""
+    fake_file = Path('email1.eml')
+    with patch.object(Path, 'iterdir', return_value=[fake_file]):
+        # Patch is_file on the Path class so that f.is_file()
+        # returns True for fake_file.
+        with patch.object(Path, 'is_file', return_value=True):
+            # Adjust expected value to a list of strings because the
+            # function returns file names.
+            assert returns_all_files_in_dir('test_dir') == ['email1.eml']
