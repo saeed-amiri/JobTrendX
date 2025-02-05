@@ -10,7 +10,7 @@ from unittest.mock import patch
 import pytest
 
 from jobtrendx.tools import check_directory, check_dir_not_empty, \
-    returns_all_files_in_dir, returns_eml_files
+    returns_all_files_in_dir, returns_eml_files, returns_eml_path
 
 
 def test_check_directory_exists() -> None:
@@ -64,3 +64,23 @@ def test_returns_eml_files() -> None:
     expected = ['email1.eml']
 
     assert returns_eml_files(fake_files, fake_extension) == expected
+
+
+def test_returns_eml_path() -> None:
+    """Test returns_eml_path can returns correct file path"""
+    fake_files = ['email1.eml', 'email2.eml']
+    parent_path = 'emails'
+    expected = [Path('emails/email1.eml'), Path('emails/email2.eml')]
+    result = returns_eml_path(parent_path=parent_path, eml_list=fake_files)
+
+    assert result == expected, f"Expected {expected}, but got {result}"
+
+
+def test_returns_eml_path_output_type():
+    """Ensure that the function returns a list of Path objects."""
+    parent = "emails"
+    eml_files = ["file1.eml", "file2.eml"]
+    result = returns_eml_path(parent, eml_files)
+
+    assert all(isinstance(path, Path) for path in result), \
+        "Not all elements are Path objects"
