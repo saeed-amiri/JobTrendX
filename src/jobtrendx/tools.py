@@ -4,6 +4,11 @@ tools for the main modules
 
 import sys
 from pathlib import Path
+import email
+from email import policy
+
+import pandas as pd
+
 from . import colors_text as ct
 
 
@@ -47,3 +52,10 @@ def returns_eml_files(eml_name_list: list[str],
         for file in eml_name_list
         if Path(file).suffix.lower() == ext
         ]
+
+
+def returns_eml_path(parent_path: str,
+                     eml_list: list[str]
+                     ) -> list[str]:
+    """make a real path of the files"""
+    return [Path(parent_path) / file for file in eml_list]
