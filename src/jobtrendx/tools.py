@@ -11,6 +11,16 @@ from email import policy
 from . import colors_text as ct
 
 
+__all__ = [
+    "check_directory",
+    "check_dir_not_empty",
+    "returns_all_files_in_dir",
+    "returns_eml_files",
+    "returns_eml_path",
+    "returns_email_contant"
+]
+
+
 def check_directory(directory: str) -> None | bool:
     "Check if the directory exists"
     if not Path.exists(Path(directory)):
