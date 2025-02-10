@@ -33,7 +33,6 @@ def test_check_dir_not_empty_contains() -> None:
     with patch.object(Path, 'iterdir', return_value=[1, 2, 3]):
         assert check_dir_not_empty('test_dir')
 
-
 def test_check_dir_not_empty_not_contains() -> None:
     """Test if the check_dir_not_empty knows dir is empty"""
     with patch.object(Path, 'iterdir', return_value=[]):
