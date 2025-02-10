@@ -16,6 +16,7 @@ class EmailProcessor:
     """
     Class to process emails
     """
+    emails_dict: dict[Path, "email.message.EmailMessage"]
 
     def __init__(self,
                  email_dir: str,
@@ -24,7 +25,7 @@ class EmailProcessor:
         self.email_dir = email_dir
         self.read_email()
 
-    def read_email(self) -> str:
+    def read_email(self) -> None:
         """
         Read the email file and extract the body of the email
         """
@@ -34,8 +35,7 @@ class EmailProcessor:
         eml_files: list[str] = tools.returns_eml_files(all_files, 'eml')
         eml_paths: list[Path] = tools.returns_eml_path(self.email_dir,
                                                        eml_files)
-        emails_dict: dict[Path, "email.message.EmailMessage"] = \
-            tools.returns_email_contant(eml_paths=eml_paths)
+        self.emails_dict = tools.returns_email_contant(eml_paths=eml_paths)
 
 
 if __name__ == "__main__":
