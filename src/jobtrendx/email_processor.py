@@ -24,6 +24,7 @@ class EmailProcessor:
                  log: logger.logging.Logger
                  ) -> None:
         self.eml_dir = eml_dir
+        self.eml_dict = {}  # Initialize empty dictionary
         self.read_eml()
         self.log_info(log)
 
@@ -31,19 +32,23 @@ class EmailProcessor:
         """
         Read the email file and extract the body of the email
         """
+        # Validate directory
         tools.check_directory(self.eml_dir)
         tools.check_dir_not_empty(self.eml_dir)
+
+        # Get list of all .eml files
         all_files: list[str] = tools.returns_all_files_in_dir(self.eml_dir)
         eml_files: list[str] = tools.returns_eml_files(all_files, 'eml')
-        eml_paths: list[Path] = tools.returns_eml_path(self.eml_dir,
-                                                       eml_files)
+        eml_paths: list[Path] = tools.returns_eml_path(self.eml_dir, eml_files)
+
+        # Get email content
         self.eml_dict = tools.returns_email_contant(eml_paths=eml_paths)
 
     def log_info(self,
                  log: logger.logging.Logger
                  ) -> None:
         """log the info into log file"""
-        log.info(f'The numeber of emails are: `{len(self.eml_dict)}`')
+        log.info(f'Processed {len(self.eml_dict)} emails successfully.')
 
 
 if __name__ == "__main__":
