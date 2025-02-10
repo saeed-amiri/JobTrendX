@@ -7,7 +7,6 @@ from pathlib import Path
 import email
 from email import policy
 
-import pandas as pd
 
 from . import colors_text as ct
 
@@ -56,6 +55,18 @@ def returns_eml_files(eml_name_list: list[str],
 
 def returns_eml_path(parent_path: str,
                      eml_list: list[str]
-                     ) -> list[str]:
+                     ) -> list[Path]:
     """make a real path of the files"""
     return [Path(parent_path) / file for file in eml_list]
+
+
+def returns_email_contant(eml_paths: list[Path]
+                          ) -> dict[Path, "email.message.EmailMessage"]:
+    """Read the emails and return the contents in a DataFrame"""
+    eml_dict: dict[Path, "email.message.EmailMessage"] = {}
+    for file_path in eml_paths:
+        with open(file_path, "r", encoding="utf-8") as eml:
+            msg = email.message_from_file(eml, policy=policy.default)
+        eml_dict[file_path] = msg
+        del msg
+    return eml_dict
