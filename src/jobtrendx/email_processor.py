@@ -9,13 +9,14 @@ import email
 
 from . import tools
 from . import logger
-from . import colors_text as ct
 
 
 class EmailProcessor:
     """
     Class to process emails
     """
+    __slots__ = ['email_dir', 'emails_dict']
+
     emails_dict: dict[Path, "email.message.EmailMessage"]
 
     def __init__(self,
@@ -24,6 +25,7 @@ class EmailProcessor:
                  ) -> None:
         self.email_dir = email_dir
         self.read_email()
+        self.log_info(log)
 
     def read_email(self) -> None:
         """
@@ -36,6 +38,12 @@ class EmailProcessor:
         eml_paths: list[Path] = tools.returns_eml_path(self.email_dir,
                                                        eml_files)
         self.emails_dict = tools.returns_email_contant(eml_paths=eml_paths)
+
+    def log_info(self,
+                 log: logger.logging.Logger
+                 ) -> None:
+        """log the info into log file"""
+        log.info(f'The numeber of emails are: `{len(self.emails_dict)}`')
 
 
 if __name__ == "__main__":
