@@ -15,37 +15,37 @@ class EmailProcessor:
     """
     Class to process emails
     """
-    __slots__ = ['email_dir', 'emails_dict']
+    __slots__ = ['eml_dir', 'eml_dict']
 
-    emails_dict: dict[Path, "email.message.EmailMessage"]
+    eml_dict: dict[Path, "email.message.EmailMessage"]
 
     def __init__(self,
-                 email_dir: str,
+                 eml_dir: str,
                  log: logger.logging.Logger
                  ) -> None:
-        self.email_dir = email_dir
-        self.read_email()
+        self.eml_dir = eml_dir
+        self.read_eml()
         self.log_info(log)
 
-    def read_email(self) -> None:
+    def read_eml(self) -> None:
         """
         Read the email file and extract the body of the email
         """
-        tools.check_directory(self.email_dir)
-        tools.check_dir_not_empty(self.email_dir)
-        all_files: list[str] = tools.returns_all_files_in_dir(self.email_dir)
+        tools.check_directory(self.eml_dir)
+        tools.check_dir_not_empty(self.eml_dir)
+        all_files: list[str] = tools.returns_all_files_in_dir(self.eml_dir)
         eml_files: list[str] = tools.returns_eml_files(all_files, 'eml')
-        eml_paths: list[Path] = tools.returns_eml_path(self.email_dir,
+        eml_paths: list[Path] = tools.returns_eml_path(self.eml_dir,
                                                        eml_files)
-        self.emails_dict = tools.returns_email_contant(eml_paths=eml_paths)
+        self.eml_dict = tools.returns_email_contant(eml_paths=eml_paths)
 
     def log_info(self,
                  log: logger.logging.Logger
                  ) -> None:
         """log the info into log file"""
-        log.info(f'The numeber of emails are: `{len(self.emails_dict)}`')
+        log.info(f'The numeber of emails are: `{len(self.eml_dict)}`')
 
 
 if __name__ == "__main__":
-    EmailProcessor(email_dir=sys.argv[1],
+    EmailProcessor(eml_dir=sys.argv[1],
                    log=logger.setup_logger("email_processor.log"))
