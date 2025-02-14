@@ -7,10 +7,12 @@ Testing the tools module
 from pathlib import Path
 from unittest.mock import patch
 
+from email.message import EmailMessage
 import pytest
 
 from jobtrendx.tools import check_directory, check_dir_not_empty, \
-    returns_all_files_in_dir, returns_eml_files, returns_eml_path
+    returns_all_files_in_dir, returns_eml_files, returns_eml_path, \
+    _extract_attachments
 
 
 def test_check_directory_exists() -> None:
@@ -32,6 +34,7 @@ def test_check_dir_not_empty_contains() -> None:
     """Test if the check_dir_not_empty knows dir is not empty"""
     with patch.object(Path, 'iterdir', return_value=[1, 2, 3]):
         assert check_dir_not_empty('test_dir')
+
 
 def test_check_dir_not_empty_not_contains() -> None:
     """Test if the check_dir_not_empty knows dir is empty"""
@@ -83,3 +86,58 @@ def test_returns_eml_path_output_type():
 
     assert all(isinstance(path, Path) for path in result), \
         "Not all elements are Path objects"
+
+
+def test_extract_attachments_no_attachments() -> None:
+    """Test _extract_attachments with no attachments in the email."""
+    email_obj = EmailMessage()
+    email_obj.set_content("This is a test email with no attachments.")
+
+    assert not _extract_attachments(email_obj)
+
+
+def test_extract_attachments_with_attachments() -> None:
+    """Test _extract_attachments with attachments in the email."""
+    email_obj = EmailMessage()
+
+    # Directly define the email as multipart/mixed
+    email_obj.set_type("multipart/mixed")
+
+    # Create a mock attachment part
+    attachment_part = EmailMessage()
+    attachment_part.add_attachment(b"dummy content",
+                                   maintype="application",
+                                   subtype="octet-stream",
+                                   filename="test.txt")
+
+    # Attach, email_obj is multipart
+    email_obj.attach(attachment_part)
+
+    assert _extract_attachments(email_obj) == ["test.txt"]
+
+
+def test_extract_attachments_mixed_content() -> None:
+    """Test _extract_attachments with mixed content in the email."""
+
+    email_obj = EmailMessage()
+    email_obj["Subject"] = "Test Email with Mixed Content"
+    email_obj["From"] = "test@example.com"
+    email_obj["To"] = "receiver@example.com"
+
+    email_obj.set_type("multipart/mixed")
+
+    # Create a mock text part
+    text_part = EmailMessage()
+    text_part.set_content("This is a text part.")
+
+    # Create a mock attachment part
+    attachment_part = EmailMessage()
+    attachment_part.add_attachment(b"dummy content",
+                                   maintype="application",
+                                   subtype="octet-stream",
+                                   filename="test.txt")
+
+    email_obj.attach(text_part)
+    email_obj.attach(attachment_part)
+
+    assert _extract_attachments(email_obj) == ["test.txt"]
