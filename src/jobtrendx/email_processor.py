@@ -48,7 +48,8 @@ class EmailProcessor:
                  log: logger.logging.Logger
                  ) -> None:
         """log the info into log file"""
-        log.info(f'Processed {len(self.eml_dict)} emails successfully.')
+        log.info(f'EmailProcessor: Processed {len(self.eml_dict)} '
+                 'emails successfully.')
 
 
 if __name__ == "__main__":
