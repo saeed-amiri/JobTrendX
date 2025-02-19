@@ -3,6 +3,7 @@
 import typing
 from pathlib import Path
 
+import pandas as pd
 import email
 from email.message import EmailMessage
 
@@ -27,3 +28,4 @@ class AnalysisEmails:
         """initiate the analysis"""
         attchments: dict[Path, dict[str, typing.Any]] = \
             tools.extract_email_detail(eml_dict)
+        eml_df: pd.DataFrame = tools.eml_to_dataframe(attchments)
