@@ -1,5 +1,6 @@
 """Analysis the email contents and order them in tabels"""
 
+import typing
 from pathlib import Path
 
 import email
@@ -24,4 +25,5 @@ class AnalysisEmails:
                          eml_dict: dict[Path, "email.message.EmailMesagge"],
                          ) -> None:
         """initiate the analysis"""
-        tools.extract_email_detail(eml_dict)
+        attchments: dict[Path, dict[str, typing.Any]] = \
+            tools.extract_email_detail(eml_dict)
