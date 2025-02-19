@@ -164,7 +164,10 @@ def eml_to_dataframe(eml_data: dict[Path, dict[str, typing.Any]]
         for path, detail in eml_data.items()
     ]
     df: pd.DataFrame = pd.DataFrame(flat_data)
-    df["body"] = df["body"].apply(_clean_eml_body)
+    try:
+        df["body"] = df["body"].apply(_clean_eml_body)
+    except KeyError:
+        pass
 
     return df
 
