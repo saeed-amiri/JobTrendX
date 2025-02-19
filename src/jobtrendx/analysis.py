@@ -1,7 +1,9 @@
 """Analysis the email contents and order them in tabels"""
 
+import typing
 from pathlib import Path
 
+import pandas as pd
 import email
 from email.message import EmailMessage
 
@@ -24,4 +26,6 @@ class AnalysisEmails:
                          eml_dict: dict[Path, "email.message.EmailMesagge"],
                          ) -> None:
         """initiate the analysis"""
-        tools.extract_email_detail(eml_dict)
+        attchments: dict[Path, dict[str, typing.Any]] = \
+            tools.extract_email_detail(eml_dict)
+        eml_df: pd.DataFrame = tools.eml_to_dataframe(attchments)
