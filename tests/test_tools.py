@@ -12,7 +12,7 @@ import pytest
 
 from jobtrendx.tools import check_directory, check_dir_not_empty, \
     returns_all_files_in_dir, returns_eml_files, returns_eml_path, \
-    _extract_attachments
+    _extract_attachments, _clean_eml_body
 
 
 def test_check_directory_exists() -> None:
@@ -141,3 +141,10 @@ def test_extract_attachments_mixed_content() -> None:
     email_obj.attach(attachment_part)
 
     assert _extract_attachments(email_obj) == ["test.txt"]
+
+
+def test_clean_eml_body() -> None:
+    """Test if the input text cleand correctly"""
+    text: str = \
+        " Hello\xa0world! Visit https://example.com for more info.  "
+    assert _clean_eml_body(text) == "Hello world! Visit [URL] for more info."
