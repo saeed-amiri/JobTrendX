@@ -10,9 +10,11 @@ from unittest.mock import patch
 from email.message import EmailMessage
 import pytest
 
+import pandas as pd
+
 from jobtrendx.tools import check_directory, check_dir_not_empty, \
     returns_all_files_in_dir, returns_eml_files, returns_eml_path, \
-    _extract_attachments, _clean_eml_body
+    _extract_attachments, _clean_eml_body, eml_to_dataframe
 
 
 def test_check_directory_exists() -> None:
@@ -148,3 +150,51 @@ def test_clean_eml_body() -> None:
     text: str = \
         " Hello\xa0world! Visit https://example.com for more info.  "
     assert _clean_eml_body(text) == "Hello world! Visit [URL] for more info."
+
+
+def test_eml_to_dataframe_valid_data() -> None:
+    """Test eml_to_dataframe with valid email dictionary."""
+    eml_data = {
+        Path("emails/email1.eml"): {
+            "subject": "Job Offer",
+            "from": "hr@company.com",
+            "to": "you@example.com",
+            "date": "Tue, 13 Feb 2024",
+            "body": "We are pleased to offer you a position.",
+            "attachments": ["contract.pdf"]
+        },
+        Path("emails/email2.eml"): {
+            "subject": "Project Update",
+            "from": "manager@example.com",
+            "to": "team@example.com",
+            "date": "Wed, 14 Feb 2024",
+            "body": "Here is the latest project update.",
+            "attachments": []
+        }
+    }
+
+    df: pd.DataFrame = eml_to_dataframe(eml_data)
+
+    # Check DataFrame shape
+    assert df.shape == (2, 7)
+
+    # Ensure correct columns exist
+    expected_columns: set[str] = {
+        "file_path", "subject", "from", "to", "date", "body", "attachments"}
+    assert set(df.columns) == expected_columns
+
+    # Ensure body text was processed
+    assert isinstance(df.at[0, "body"], str)
+    assert "offer you a position" in df.at[0, "body"]
+
+    # Ensure attachments are stored correctly
+    assert isinstance(df.at[0, "attachments"], list)
+    assert df.at[0, "attachments"] == ["contract.pdf"]
+
+
+def test_eml_to_dataframe_empty_dict() -> None:
+    """Test eml_to_dataframe with an empty dictionary (edge case)."""
+    df = eml_to_dataframe({})
+
+    # Should return an empty DataFrame with correct columns
+    assert df.empty
