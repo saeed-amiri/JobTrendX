@@ -2,6 +2,7 @@
 tools for the main modules
 """
 
+import re
 import sys
 import typing
 from pathlib import Path
@@ -9,6 +10,7 @@ import email
 from email import policy
 from email.message import EmailMessage
 
+import pandas as pd
 
 from . import colors_text as ct
 
@@ -21,6 +23,7 @@ __all__ = [
     "returns_eml_path",
     "returns_email_contant",
     "extract_email_detail",
+    "eml_to_dataframe",
 ]
 
 
@@ -151,3 +154,29 @@ def _extract_attachments(email_obj: EmailMessage) -> list[str | None]:
             attchments.append(part.get_filename())
 
     return attchments
+
+
+def eml_to_dataframe(eml_data: dict[Path, dict[str, typing.Any]]
+                     ) -> pd.DataFrame:
+    """Flatten the dict of dict and convert to df"""
+    flat_data: list[dict[str, typing.Any]] = [
+        {"file_path": str(path), **detail}
+        for path, detail in eml_data.items()
+    ]
+    df: pd.DataFrame = pd.DataFrame(flat_data)
+    df["body"] = df["body"].apply(_clean_eml_body)
+
+    return df
+
+
+def _clean_eml_body(text: str) -> str:
+    """
+    Remove the extra spaces, new lines, and the encoding
+    artifcats
+    """
+    if not text:
+        return ""
+    text = text.strip()
+    text = text.replace("\xa0", " ")  # Replace non-breaking spaces
+    text = re.sub(r"http\S+", "[URL]", text)  # Replace links
+    return text
