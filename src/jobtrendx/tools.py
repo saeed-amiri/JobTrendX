@@ -9,6 +9,7 @@ from pathlib import Path
 import email
 from email import policy
 from email.message import EmailMessage
+from langdetect import detect
 
 import pandas as pd
 
@@ -24,6 +25,7 @@ __all__ = [
     "returns_email_contant",
     "extract_email_detail",
     "eml_to_dataframe",
+    "detect_language",
 ]
 
 
@@ -183,3 +185,31 @@ def _clean_eml_body(text: str) -> str:
     text = text.replace("\xa0", " ")  # Replace non-breaking spaces
     text = re.sub(r"http\S+", "[URL]", text)  # Replace links
     return text
+
+
+def detect_language(bodies: pd.Series) -> pd.Series:
+    """Get emails languages"""
+    return bodies.apply(_detect_single_language)
+
+
+def _detect_single_language(text: str) -> str:
+    """
+    Detect the language of the given text,
+    If it failed to detect it will return unknown,
+    For now only En and De is considered
+    """
+    try:
+        lang: str = detect(text)
+        return _check_language(lang)
+    except Exception as err:
+        print(f'Warning: Language detection faild! error: `{err}`\n')
+        return "unknown"
+
+
+def _check_language(lang: str) -> str:
+    """
+    Check if the detected language is one of English (en)
+    or German (de), otherwise return "unknown"
+    """
+    allowed_languages: set[str] = {"en", "de"}
+    return lang if lang in allowed_languages else "unknown"
