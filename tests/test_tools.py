@@ -14,7 +14,8 @@ import pandas as pd
 
 from jobtrendx.tools import check_directory, check_dir_not_empty, \
     returns_all_files_in_dir, returns_eml_files, returns_eml_path, \
-    _extract_attachments, _clean_eml_body, eml_to_dataframe
+    _extract_attachments, _clean_eml_body, eml_to_dataframe, detect_language, \
+    _detect_single_language, _check_language
 
 
 def test_check_directory_exists() -> None:
@@ -198,3 +199,28 @@ def test_eml_to_dataframe_empty_dict() -> None:
 
     # Should return an empty DataFrame with correct columns
     assert df.empty
+
+
+def test_detect_language() -> None:
+    """test it with a pd.Series"""
+    bodies = pd.Series(
+        ["Hallo, wie geht's?", "Hello, how are you?", "Bonjour!", ""])
+    expected = pd.Series(["de", "en", "unknown", "unknown"])
+
+    assert detect_language(bodies).equals(expected)
+
+
+def test_detect_single_language() -> None:
+    """test with valid and invalid text"""
+    assert _detect_single_language("Das ist ein Test.") == "de"
+    assert _detect_single_language("This is a test.") == "en"
+    assert _detect_single_language("Bonjour tout le monde!") == "unknown"
+    assert _detect_single_language("") == "unknown"
+
+
+def test_check_language() -> None:
+    """check to the language is valid"""
+    assert _check_language("en") == "en"
+    assert _check_language("de") == "de"
+    assert _check_language("fr") == "unknown"
+    assert _check_language("es") == "unknown"
