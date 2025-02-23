@@ -29,3 +29,4 @@ class AnalysisEmails:
         attchments: dict[Path, dict[str, typing.Any]] = \
             tools.extract_email_detail(eml_dict)
         eml_df: pd.DataFrame = tools.eml_to_dataframe(attchments)
+        eml_df.loc[:, 'eml_lang'] = tools.detect_language(eml_df['body'])
