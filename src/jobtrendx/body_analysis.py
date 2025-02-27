@@ -36,42 +36,7 @@ def split_body(bodies: pd.DataFrame,
     for _, row in bodies.iterrows():
         lang: str = row['eml_lang']
         body: str = row['body']
-        # print(_get_sections(body, sections[lang]))
-
-    sections_en = {
-        "job_title": "Top Match",
-        "company": "Who we are",
-        "requirements": "Your knowledge/experience",
-        "benefits": "We offer"
-    }
-
-    body_text = """Top Match
-        Data Scientist (m/f/d) AI Specialist
-
-        Lloyds Bank - Bank of Scotland
-        Berlin
-        251-500 employees
-        Permanent position
-        Full-time, Part-time, Remote possible
-        Estimated Salary: $80,000 - $110,000 per year
-
-        Who we are
-        Lloyds Bank GmbH and its brands Bank of Scotland and Lloyds Bank
-        have won over 1 million satisfied customers in recent years...
-
-        Your knowledge/experience
-        Educated to a degree level in Computer Science, Data Science...
-
-        We offer
-        An inclusive and diverse work environment...
-    """
-
-    sections: dict[str, str] = _get_sections(body_text, sections_en)
-
-    
-    sections: dict[str, str] = _get_sections(body_text, sections_en)
-    print(sections)
-
+        print(_get_sections(body, sections[lang]))
 
 def _get_sections(body: str,
                   sections: dict[str, str]
