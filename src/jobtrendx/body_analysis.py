@@ -18,3 +18,18 @@ and return them.
 26 Feb. 2025
 Samiri
 """
+
+import re
+
+import pandas as pd
+
+__all__ = [
+    'split_body'
+]
+
+
+def split_body(bodies: pd.DataFrame,
+               sections: dict[str, list[str]]
+               ) -> None:
+    """splitting the body of the emails based on the sections
+    titles"""
