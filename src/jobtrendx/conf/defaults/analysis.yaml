@@ -1,6 +1,13 @@
 sections:
-  job_title: ["Beliebter Job", "Top Treffer"]
-  company_info: ["Wer wir sind", "Lloyds Bank GmbH and its brands"]
-  job_description: ["Das wird dein Job", "Your tasks"]
-  requirements: ["Das bringst du mit", "Your knowledge/experience"]
-  offer: ["Das bieten wir dir", "We offer"]
+  de:
+    job_title: "Beliebter Job"
+    company_info: "Wer wir sind"
+    job_description: "Das wird dein Job"
+    requirements: "Das bringst du mit"
+    offer: "Das bieten wir dir"
+  en:
+    job_title: "Top Treffer"
+    company_info: "Lloyds Bank GmbH and its brands"
+    job_description: "Your tasks"
+    requirements: "Your knowledge/experience"
+    offer: "We offer"
