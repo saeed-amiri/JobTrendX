@@ -74,3 +74,4 @@ class BodyEmailAnalayer:
 
     def split_bodies(self) -> None:
         """split the body sections and return them"""
+        body_analysis.split_body(self.bodies, self.cfg_anlz.sections)
