@@ -2,15 +2,15 @@
 
 import typing
 from pathlib import Path
+import email
 
 import pandas as pd
-import email
-from email.message import EmailMessage
 
 from omegaconf import DictConfig
 
 from . import logger
 from . import tools
+from . import body_analysis
 
 
 class AnalysisEmails:
