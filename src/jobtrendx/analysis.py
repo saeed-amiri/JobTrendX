@@ -16,7 +16,7 @@ from . import body_analysis
 class AnalysisEmails:
     """Analysing the emails"""
 
-    __slots__ = []
+    __slots__: list[str] = []
 
     def __init__(self,
                  eml_dict: dict[Path, "email.message.EmailMesagge"],
