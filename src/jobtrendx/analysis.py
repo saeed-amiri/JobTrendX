@@ -7,6 +7,8 @@ import pandas as pd
 import email
 from email.message import EmailMessage
 
+from omegaconf import DictConfig
+
 from . import logger
 from . import tools
 
@@ -18,12 +20,14 @@ class AnalysisEmails:
 
     def __init__(self,
                  eml_dict: dict[Path, "email.message.EmailMesagge"],
+                 cfg: DictConfig,
                  log: logger.logging.Logger
                  ) -> None:
-        self.analysing_object(eml_dict)
+        self.analysing_object(eml_dict, cfg)
 
     def analysing_object(self,
                          eml_dict: dict[Path, "email.message.EmailMesagge"],
+                         cfg: DictConfig
                          ) -> None:
         """initiate the analysis"""
         attchments: dict[Path, dict[str, typing.Any]] = \
