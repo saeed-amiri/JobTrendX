@@ -62,7 +62,7 @@ class BodyEmailAnalayer:
                  cfg: DictConfig,
                  log: logger.logging.Logger
                  ) -> None:
-        self.bodies = eml_df[['body', 'eml_lang']]
+        self.bodies = eml_df[['file_path', 'body', 'eml_lang']]
         self.cfg_anlz = cfg.defaults.analysis
         self.process(log)
 
