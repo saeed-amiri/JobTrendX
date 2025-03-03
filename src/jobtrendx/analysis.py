@@ -59,19 +59,19 @@ class BodyEmailAnalayer:
     def __init__(self,
                  eml_df: pd.DataFrame,
                  cfg: DictConfig,
-                 log: logger.logging.Logger
                  ) -> None:
         self.bodies = eml_df[['file_path', 'body', 'eml_lang']]
         self.cfg_anlz = cfg.defaults.analysis
-        self.process(log)
 
     def process(self,
                 log: logger.logging.Logger
                 ) -> None:
         """spliting the body and extracting the info from it"""
+        log.info("Processing email bodies...")
         sections: dict[str, dict[str, str]] = self.split_bodies()
 
-    def split_bodies(self) -> dict[str, dict[str, str]]:
-        """split the body sections and return them"""
-
+    def split_bodies(self) -> pd.DataFrame:
+        """split the body sections and return them
+        returns the output as DataFrame. FilePaths are the index
+        """
         return body_analysis.split_body(self.bodies, self.cfg_anlz.sections)
