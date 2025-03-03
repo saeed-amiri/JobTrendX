@@ -70,8 +70,9 @@ class BodyEmailAnalayer:
                 log: logger.logging.Logger
                 ) -> None:
         """spliting the body and extracting the info from it"""
-        self.split_bodies()
+        sections: dict[str, dict[str, str]] = self.split_bodies()
 
-    def split_bodies(self) -> None:
+    def split_bodies(self) -> dict[str, dict[str, str]]:
         """split the body sections and return them"""
-        body_analysis.split_body(self.bodies, self.cfg_anlz.sections)
+
+        return body_analysis.split_body(self.bodies, self.cfg_anlz.sections)
