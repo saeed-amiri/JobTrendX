@@ -24,7 +24,8 @@ import re
 import pandas as pd
 
 __all__ = [
-    'split_body'
+    'split_body',
+    'analysis_job_title',
 ]
 
 
@@ -78,3 +79,45 @@ def _get_sections(body: str,
             section_data[current_key] += part + "\n"
 
     return section_data
+
+
+def analysis_job_title(job_title: pd.DataFrame
+                       ) -> dict[str, pd.DataFrame]:
+    """Analyze job titles based on language and return results."""
+
+    # Map language codes to their processing functions
+    lang_processors = {
+        "en": _analz_job_titles_en,
+        "de": _analz_job_titles_de,
+        # Add more languages here if needed
+    }
+
+    splited_df = _split_by_lang(job_title)  # Split job titles by language
+    results = {}
+
+    for lang, df in splited_df.items():
+        if lang in lang_processors:
+            results[lang] = lang_processors[lang](df)
+        else:
+            print(f"Warning: No processor for language '{lang}'")
+
+    return results
+
+
+def _split_by_lang(df_in: pd.DataFrame
+                   ) -> dict[str, pd.DataFrame]:
+    """split the dataframes based on the numbers of the langs"""
+    return {
+        lang: df_in[df_in["eml_lang"] == lang] for
+        lang in df_in["eml_lang"].unique()
+        }
+
+
+def _analz_job_titles_en(job_title_en: pd.DataFrame
+                         ) -> pd.DataFrame:
+    """analyzing the job titles in English"""
+
+
+def _analz_job_titles_de(job_title_de: pd.DataFrame
+                         ) -> pd.DataFrame:
+    """analyzing the job titles in German"""
