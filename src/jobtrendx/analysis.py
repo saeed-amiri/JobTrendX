@@ -49,7 +49,16 @@ class AnalysisEmails:
 
 
 class BodyEmailAnalayer:
-    """analysing the emails' body"""
+    """analysing the emails' body
+    "body" sections are:
+        job_title
+        company_info
+        job_description
+        requirements
+        offer
+    are in both 'en' and 'de' languages.
+    Each section will be analysis separately.
+    """
 
     __slots__: list[str] = [
         "bodies",
