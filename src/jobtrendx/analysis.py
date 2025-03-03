@@ -44,13 +44,21 @@ class AnalysisEmails:
                      log: logger.logging.Logger
                      ) -> None:
         """call the sub-class to analysis the body"""
-        BodyEmailAnalayer(eml_df=eml_df,
-                          cfg=cfg,
-                          log=log)
+        body_analyzer = BodyEmailAnalayer(eml_df=eml_df, cfg=cfg)
+        body_analyzer.process(log=log)
 
 
 class BodyEmailAnalayer:
-    """analysing the emails' body"""
+    """analysing the emails' body
+    "body" sections are:
+        job_title
+        company_info
+        job_description
+        requirements
+        offer
+    are in both 'en' and 'de' languages.
+    Each section will be analysis separately.
+    """
 
     __slots__: list[str] = [
         "bodies",
@@ -60,18 +68,26 @@ class BodyEmailAnalayer:
     def __init__(self,
                  eml_df: pd.DataFrame,
                  cfg: DictConfig,
-                 log: logger.logging.Logger
                  ) -> None:
-        self.bodies = eml_df[['body', 'eml_lang']]
+        self.bodies = eml_df[['file_path', 'body', 'eml_lang']]
         self.cfg_anlz = cfg.defaults.analysis
-        self.process(log)
 
     def process(self,
                 log: logger.logging.Logger
                 ) -> None:
         """spliting the body and extracting the info from it"""
-        self.split_bodies()
+        log.info("Processing email bodies...")
+        sections: pd.DataFrame = self.split_bodies()
+        self.anlz_job_title(sections[['eml_lang', 'job_title']])
 
-    def split_bodies(self) -> None:
-        """split the body sections and return them"""
-        body_analysis.split_body(self.bodies, self.cfg_anlz.sections)
+    def split_bodies(self) -> pd.DataFrame:
+        """split the body sections and return them
+        returns the output as DataFrame. FilePaths are the index
+        """
+        return body_analysis.split_body(self.bodies, self.cfg_anlz.sections)
+
+    def anlz_job_title(self,
+                       job_title: pd.DataFrame
+                       ) -> pd.DataFrame:
+        """Analysing the job titles"""
+        body_analysis.analysis_job_title(job_title)

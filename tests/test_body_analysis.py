@@ -3,8 +3,9 @@ Testing the body_analysis module
 """
 # pylint: disable=redefined-outer-name
 
+import pandas as pd
 
-from jobtrendx.body_analysis import _get_sections
+from jobtrendx.body_analysis import _get_sections, _split_by_lang
 
 
 def test_get_sections_de() -> None:
@@ -97,3 +98,34 @@ def test_get_sections_en() -> None:
         'Educated to a degree level in Computer Science, Data Science...\n'
     assert sections['benefits'] == \
         'An inclusive and diverse work environment...\n'
+
+
+def test_split_by_lang() -> None:
+    """Test the _split_by_lang function. (Copilt)"""
+    data = {
+        "file_path": ["file1", "file2", "file3", "file4"],
+        "eml_lang": ["en", "de", "en", "de"],
+        "body": ["body1", "body2", "body3", "body4"]
+    }
+    df = pd.DataFrame(data)
+
+    expected_en = pd.DataFrame({
+        "file_path": ["file1", "file3"],
+        "eml_lang": ["en", "en"],
+        "body": ["body1", "body3"]
+    })
+
+    expected_de = pd.DataFrame({
+        "file_path": ["file2", "file4"],
+        "eml_lang": ["de", "de"],
+        "body": ["body2", "body4"]
+    })
+
+    result = _split_by_lang(df)
+
+    assert "en" in result
+    assert "de" in result
+    pd.testing.assert_frame_equal(
+        result["en"].reset_index(drop=True), expected_en)
+    pd.testing.assert_frame_equal(
+        result["de"].reset_index(drop=True), expected_de)
