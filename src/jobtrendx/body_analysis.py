@@ -35,11 +35,13 @@ def split_body(bodies: pd.DataFrame,
     titles"""
     data = [
         (row.file_path,
+         row.eml_lang,
          *_get_sections(row.body, sections[row.eml_lang]).values())
         for row in bodies.itertuples(index=False)
     ]
 
-    column_names = ["file_path"] + list(sections[next(iter(sections))].keys())
+    column_names = \
+        ["file_path", "eml_lang"] + list(sections[next(iter(sections))].keys())
     return pd.DataFrame(data, columns=column_names).set_index("file_path")
 
 
