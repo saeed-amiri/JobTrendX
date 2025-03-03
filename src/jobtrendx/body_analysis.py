@@ -30,13 +30,17 @@ __all__ = [
 
 def split_body(bodies: pd.DataFrame,
                sections: dict[str, dict[str, str]]
-               ) -> None:
+               ) -> dict[str, dict[str, str]]:
     """splitting the body of the emails based on the sections
     titles"""
+    eml_sections: dict[str, dict[str, str]] = {}
     for _, row in bodies.iterrows():
+        file_path = row['file_path']
         lang: str = row['eml_lang']
         body: str = row['body']
-        print(_get_sections(body, sections[lang]))
+        eml_sections[file_path] = _get_sections(body, sections[lang])
+    return eml_sections
+
 
 def _get_sections(body: str,
                   sections: dict[str, str]
