@@ -44,9 +44,8 @@ class AnalysisEmails:
                      log: logger.logging.Logger
                      ) -> None:
         """call the sub-class to analysis the body"""
-        BodyEmailAnalayer(eml_df=eml_df,
-                          cfg=cfg,
-                          log=log)
+        body_analyzer = BodyEmailAnalayer(eml_df=eml_df, cfg=cfg)
+        body_analyzer.process(log=log)
 
 
 class BodyEmailAnalayer:
