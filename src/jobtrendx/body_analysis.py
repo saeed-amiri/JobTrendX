@@ -26,6 +26,7 @@ import pandas as pd
 __all__ = [
     'split_body',
     'analysis_job_title',
+    'analysis_top_skills'
 ]
 
 
@@ -81,6 +82,14 @@ def _get_sections(body: str,
     return section_data
 
 
+def analysis_top_skills(job_skills: pd.DataFrame) -> pd.DataFrame:
+    """Get the job top required skills as mentioned directly
+    in the emails
+    This section usually started with a sentence:
+    "Bei diesem Job kannst du mit folgenden Fähigkeiten punkten:"
+    """
+
+
 def analysis_job_title(job_title: pd.DataFrame
                        ) -> dict[str, pd.DataFrame]:
     """Analyze job titles based on language and return results."""
@@ -114,10 +123,10 @@ def _split_by_lang(df_in: pd.DataFrame
 
 
 def _anlz_job_titles_en(job_title_en: pd.DataFrame
-                         ) -> pd.DataFrame:
+                        ) -> pd.DataFrame:
     """analyzing the job titles in English"""
 
 
 def _anlz_job_titles_de(job_title_de: pd.DataFrame
-                         ) -> pd.DataFrame:
+                        ) -> pd.DataFrame:
     """analyzing the job titles in German"""

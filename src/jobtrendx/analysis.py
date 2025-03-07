@@ -99,6 +99,7 @@ class BodyEmailAnalayer:
         """spliting the body and extracting the info from it"""
         log.info("Processing email bodies...")
         sections: pd.DataFrame = self.split_bodies()
+        self.anlz_top_skills(sections[['eml_lang', 'top_skills']])
         self.anlz_job_title(sections[['eml_lang', 'job_title']])
 
     def split_bodies(self) -> pd.DataFrame:
@@ -106,6 +107,12 @@ class BodyEmailAnalayer:
         returns the output as DataFrame. FilePaths are the index
         """
         return body_analysis.split_body(self.bodies, self.cfg_anlz.sections)
+
+    def anlz_top_skills(self,
+                        top_skills: pd.DataFrame
+                        ) -> pd.DataFrame:
+        """Analyzing top skills of the jobs"""
+        body_analysis.analysis_top_skills(top_skills)
 
     def anlz_job_title(self,
                        job_title: pd.DataFrame
