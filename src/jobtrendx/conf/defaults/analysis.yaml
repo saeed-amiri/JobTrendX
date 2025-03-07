@@ -1,12 +1,14 @@
 sections:
   de:
     job_title: "Beliebter Job"
+    top_skills: "Top-Fähigkeiten"
     company_info: "Wer wir sind"
     job_description: "Das wird dein Job"
     requirements: "Das bringst du mit"
     offer: "Das bieten wir dir"
   en:
     job_title: "Top Treffer"
+    top_skills: "Top-Fähigkeiten"
     company_info: "Lloyds Bank GmbH and its brands"
     job_description: "Your tasks"
     requirements: "Your knowledge/experience"
