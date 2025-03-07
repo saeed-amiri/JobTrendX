@@ -15,9 +15,10 @@ class EmailProcessor:
     """
     Class to process emails
     """
-    __slots__ = ['eml_dir', 'eml_dict']
+    __slots__ = ['eml_dir', 'eml_dict', 'log']
 
     eml_dict: dict[Path, "email.message.EmailMessage"]
+    log: logger.logging.Logger
 
     def __init__(self,
                  eml_dir: str,
@@ -25,8 +26,12 @@ class EmailProcessor:
                  ) -> None:
         self.eml_dir = eml_dir
         self.eml_dict = {}  # Initialize empty dictionary
+        self.log = log
+
+    def execute(self) -> None:
+        """Execute the class"""
         self.read_eml()
-        self.log_info(log)
+        self.log_info()
 
     def read_eml(self) -> None:
         """
@@ -44,12 +49,10 @@ class EmailProcessor:
         # Get email content
         self.eml_dict = tools.returns_email_contant(eml_paths=eml_paths)
 
-    def log_info(self,
-                 log: logger.logging.Logger
-                 ) -> None:
+    def log_info(self) -> None:
         """log the info into log file"""
-        log.info(f'EmailProcessor: Processed {len(self.eml_dict)} '
-                 'emails successfully.')
+        self.log.info(f'EmailProcessor: Processed {len(self.eml_dict)} '
+                      'emails successfully.')
 
 
 if __name__ == "__main__":
