@@ -1,7 +1,7 @@
 """
 Analyzing the "body" section of the emails.
 Emails contains several sections, depends on the language of
-the email, this sections have different titles.
+the email, these sections have different titles.
 This titles are set in cfg/defaults/analysis.yaml:
 
 sections:
@@ -11,9 +11,9 @@ sections:
   requirements: ["Das bringst du mit", "Your knowledge/experience"]
   offer: ["Das bieten wir dir", "We offer"]
 
-This module here, first must separate the "body" text, based
-on the sections and than grep the information of each sections
-and return them.
+This module first separate the "body" text based on the
+sections and than grep the information of each sections and
+return them.
 
 26 Feb. 2025
 Samiri
