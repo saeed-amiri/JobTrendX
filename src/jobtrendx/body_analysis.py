@@ -87,8 +87,8 @@ def analysis_job_title(job_title: pd.DataFrame
 
     # Map language codes to their processing functions
     lang_processors = {
-        "en": _analz_job_titles_en,
-        "de": _analz_job_titles_de,
+        "en": _anlz_job_titles_en,
+        "de": _anlz_job_titles_de,
         # Add more languages here if needed
     }
 
@@ -113,11 +113,11 @@ def _split_by_lang(df_in: pd.DataFrame
         }
 
 
-def _analz_job_titles_en(job_title_en: pd.DataFrame
+def _anlz_job_titles_en(job_title_en: pd.DataFrame
                          ) -> pd.DataFrame:
     """analyzing the job titles in English"""
 
 
-def _analz_job_titles_de(job_title_de: pd.DataFrame
+def _anlz_job_titles_de(job_title_de: pd.DataFrame
                          ) -> pd.DataFrame:
     """analyzing the job titles in German"""
