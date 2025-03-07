@@ -1,13 +1,24 @@
 """
 The main entry point of the application.
+To run:
+python -m jobtrendx.main
+or set a new dir containing emails:
+PYTHONPATH=src python -m jobtrendx.main defaults.paths.emails="<NEW_DIR>"
 """
 # pylint: disable=no-value-for-parameter
+
+import typing
 
 import hydra
 from omegaconf import DictConfig
 
-from . import email_processor
 from . import logger
+from . import email_processor
+from . import analysis
+
+if typing.TYPE_CHECKING:
+    from pathlib import Path
+    import email
 
 
 LOG: logger.logging.Logger = logger.setup_logger('jobtrendx.log')
@@ -18,7 +29,11 @@ def main(cfg: DictConfig) -> None:
     # pylint: disable=missing-function-docstring
     # pylint: disable=unused-argument
     src: str = cfg.defaults.paths.emails
-    email_processor.EmailProcessor(email_dir=src, log=LOG)
+    email_prc = email_processor.EmailProcessor(eml_dir=src, log=LOG)
+    email_prc.execute()
+    eml_dict: dict[Path, "email.message.EmailMessage"] = \
+        email_prc.eml_dict
+    analysis.AnalysisEmails(eml_dict=eml_dict, cfg=cfg, log=LOG)
 
 
 if __name__ == "__main__":
