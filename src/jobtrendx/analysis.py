@@ -31,7 +31,7 @@ from omegaconf import DictConfig
 
 from . import logger
 from . import tools
-from . import body_analysis
+from . import payload_analysis
 
 
 class AnalysisEmails:
@@ -106,16 +106,17 @@ class PayloadAnalayer:
         """split the payload sections and return them
         returns the output as DataFrame. FilePaths are the index
         """
-        return body_analysis.split_payload(self.bodies, self.cfg_anlz.sections)
+        return payload_analysis.split_payload(
+            self.bodies, self.cfg_anlz.sections)
 
     def anlz_top_skills(self,
                         top_skills: pd.DataFrame
                         ) -> pd.DataFrame:
         """Analyzing top skills of the jobs"""
-        body_analysis.analysis_top_skills(top_skills)
+        payload_analysis.analysis_top_skills(top_skills)
 
     def anlz_job_title(self,
                        job_title: pd.DataFrame
                        ) -> pd.DataFrame:
         """Analysing the job titles"""
-        body_analysis.analysis_job_title(job_title)
+        payload_analysis.analysis_job_title(job_title)
