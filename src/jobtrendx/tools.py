@@ -106,22 +106,22 @@ def extract_email_detail(eml_dict: dict[Path, EmailMessage]
             "to": email_obj["to"],
             "date": email_obj["date"],
             "message_id": email_obj["message-id"],
-            "body": _extract_email_body(email_obj),
+            "payload": _extract_email_payload(email_obj),
             "attachments": _extract_attachments(email_obj)
         }
         extracted_data[file_path] = details
     return extracted_data
 
 
-def _extract_email_body(email_obj: EmailMessage) -> str:
-    """Get the plain text body of the email."""
+def _extract_email_payload(email_obj: EmailMessage) -> str:
+    """Get the plain text payload of the email."""
     if email_obj.is_multipart():
-        return _extract_body_from_multipart(email_obj)
-    return _extract_body_from_singlepart(email_obj)
+        return _extract_payload_from_multipart(email_obj)
+    return _extract_payload_from_singlepart(email_obj)
 
 
-def _extract_body_from_multipart(email_obj: EmailMessage) -> str:
-    """Extract body from a multipart email."""
+def _extract_payload_from_multipart(email_obj: EmailMessage) -> str:
+    """Extract payload from a multipart email."""
     for part in email_obj.walk():
         payload = part.get_payload(decode=True)
         if payload is not None:
@@ -129,8 +129,8 @@ def _extract_body_from_multipart(email_obj: EmailMessage) -> str:
     return ""
 
 
-def _extract_body_from_singlepart(email_obj: EmailMessage) -> str:
-    """Extract body from a singlepart email."""
+def _extract_payload_from_singlepart(email_obj: EmailMessage) -> str:
+    """Extract payload from a singlepart email."""
     payload = email_obj.get_payload(decode=True)
     if payload is not None:
         return _decode_payload(email_obj, payload)
@@ -167,14 +167,14 @@ def eml_to_dataframe(eml_data: dict[Path, dict[str, typing.Any]]
     ]
     df: pd.DataFrame = pd.DataFrame(flat_data)
     try:
-        df["body"] = df["body"].apply(_clean_eml_body)
+        df["payload"] = df["payload"].apply(_clean_eml_payload)
     except KeyError:
         pass
 
     return df
 
 
-def _clean_eml_body(text: str) -> str:
+def _clean_eml_payload(text: str) -> str:
     """
     Remove the extra spaces, new lines, and the encoding
     artifcats

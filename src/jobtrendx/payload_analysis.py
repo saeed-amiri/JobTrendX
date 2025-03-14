@@ -1,5 +1,5 @@
 """
-Analyzing the "body" section of the emails.
+Analyzing the "payload" section of the emails.
 Emails contains several sections, depends on the language of
 the email, these sections have different titles.
 This titles are set in cfg/defaults/analysis.yaml:
@@ -11,7 +11,7 @@ sections:
   requirements: ["Das bringst du mit", "Your knowledge/experience"]
   offer: ["Das bieten wir dir", "We offer"]
 
-This module first separate the "body" text based on the
+This module first separate the "payload" text based on the
 sections and than grep the information of each sections and
 return them.
 
@@ -24,21 +24,21 @@ import re
 import pandas as pd
 
 __all__ = [
-    'split_body',
+    'split_payload',
     'analysis_job_title',
     'analysis_top_skills'
 ]
 
 
-def split_body(bodies: pd.DataFrame,
-               sections: dict[str, dict[str, str]]
-               ) -> pd.DataFrame:
-    """splitting the body of the emails based on the sections
+def split_payload(bodies: pd.DataFrame,
+                  sections: dict[str, dict[str, str]]
+                  ) -> pd.DataFrame:
+    """splitting the payload of the emails based on the sections
     titles"""
     data = [
         (row.file_path,
          row.eml_lang,
-         *_get_sections(row.body, sections[row.eml_lang]).values())
+         *_get_sections(row.payload, sections[row.eml_lang]).values())
         for row in bodies.itertuples(index=False)
     ]
 
@@ -47,15 +47,15 @@ def split_body(bodies: pd.DataFrame,
     return pd.DataFrame(data, columns=column_names).set_index("file_path")
 
 
-def _get_sections(body: str,
+def _get_sections(payload: str,
                   sections: dict[str, str]
                   ) -> dict[str, str]:
     """
-    Splits the email body into sections based on predefined
+    Splits the email payload into sections based on predefined
     section titles, mapping them to standardized keys.
 
     Args:
-        body (str): The email body text.
+        payload (str): The email payload text.
         sections (dict[str, str]): Dictionary mapping
         standardized keys to language-specific section titles.
 
@@ -66,8 +66,8 @@ def _get_sections(body: str,
     section_data: dict[str, str] = {key: "" for key in sections.keys()}
     pattern: str = "|".join([re.escape(title) for title in sections.values()])
 
-    # Split body into sections using regex
-    parts = re.split(f"({pattern})", body)
+    # Split payload into sections using regex
+    parts = re.split(f"({pattern})", payload)
 
     # Iterate over parts and map them to standardized section keys
     current_key = None
