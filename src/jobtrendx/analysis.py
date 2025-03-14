@@ -60,10 +60,10 @@ class AnalysisEmails:
         return eml_df
 
     def process_payload(self,
-                     eml_df: pd.DataFrame,
-                     cfg: DictConfig,
-                     log: logger.logging.Logger
-                     ) -> None:
+                        eml_df: pd.DataFrame,
+                        cfg: DictConfig,
+                        log: logger.logging.Logger
+                        ) -> None:
         """call the sub-class to analysis the payload"""
         payload_analyzer = PayloadEmailAnalayer(eml_df=eml_df, cfg=cfg)
         payload_analyzer.process(log=log)
