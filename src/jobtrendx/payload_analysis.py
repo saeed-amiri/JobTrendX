@@ -33,6 +33,7 @@ __all__ = [
 def split_payload(bodies: pd.DataFrame,
                   sections: dict[str, dict[str, str]]
                   ) -> pd.DataFrame:
+
     """splitting the payload of the emails based on the sections
     titles"""
     data = [

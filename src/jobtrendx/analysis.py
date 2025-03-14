@@ -65,11 +65,11 @@ class AnalysisEmails:
                         log: logger.logging.Logger
                         ) -> None:
         """call the sub-class to analysis the payload"""
-        payload_analyzer = PayloadAnalayer(eml_df=eml_df, cfg=cfg)
+        payload_analyzer = payloadAnalayer(eml_df=eml_df, cfg=cfg)
         payload_analyzer.process(log=log)
 
 
-class PayloadAnalayer:
+class payloadAnalayer:
     """analysing the emails' payload
     "payload" sections are:
         job_title
