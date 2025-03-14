@@ -10,6 +10,7 @@ import pytest
 
 from jobtrendx.logger import setup_logger, check_log_file, write_header
 
+
 @pytest.fixture
 def test_log_file() -> str:
     "To provide a clean log filename for testing"

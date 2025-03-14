@@ -14,8 +14,8 @@ import pandas as pd
 
 from jobtrendx.tools import check_directory, check_dir_not_empty, \
     returns_all_files_in_dir, returns_eml_files, returns_eml_path, \
-    _extract_attachments, _clean_eml_body, eml_to_dataframe, detect_language, \
-    _detect_single_language, _check_language
+    _extract_attachments, _clean_eml_payload, eml_to_dataframe, \
+    detect_language, _detect_single_language, _check_language
 
 
 def test_check_directory_exists() -> None:
@@ -146,11 +146,12 @@ def test_extract_attachments_mixed_content() -> None:
     assert _extract_attachments(email_obj) == ["test.txt"]
 
 
-def test_clean_eml_body() -> None:
+def test_clean_eml_payload() -> None:
     """Test if the input text cleand correctly"""
     text: str = \
         " Hello\xa0world! Visit https://example.com for more info.  "
-    assert _clean_eml_body(text) == "Hello world! Visit [URL] for more info."
+    assert _clean_eml_payload(text) == \
+        "Hello world! Visit [URL] for more info."
 
 
 def test_eml_to_dataframe_valid_data() -> None:
@@ -161,7 +162,7 @@ def test_eml_to_dataframe_valid_data() -> None:
             "from": "hr@company.com",
             "to": "you@example.com",
             "date": "Tue, 13 Feb 2024",
-            "body": "We are pleased to offer you a position.",
+            "payload": "We are pleased to offer you a position.",
             "attachments": ["contract.pdf"]
         },
         Path("emails/email2.eml"): {
@@ -169,7 +170,7 @@ def test_eml_to_dataframe_valid_data() -> None:
             "from": "manager@example.com",
             "to": "team@example.com",
             "date": "Wed, 14 Feb 2024",
-            "body": "Here is the latest project update.",
+            "payload": "Here is the latest project update.",
             "attachments": []
         }
     }
@@ -181,12 +182,12 @@ def test_eml_to_dataframe_valid_data() -> None:
 
     # Ensure correct columns exist
     expected_columns: set[str] = {
-        "file_path", "subject", "from", "to", "date", "body", "attachments"}
+        "file_path", "subject", "from", "to", "date", "payload", "attachments"}
     assert set(df.columns) == expected_columns
 
-    # Ensure body text was processed
-    assert isinstance(df.at[0, "body"], str)
-    assert "offer you a position" in df.at[0, "body"]
+    # Ensure payload text was processed
+    assert isinstance(df.at[0, "payload"], str)
+    assert "offer you a position" in df.at[0, "payload"]
 
     # Ensure attachments are stored correctly
     assert isinstance(df.at[0, "attachments"], list)

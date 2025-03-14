@@ -1,11 +1,11 @@
 """
-Testing the body_analysis module
+Testing the payload_analysis module
 """
 # pylint: disable=redefined-outer-name
 
 import pandas as pd
 
-from jobtrendx.body_analysis import _get_sections, _split_by_lang
+from jobtrendx.payload_analysis import _get_sections, _split_by_lang
 
 
 def test_get_sections_de() -> None:
@@ -17,7 +17,7 @@ def test_get_sections_de() -> None:
         "benefits": "Das bieten wir dir"
         }
 
-    body_text = """Beliebter Job
+    payload_text = """Beliebter Job
         Data Scientist (m/w/d) Schwerpunkt KI
 
         PreZero Service Deutschland GmbH & Co. KG
@@ -36,7 +36,7 @@ def test_get_sections_de() -> None:
         Das bieten wir dir
         Als Teil der Schwarz Gruppe...
         """
-    sections: dict[str, str] = _get_sections(body_text, sections_de)
+    sections: dict[str, str] = _get_sections(payload_text, sections_de)
     assert sections["job_title"] == (
         'Data Scientist (m/w/d) Schwerpunkt KI\n\n        PreZero Service '
         'Deutschland GmbH & Co. KG\n        Wesseling bei Köln \n        '
@@ -61,7 +61,7 @@ def test_get_sections_en() -> None:
         "benefits": "We offer"
     }
 
-    body_text = """Top Match
+    payload_text = """Top Match
         Data Scientist (m/f/d) AI Specialist
 
         Lloyds Bank - Bank of Scotland
@@ -82,7 +82,7 @@ def test_get_sections_en() -> None:
         An inclusive and diverse work environment...
     """
 
-    sections: dict[str, str] = _get_sections(body_text, sections_en)
+    sections: dict[str, str] = _get_sections(payload_text, sections_en)
 
     assert sections['job_title'] == (
         'Data Scientist (m/f/d) AI Specialist\n\n        Lloyds Bank - '
@@ -105,20 +105,20 @@ def test_split_by_lang() -> None:
     data = {
         "file_path": ["file1", "file2", "file3", "file4"],
         "eml_lang": ["en", "de", "en", "de"],
-        "body": ["body1", "body2", "body3", "body4"]
+        "payload": ["payload1", "payload2", "payload3", "payload4"]
     }
     df = pd.DataFrame(data)
 
     expected_en = pd.DataFrame({
         "file_path": ["file1", "file3"],
         "eml_lang": ["en", "en"],
-        "body": ["body1", "body3"]
+        "payload": ["payload1", "payload3"]
     })
 
     expected_de = pd.DataFrame({
         "file_path": ["file2", "file4"],
         "eml_lang": ["de", "de"],
-        "body": ["body2", "body4"]
+        "payload": ["payload2", "payload4"]
     })
 
     result = _split_by_lang(df)
