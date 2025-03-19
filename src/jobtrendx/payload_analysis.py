@@ -36,6 +36,9 @@ def split_payload(payloads: pd.DataFrame,
 
     """splitting the payload of the emails based on the sections
     titles"""
+    # Not implemented yet!
+    payloads_uplift = _split_by_spaces(payloads)
+
     data = [
         (row.file_path,
          row.eml_lang,
@@ -46,6 +49,28 @@ def split_payload(payloads: pd.DataFrame,
     column_names = \
         ["file_path", "eml_lang"] + list(sections[next(iter(sections))].keys())
     return pd.DataFrame(data, columns=column_names).set_index("file_path")
+
+
+# These two functions are for splitting the sections based on the spaces
+# Not functional yet! but i push them to the main
+def _split_by_spaces(payloads: pd.DataFrame
+                     ) -> pd.DataFrame:
+    """To split the payload more accurately"""
+    payloads_up: pd.DataFrame = payloads.copy()
+    payloads_up.loc[:, "split_payload"] = \
+        payloads["payload"].apply(lambda x: x.split('\n\n'))
+    return payloads_up
+
+
+def _get_sections_conditions(payload: list[str],
+                             sections: dict[str, str]
+                             ) -> dict[str, str]:
+    """split the sections"""
+    for item in payload:
+        if '€' in item:
+            print(item)
+        if '(m/w/d)' in item or '(f/m/x)' in item:
+            print(item)
 
 
 def _get_sections(payload: str,
