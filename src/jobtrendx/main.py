@@ -33,7 +33,8 @@ def main(cfg: DictConfig) -> None:
     email_prc.execute()
     eml_dict: dict[Path, "email.message.EmailMessage"] = \
         email_prc.eml_dict
-    analysis.AnalysisEmails(eml_dict=eml_dict, cfg=cfg, log=LOG)
+    anlaz = analysis.AnalysisEmails(eml_dict=eml_dict, cfg=cfg)
+    anlaz.analyzing(log=LOG)
 
 
 if __name__ == "__main__":
