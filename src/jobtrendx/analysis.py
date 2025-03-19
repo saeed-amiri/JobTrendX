@@ -1,6 +1,6 @@
 """Analysis the email contents and order them in tabels
 
-PayloadAnalayer:
+PayloadAnalayzer:
 Analyzing the "payload" section of the emails.
 Emails contains several sections, depends on the language of
 the email, these sections have different titles.
@@ -67,11 +67,11 @@ class AnalysisEmails:
                         log: logger.logging.Logger
                         ) -> None:
         """call the sub-class to analysis the payload"""
-        payload_analyzer = PayloadAnalayer(eml_df=eml_df, cfg=self.cfg)
+        payload_analyzer = PayloadAnalayzer(eml_df=eml_df, cfg=self.cfg)
         payload_analyzer.process(log=log)
 
 
-class PayloadAnalayer:
+class PayloadAnalayzer:
     """analysing the emails' payload
     "payload" sections are:
         job_title
