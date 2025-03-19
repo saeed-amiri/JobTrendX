@@ -30,7 +30,7 @@ __all__ = [
 ]
 
 
-def split_payload(bodies: pd.DataFrame,
+def split_payload(payloads: pd.DataFrame,
                   sections: dict[str, dict[str, str]]
                   ) -> pd.DataFrame:
 
@@ -40,7 +40,7 @@ def split_payload(bodies: pd.DataFrame,
         (row.file_path,
          row.eml_lang,
          *_get_sections(row.payload, sections[row.eml_lang]).values())
-        for row in bodies.itertuples(index=False)
+        for row in payloads.itertuples(index=False)
     ]
 
     column_names = \
