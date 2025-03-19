@@ -37,23 +37,26 @@ from . import payload_analysis
 class AnalysisEmails:
     """Analysing the emails"""
 
-    __slots__: list[str] = []
+    __slots__: list[str] = ['cfg', 'eml_dict']
 
     def __init__(self,
                  eml_dict: dict[Path, "email.message.EmailMesagge"],
                  cfg: DictConfig,
-                 log: logger.logging.Logger
                  ) -> None:
-        eml_df: pd.DataFrame = self.process_emails(eml_dict, cfg)
-        self.process_payload(eml_df, cfg, log)
+        self.cfg = cfg
+        self.eml_dict = eml_dict
 
-    def process_emails(self,
-                       eml_dict: dict[Path, "email.message.EmailMesagge"],
-                       cfg: DictConfig
-                       ) -> pd.DataFrame:
+    def analyzing(self,
+                  log: logger.logging.Logger
+                  ) -> None:
+        """Initiate analyzing"""
+        eml_df: pd.DataFrame = self.process_emails()
+        self.process_payload(eml_df, log)
+
+    def process_emails(self) -> pd.DataFrame:
         """initiate the analysis"""
         attchments: dict[Path, dict[str, typing.Any]] = \
-            tools.extract_email_detail(eml_dict)
+            tools.extract_email_detail(self.eml_dict)
         eml_df: pd.DataFrame = tools.eml_to_dataframe(attchments)
         eml_df.loc[:, 'eml_lang'] = tools.detect_language(eml_df['payload'])
 
@@ -61,11 +64,10 @@ class AnalysisEmails:
 
     def process_payload(self,
                         eml_df: pd.DataFrame,
-                        cfg: DictConfig,
                         log: logger.logging.Logger
                         ) -> None:
         """call the sub-class to analysis the payload"""
-        payload_analyzer = PayloadAnalayer(eml_df=eml_df, cfg=cfg)
+        payload_analyzer = PayloadAnalayer(eml_df=eml_df, cfg=self.cfg)
         payload_analyzer.process(log=log)
 
 
