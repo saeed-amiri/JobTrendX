@@ -50,10 +50,10 @@ class AnalysisEmails:
                   log: logger.logging.Logger
                   ) -> None:
         """Initiate analyzing"""
-        eml_df: pd.DataFrame = self.process_emails()
-        self.process_payload(eml_df, log)
+        eml_df: pd.DataFrame = self.extract_email_data()
+        self.analyze_email_payload(eml_df, log)
 
-    def process_emails(self) -> pd.DataFrame:
+    def extract_email_data(self) -> pd.DataFrame:
         """initiate the analysis"""
         attchments: dict[Path, dict[str, typing.Any]] = \
             tools.extract_email_detail(self.eml_dict)
@@ -62,13 +62,13 @@ class AnalysisEmails:
 
         return eml_df
 
-    def process_payload(self,
-                        eml_df: pd.DataFrame,
-                        log: logger.logging.Logger
-                        ) -> None:
+    def analyze_email_payload(self,
+                              eml_df: pd.DataFrame,
+                              log: logger.logging.Logger
+                              ) -> None:
         """call the sub-class to analysis the payload"""
         payload_analyzer = PayloadAnalayzer(eml_df=eml_df, cfg=self.cfg)
-        payload_analyzer.process(log=log)
+        payload_analyzer.analyze_sections(log=log)
 
 
 class PayloadAnalayzer:
@@ -95,9 +95,9 @@ class PayloadAnalayzer:
         self.bodies = eml_df[['file_path', 'payload', 'eml_lang']]
         self.cfg_anlz = cfg.defaults.analysis
 
-    def process(self,
-                log: logger.logging.Logger
-                ) -> None:
+    def analyze_sections(self,
+                         log: logger.logging.Logger
+                         ) -> None:
         """spliting the payload and extracting the info from it"""
         log.info("Processing email bodies...")
         sections: pd.DataFrame = self.split_bodies()
