@@ -100,7 +100,9 @@ class PayloadAnalayzer:
                          ) -> None:
         """spliting the payload and extracting the info from it"""
         log.info("Processing email bodies...")
+
         sections: pd.DataFrame = self.split_bodies()
+
         self.anlz_top_skills(sections[['eml_lang', 'top_skills']])
         self.anlz_job_title(sections[['eml_lang', 'job_title']])
 
