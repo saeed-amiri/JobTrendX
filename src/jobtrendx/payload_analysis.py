@@ -56,7 +56,7 @@ def split_payload(payloads: pd.DataFrame,
 def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
     """To split the payload more accurately"""
     payloads_up = payloads.copy()
-    
+
     # Split on double newlines
     payloads_up["clean_payload"] = _split_double_newline(payloads_up)
 
@@ -64,7 +64,6 @@ def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
     payloads_up["clean_payload"] = payloads_up["clean_payload"].apply(
         _remove_url_lines
     )
-        
     return payloads_up
 
 
