@@ -37,7 +37,7 @@ def split_payload(payloads: pd.DataFrame,
     """splitting the payload of the emails based on the sections
     titles"""
     # Not implemented yet!
-    payloads_uplift = _split_by_spaces(payloads)
+    payloads_uplift = _payload_clean_up(payloads)
 
     data = [
         (row.file_path,
@@ -53,13 +53,30 @@ def split_payload(payloads: pd.DataFrame,
 
 # These two functions are for splitting the sections based on the spaces
 # Not functional yet! but i push them to the main
-def _split_by_spaces(payloads: pd.DataFrame
-                     ) -> pd.DataFrame:
+def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
     """To split the payload more accurately"""
-    payloads_up: pd.DataFrame = payloads.copy()
-    payloads_up.loc[:, "split_payload"] = \
-        payloads["payload"].apply(lambda x: x.split('\n\n'))
+    payloads_up = payloads.copy()
+
+    # Split on double newlines
+    payloads_up["clean_payload"] = _split_double_newline(payloads_up)
+
+    # Remove lines with [URL]
+    payloads_up["clean_payload"] = payloads_up["clean_payload"].apply(
+        _remove_url_lines
+    )
     return payloads_up
+
+
+def _split_double_newline(payloads: pd.DataFrame) -> pd.Series:
+    """Split the text by breaking on \n\n and remove empty items."""
+    return payloads["payload"].apply(
+        lambda x: [item for item in re.split(r'\n{2,}', x) if item.strip()]
+    )
+
+
+def _remove_url_lines(lines: list[str]) -> list[str]:
+    """Remove the lines that contain the placeholder '[URL]'."""
+    return [line for line in lines if '[URL]' not in line]
 
 
 def _get_sections_conditions(payload: list[str],

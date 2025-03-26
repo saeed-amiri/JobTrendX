@@ -5,7 +5,8 @@ Testing the payload_analysis module
 
 import pandas as pd
 
-from jobtrendx.payload_analysis import _get_sections, _split_by_lang
+from jobtrendx.payload_analysis import _get_sections, _split_by_lang, \
+    _split_double_newline
 
 
 def test_get_sections_de() -> None:
@@ -129,3 +130,38 @@ def test_split_by_lang() -> None:
         result["en"].reset_index(drop=True), expected_en)
     pd.testing.assert_frame_equal(
         result["de"].reset_index(drop=True), expected_de)
+
+
+def test_split_double_newline() -> None:
+    """Test the _split_double_newline function."""
+    data = {
+        "payload": [
+            "Hello\n\nWorld",              # Simple case
+            "Hello\n\n\n\nWorld",          # Multiple newlines
+            "Only one line",               # No double newlines
+            "\n\n\n\n",                    # Only newlines
+            "Line1\n\nLine2\n\n\n\nLine3"  # Mixed spacing
+        ]
+    }
+    df = pd.DataFrame(data)
+
+    result = _split_double_newline(df)
+
+    # Check resulting splits
+    # 1) "Hello\n\nWorld" -> ["Hello", "World"]
+    assert result.iloc[0] == ["Hello", "World"]
+
+    # 2) "Hello\n\n\n\nWorld" -> ["Hello", "World"]
+    #    Extra newlines in the middle should still split into just two items
+    assert result.iloc[1] == ["Hello", "World"]
+
+    # 3) "Only one line" -> ["Only one line"]
+    #    No double newline => only one item
+    assert result.iloc[2] == ["Only one line"]
+
+    # 4) "\n\n\n\n" -> []
+    #    Empty (only newlines), everything should be filtered out
+    assert result.iloc[3] == []
+
+    # 5) "Line1\n\nLine2\n\n\n\nLine3" -> ["Line1", "Line2", "Line3"]
+    assert result.iloc[4] == ["Line1", "Line2", "Line3"]
