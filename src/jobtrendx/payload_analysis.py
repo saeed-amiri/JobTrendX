@@ -55,24 +55,29 @@ def split_payload(payloads: pd.DataFrame,
 # Not functional yet! but i push them to the main
 def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
     """To split the payload more accurately"""
-    payloads_up: pd.DataFrame = payloads.copy()
-    payloads_up.loc[:, "clean_payload"] = _split_double_n_line(payloads_up)
-    payloads_up.loc[:, "clean_payload"] = _remove_extra_ending(payloads_up)
+    payloads_up = payloads.copy()
+    
+    # Split on double newlines
+    payloads_up["clean_payload"] = _split_double_newline(payloads_up)
+
+    # Remove lines with [URL]
+    payloads_up["clean_payload"] = payloads_up["clean_payload"].apply(
+        _remove_url_lines
+    )
+        
     return payloads_up
 
 
-def _split_double_n_line(payloads: pd.DataFrame) -> pd.DataFrame:
+def _split_double_newline(payloads: pd.DataFrame) -> pd.Series:
     """Split the text by breaking on \n\n and remove empty items."""
     return payloads["payload"].apply(
         lambda x: [item for item in re.split(r'\n{2,}', x) if item.strip()]
     )
 
 
-def _remove_extra_ending(payloads_up: pd.DataFrame) -> pd.DataFrame:
-    """remove ',', '\n', '!', ... at the end of the lines with regex"""
-    return payloads_up["clean_payload"].apply(
-        lambda x: [re.sub(r'[,.\n!]*$', '', item) for item in x]
-    )
+def _remove_url_lines(lines: list[str]) -> list[str]:
+    """Remove the lines that contain the placeholder '[URL]'."""
+    return [line for line in lines if '[URL]' not in line]
 
 
 def _get_sections_conditions(payload: list[str],

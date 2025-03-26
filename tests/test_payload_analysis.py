@@ -6,7 +6,7 @@ Testing the payload_analysis module
 import pandas as pd
 
 from jobtrendx.payload_analysis import _get_sections, _split_by_lang, \
-    _remove_extra_ending, _split_double_n_line
+    _split_double_newline
 
 
 def test_get_sections_de() -> None:
@@ -132,8 +132,8 @@ def test_split_by_lang() -> None:
         result["de"].reset_index(drop=True), expected_de)
 
 
-def test_split_double_n_line() -> None:
-    """Test the _split_double_n_line function."""
+def test_split_double_newline() -> None:
+    """Test the _split_double_newline function."""
     data = {
         "payload": [
             "Hello\n\nWorld",              # Simple case
@@ -145,7 +145,7 @@ def test_split_double_n_line() -> None:
     }
     df = pd.DataFrame(data)
 
-    result = _split_double_n_line(df)
+    result = _split_double_newline(df)
 
     # Check resulting splits
     # 1) "Hello\n\nWorld" -> ["Hello", "World"]
@@ -165,37 +165,3 @@ def test_split_double_n_line() -> None:
 
     # 5) "Line1\n\nLine2\n\n\n\nLine3" -> ["Line1", "Line2", "Line3"]
     assert result.iloc[4] == ["Line1", "Line2", "Line3"]
-
-
-def test_remove_extra_ending() -> None:
-    """
-    Test the _remove_extra_ending function to ensure it removes
-    trailing commas, periods, and newline characters from each string
-    in the 'clean_payload' column.
-    """
-    data = {
-        "clean_payload": [
-            ["Hello,", "World.", "Testing\n", "End,"],
-            ["Line1\n\n", "Line2...", "Line3,"],
-            ["Line4!\n", "Line5!", "Line6!,"],
-            ["Nothing to remove", "All good here"],
-            []
-        ]
-    }
-
-    df = pd.DataFrame(data)
-
-    result = _remove_extra_ending(df)
-
-    # Build the expected DataFrame or Series
-    expected = pd.Series(
-        [
-            ["Hello", "World", "Testing", "End"],
-            ["Line1", "Line2", "Line3"],
-            ["Line4", "Line5", "Line6"],
-            ["Nothing to remove", "All good here"],
-            []
-        ],
-        name="clean_payload"
-    )
-    pd.testing.assert_series_equal(result, expected)
