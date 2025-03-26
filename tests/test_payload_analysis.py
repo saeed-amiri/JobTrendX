@@ -5,7 +5,8 @@ Testing the payload_analysis module
 
 import pandas as pd
 
-from jobtrendx.payload_analysis import _get_sections, _split_by_lang
+from jobtrendx.payload_analysis import _get_sections, _split_by_lang, \
+    _remove_extra_ending, _split_double_n_line
 
 
 def test_get_sections_de() -> None:
@@ -129,3 +130,72 @@ def test_split_by_lang() -> None:
         result["en"].reset_index(drop=True), expected_en)
     pd.testing.assert_frame_equal(
         result["de"].reset_index(drop=True), expected_de)
+
+
+def test_split_double_n_line() -> None:
+    """Test the _split_double_n_line function."""
+    data = {
+        "payload": [
+            "Hello\n\nWorld",              # Simple case
+            "Hello\n\n\n\nWorld",          # Multiple newlines
+            "Only one line",               # No double newlines
+            "\n\n\n\n",                    # Only newlines
+            "Line1\n\nLine2\n\n\n\nLine3"  # Mixed spacing
+        ]
+    }
+    df = pd.DataFrame(data)
+
+    result = _split_double_n_line(df)
+
+    # Check resulting splits
+    # 1) "Hello\n\nWorld" -> ["Hello", "World"]
+    assert result.iloc[0] == ["Hello", "World"]
+
+    # 2) "Hello\n\n\n\nWorld" -> ["Hello", "World"]
+    #    Extra newlines in the middle should still split into just two items
+    assert result.iloc[1] == ["Hello", "World"]
+
+    # 3) "Only one line" -> ["Only one line"]
+    #    No double newline => only one item
+    assert result.iloc[2] == ["Only one line"]
+
+    # 4) "\n\n\n\n" -> []
+    #    Empty (only newlines), everything should be filtered out
+    assert result.iloc[3] == []
+
+    # 5) "Line1\n\nLine2\n\n\n\nLine3" -> ["Line1", "Line2", "Line3"]
+    assert result.iloc[4] == ["Line1", "Line2", "Line3"]
+
+
+def test_remove_extra_ending() -> None:
+    """
+    Test the _remove_extra_ending function to ensure it removes
+    trailing commas, periods, and newline characters from each string
+    in the 'clean_payload' column.
+    """
+    data = {
+        "clean_payload": [
+            ["Hello,", "World.", "Testing\n", "End,"],
+            ["Line1\n\n", "Line2...", "Line3,"],
+            ["Line4!\n", "Line5!", "Line6!,"],
+            ["Nothing to remove", "All good here"],
+            []
+        ]
+    }
+
+    df = pd.DataFrame(data)
+
+    result = _remove_extra_ending(df)
+
+    # Build the expected DataFrame or Series
+    expected = pd.Series(
+        [
+            ["Hello", "World", "Testing", "End"],
+            ["Line1", "Line2", "Line3"],
+            ["Line4", "Line5", "Line6"],
+            ["Nothing to remove", "All good here"],
+            []
+        ],
+        name="clean_payload"
+    )
+    pd.testing.assert_series_equal(result, expected)

@@ -56,7 +56,8 @@ def split_payload(payloads: pd.DataFrame,
 def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
     """To split the payload more accurately"""
     payloads_up: pd.DataFrame = payloads.copy()
-    payloads_up.loc[:, "split_payload"] = _split_double_n_line(payloads_up)
+    payloads_up.loc[:, "clean_payload"] = _split_double_n_line(payloads_up)
+    payloads_up.loc[:, "clean_payload"] = _remove_extra_ending(payloads_up)
     return payloads_up
 
 
@@ -64,6 +65,13 @@ def _split_double_n_line(payloads: pd.DataFrame) -> pd.DataFrame:
     """Split the text by breaking on \n\n and remove empty items."""
     return payloads["payload"].apply(
         lambda x: [item for item in re.split(r'\n{2,}', x) if item.strip()]
+    )
+
+
+def _remove_extra_ending(payloads_up: pd.DataFrame) -> pd.DataFrame:
+    """remove ',', '\n', '!', ... at the end of the lines with regex"""
+    return payloads_up["clean_payload"].apply(
+        lambda x: [re.sub(r'[,.\n!]*$', '', item) for item in x]
     )
 
 
