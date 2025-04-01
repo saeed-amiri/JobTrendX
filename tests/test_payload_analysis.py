@@ -6,7 +6,7 @@ Testing the payload_analysis module
 import pandas as pd
 
 from jobtrendx.payload_analysis import _get_sections, _split_by_lang, \
-    _split_double_newline, _filter_item
+    _split_double_newline, _filter_item, _extract_title
 
 
 def test_get_sections_de() -> None:
@@ -188,3 +188,64 @@ def test_filter_item():
     ]
 
     assert result == expected, f"Expected {expected}, got {result}"
+
+
+def test_extract_title_none_found():
+    """
+    Test that _extract_title returns 'Nan' if neither '(m/w/d)' nor '(f/m/x)'
+    is found in any item of row['clean_payload'].
+    """
+    row = pd.Series({
+        "clean_payload": [
+            "Just some random text.\nNothing special here.",
+            "Another block of text without any markers."
+        ]
+    })
+    assert _extract_title(row) == "Nan"
+
+
+def test_extract_title_mwd_found():
+    """
+    Test that _extract_title returns the line with '(m/w/d)' if it appears.
+    """
+    row = pd.Series({
+        "clean_payload": [
+            "We have a lot of content here.",
+            "Job Title (m/w/d)\nAnd some extra lines here."
+        ]
+    })
+    expected = "Job Title (m/w/d)"
+    result = _extract_title(row)
+    assert result == expected, f"Expected '{expected}', but got '{result}'"
+
+
+def test_extract_title_fmx_found():
+    """
+    Test that _extract_title returns the line with '(f/m/x)' if it appears.
+    """
+    row = pd.Series({
+        "clean_payload": [
+            "Some text\nstill no marker.",
+            "Another block\nJob Family Title (f/m/x)\nEven more lines."
+        ]
+    })
+    expected = "Job Family Title (f/m/x)"
+    result = _extract_title(row)
+    assert result == expected, f"Expected '{expected}', but got '{result}'"
+
+
+def test_extract_title_multiple_matches():
+    """
+    Test that _extract_title returns the FIRST matching line
+    if multiple matches are present in row['clean_payload'].
+    """
+    row = pd.Series({
+        "clean_payload": [
+            "Something else (m/w/d)\nInside first block.\nAnother line.",
+            "Second block with (f/m/x)\nShould not be returned."
+        ]
+    })
+    # Should return the line from the first block it encounters
+    expected = "Something else (m/w/d)"
+    result = _extract_title(row)
+    assert result == expected, f"Expected '{expected}', but got '{result}'"
