@@ -38,6 +38,7 @@ def split_payload(payloads: pd.DataFrame,
     titles"""
     # Not implemented yet!
     payloads_uplift = _payload_clean_up(payloads)
+    data_set: pd.DataFrame = _get_info(payloads_uplift)
 
     data = [
         (row.file_path,
@@ -108,15 +109,26 @@ def _filter_item(item: list[str],
     return filtered
 
 
-def _get_sections_conditions(payload: list[str],
-                             sections: dict[str, str]
-                             ) -> dict[str, str]:
-    """split the sections"""
-    for item in payload:
-        if '€' in item:
-            print(item)
-        if '(m/w/d)' in item or '(f/m/x)' in item:
-            print(item)
+def _get_info(payload: pd.DataFrame) -> pd.DataFrame:
+    """get the info from the payloads"""
+    columns: list[str] = ['job', 'salary', 'location']
+    data: pd.DataFrame = pd.DataFrame(columns=columns)
+    titles: dict[str, str] = {}
+    for _, row in payload.iterrows():
+        titles[row['file_path']] = _extract_title(row)
+
+
+def _extract_title(row: pd.Series) -> str:
+    """extract the title of the job"""
+    title: str = 'Nan'
+    for item in row['clean_payload']:
+        if any(tag in item for tag in ['(m/w/d)', '(f/m/x)']):
+            title = next((
+                        line for line in item.split('\n')
+                        if '(m/w/d)' in line or '(f/m/x)' in line
+                        ), "")
+            break
+    return title
 
 
 def _get_sections(payload: str,
