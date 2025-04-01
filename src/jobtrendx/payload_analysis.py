@@ -60,10 +60,9 @@ def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
     # Split on double newlines
     payloads_up["clean_payload"] = _split_double_newline(payloads_up)
 
-    # Remove lines with [URL]
-    payloads_up["clean_payload"] = payloads_up["clean_payload"].apply(
-        _remove_url_lines
-    )
+    payloads_up["clean_payload"] = \
+        payloads_up["clean_payload"].apply(_filter_item)
+
     return payloads_up
 
 
@@ -74,9 +73,39 @@ def _split_double_newline(payloads: pd.DataFrame) -> pd.Series:
     )
 
 
-def _remove_url_lines(lines: list[str]) -> list[str]:
-    """Remove the lines that contain the placeholder '[URL]'."""
-    return [line for line in lines if '[URL]' not in line]
+def _filter_item(item: list[str],
+                 max_newlines: int = 2,
+                 min_dashes: int = 3
+                 ) -> list[str]:
+    """
+    Cleans the payloads by applying specific filtering criteria:
+    - Removes items where the number of newlines is less than
+      or equal to the number of '[URL]' occurrences.
+    - Excludes items with `max_newlines` or fewer newlines
+      and more than `min_dashes` dashes.
+    - Retains all other items for further processing.
+
+    Args:
+        payloads (pd.DataFrame): DataFrame containing payload
+        data.
+        max_newlines (int): Maximum number of newlines allowed
+        for exclusion.
+        min_dashes (int): Minimum number of dashes required
+        for exclusion.
+
+    Returns:
+        Cleaned payloads.
+    """
+    filtered: list[str] = []
+    for i in item:
+        new_line_count: int = i.count('\n')
+        url_count: int = i.count('[URL]')
+        dash_count: int = i.count('-')
+        if new_line_count > url_count and not (
+            new_line_count <= max_newlines and dash_count > min_dashes
+        ):
+            filtered.append(i)
+    return filtered
 
 
 def _get_sections_conditions(payload: list[str],
