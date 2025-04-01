@@ -6,7 +6,7 @@ Testing the payload_analysis module
 import pandas as pd
 
 from jobtrendx.payload_analysis import _get_sections, _split_by_lang, \
-    _split_double_newline
+    _split_double_newline, _filter_item
 
 
 def test_get_sections_de() -> None:
@@ -165,3 +165,26 @@ def test_split_double_newline() -> None:
 
     # 5) "Line1\n\nLine2\n\n\n\nLine3" -> ["Line1", "Line2", "Line3"]
     assert result.iloc[4] == ["Line1", "Line2", "Line3"]
+
+
+def test_filter_item():
+    """
+    Test the _filter_item function with different newline,
+    [URL], and dash counts.
+    """
+    items = [
+        "No newlines, no URL",
+        "One newline\nNo URL",
+        "One newline\nHas [URL]",
+        "Three newlines\n\n\nAnd four----dashes",
+        "Two newlines\n\nAnd four----dashes",
+    ]
+
+    result = _filter_item(items, max_newlines=2, min_dashes=3)
+
+    expected = [
+        "One newline\nNo URL",
+        "Three newlines\n\n\nAnd four----dashes"
+    ]
+
+    assert result == expected, f"Expected {expected}, got {result}"
