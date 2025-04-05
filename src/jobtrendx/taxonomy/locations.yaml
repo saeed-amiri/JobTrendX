@@ -1,4 +1,9 @@
-# From https://www.kaggle.com/datasets/berkayalan/deutschland-cities?resource=download
+# City list data sourced from Wikipedia via Kaggle dataset: Berkay Alan,
+# "Cities and Towns of Germany," Kaggle, 
+# https://www.kaggle.com/datasets/berkayalan/cities-and-towns-of-germany, accessed April 2025.
+# Original data from Wikipedia: https://en.wikipedia.org/wiki/List_of_cities_and_towns_in_Germany
+# License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0).
+
 cities:
   Baden-Württemberg:
     - Aalen
