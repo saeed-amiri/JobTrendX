@@ -10,3 +10,9 @@ app:
     name: "JobTrendX"
     version: "0.1.0"
     mode: "development"
+
+# DO NOT CHENGE!
+taxonomy_path: "/home/santiago/Documents/MyScripts/JobTrendX/src/jobtrendx/taxonomy"
+taxonomy_files:
+  locations: locations.yaml
+  job_titles: job_titles.yaml

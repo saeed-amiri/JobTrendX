@@ -1,24 +1,23 @@
-job_titles:
-  data_scientist:
-    - Datascientist
-    - Data Scientist
-    - Datenwissenschaftler
-    - Wissenschaftler Daten
-    - Datenanalyse
-    - KI
-    - KI Forscher
-    - ML
-    - Machine Learning
-    - Machine Learning Engineer 
-  data_engineer:
-    - Data Engineer
-    - Dateningenieur
-    - Engineer Data
-    - Fachbereich Data
-  data_analyst:
-    - Data Analyst
-    - Datenanalyst
-    - Data Architect
-    - Analyst Data
-    - Supply Analyst
-    - Analyst Operations
+data_scientist:
+  - Datascientist
+  - Data Scientist
+  - Datenwissenschaftler
+  - Wissenschaftler Daten
+  - Datenanalyse
+  - KI
+  - KI Forscher
+  - ML
+  - Machine Learning
+  - Machine Learning Engineer 
+data_engineer:
+  - Data Engineer
+  - Dateningenieur
+  - Engineer Data
+  - Fachbereich Data
+data_analyst:
+  - Data Analyst
+  - Datenanalyst
+  - Data Architect
+  - Analyst Data
+  - Supply Analyst
+  - Analyst Operations

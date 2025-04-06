@@ -20,8 +20,13 @@ Samiri
 """
 
 import re
+import sys
+from pathlib import Path
 
+import yaml
 import pandas as pd
+
+from omegaconf import DictConfig
 
 __all__ = [
     'split_payload',
@@ -31,14 +36,21 @@ __all__ = [
 
 
 def split_payload(payloads: pd.DataFrame,
-                  sections: dict[str, dict[str, str]]
+                  cfg: DictConfig
                   ) -> pd.DataFrame:
 
     """splitting the payload of the emails based on the sections
     titles"""
     # Not implemented yet!
+    # Get the fixed sections in the Config
+    sections: dict[str, dict[str, str]] = cfg.defaults.analysis.sections
+
+    # Get the name of the cities from a yaml file
+    locations: dict[str, list[str]] = _fetch_from_yaml(cfg, 'locations')
+    job_titles: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
+
     payloads_uplift = _payload_clean_up(payloads)
-    data_set: pd.DataFrame = _get_info(payloads_uplift)
+    data_set: pd.DataFrame = _get_info(payloads_uplift, locations, job_titles)
 
     data = [
         (row.file_path,
@@ -54,6 +66,38 @@ def split_payload(payloads: pd.DataFrame,
 
 # These two functions are for splitting the sections based on the spaces
 # Not functional yet! but i push them to the main
+def _fetch_from_yaml(cfg: DictConfig,
+                     file_type: str
+                     ) -> dict[str, list[str]]:
+    """
+    Reads the YAML file containing location data and returns
+    a dictionary of items in the yaml
+
+    Args:
+        cfg (DictConfig): Configuration object containing
+        paths to taxonomy files.
+
+    Returns:
+        dict[str, list[str]]: Dictionary of city names grouped
+        by states names.
+
+    Raises:
+        SystemExit: If the file is not found, has a format
+        error, or an unknown error occurs.
+    """
+    # pylint: disable=broad-exception-caught
+    file_path = Path(cfg.taxonomy_path) / cfg.taxonomy_files[file_type]
+    try:
+        with file_path.open('r', encoding='utf-8') as f_loc:
+            return yaml.safe_load(f_loc)
+    except FileNotFoundError:
+        sys.exit(f"\nFile Not Found:\n`{file_path}` does not exist!")
+    except yaml.YAMLError:
+        sys.exit(f"\nFile Format Error:\n`{file_path}` not a valid YAML file!")
+    except Exception as err:
+        sys.exit(f"Unknown Error in `{file_path}`: {err}")
+
+
 def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
     """To split the payload more accurately"""
     payloads_up = payloads.copy()
@@ -109,13 +153,22 @@ def _filter_item(item: list[str],
     return filtered
 
 
-def _get_info(payload: pd.DataFrame) -> pd.DataFrame:
-    """get the info from the payloads"""
-    columns: list[str] = ['job', 'salary', 'location']
-    data: pd.DataFrame = pd.DataFrame(columns=columns)
-    titles: dict[str, str] = {}
+def _get_info(payload: pd.DataFrame,
+              locations: dict[str, list[str]],
+              job_title: dict[str, list[str]]
+              ) -> pd.DataFrame:
+    """get the info from the payloads
+    columns: list[str] = ['job', 'salary', 'city', 'state']
+    """
+    cities: list[str] = [
+        city for _, item in locations.items() for city in item]
+    job_names: list[str] = [
+        j_t for _, item in job_title.items() for j_t in item]
+
     for _, row in payload.iterrows():
-        titles[row['file_path']] = _extract_title(row)
+        title_i: str = _extract_title(row)
+        city: str = _extract_matching_item(title_i, cities)
+        job_name: str = _extract_matching_item(title_i, job_names)
 
 
 def _extract_title(row: pd.Series) -> str:
@@ -129,6 +182,22 @@ def _extract_title(row: pd.Series) -> str:
                         ), "")
             break
     return title
+
+
+def _extract_matching_item(title: str,
+                           items: list[str]
+                           ) -> str:
+    """
+    Checks if the name of the item is mentioned in the title
+    as a separate word.
+    """
+    for item in items:
+        # Build a regex that looks for 'item' as a whole word,
+        # case-insensitive.
+        pattern = rf"\b{re.escape(item)}\b"
+        if re.search(pattern, title, re.IGNORECASE):
+            return item
+    return "nan"
 
 
 def _get_sections(payload: str,

@@ -4,632 +4,631 @@
 # Original data from Wikipedia: https://en.wikipedia.org/wiki/List_of_cities_and_towns_in_Germany
 # License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0).
 
-cities:
-  Baden-Württemberg:
-    - Aalen
-    - Achern
-    - Albstadt
-    - Backnang
-    - Baden-Baden
-    - Balingen
-    - Biberach
-    - Bietigheim-Bissingen
-    - Böblingen
-    - Bretten
-    - Bruchsal
-    - Bühl
-    - Calw
-    - Crailsheim
-    - Ditzingen
-    - Ehingen an der Donau
-    - Emmendingen
-    - Esslingen
-    - Ettlingen
-    - Fellbach
-    - Filderstadt
-    - Freiburg im Breisgau
-    - Freudenstadt
-    - Friedrichshafen
-    - Gaggenau
-    - Geislingen an der Steige
-    - Göppingen
-    - Heidelberg
-    - Heidenheim
-    - Heilbronn
-    - Herrenberg
-    - Horb am Neckar
-    - Karlsruhe
-    - Kehl
-    - Kirchheim unter Teck
-    - Konstanz
-    - Kornwestheim
-    - Künzelsau
-    - Leimen
-    - Leinfelden-Echterdingen
-    - Leonberg
-    - Lörrach
-    - Ludwigsburg
-    - Mannheim
-    - Mosbach
-    - Mühlacker
-    - Neckarsulm
-    - Neustadt
-    - Nürtingen
-    - Offenburg
-    - Ostfildern
-    - Pforzheim
-    - Radolfzell am Bodensee
-    - Rastatt
-    - Ravensburg
-    - Reutlingen
-    - Rheinfelden (Baden)
-    - Rottweil
-    - Schorndorf
-    - Schwäbisch Gmünd
-    - Schwäbisch Hall
-    - Sigmaringen
-    - Sindelfingen
-    - Sinsheim
-    - Stuttgart
-    - Tauberbischofsheim
-    - Tübingen
-    - Tuttlingen
-    - Ulm
-    - Vaihingen an der Enz
-    - Villingen-Schwenningen
-    - Waiblingen
-    - Waldshut-Tiengen
-    - Wangen im Allgäu
-    - Weil am Rhein
-    - Weingarten
-    - Weinheim
-    - Wiesloch
-    - Winnenden
-  Bavaria:
-    - Aichach
-    - Altötting
-    - Amberg
-    - Ansbach
-    - Aschaffenburg
-    - Augsburg
-    - Bad Kissingen
-    - Bad Neustadt
-    - Bad Reichenhall
-    - Bad Tölz
-    - Bamberg
-    - Bayreuth
-    - Cham
-    - Coburg
-    - Dachau
-    - Deggendorf
-    - Dillingen
-    - Dingolfing
-    - Donauwörth
-    - Ebersberg
-    - Eichstätt
-    - Erding
-    - Erlangen
-    - Forchheim
-    - Freising
-    - Freyung
-    - Friedberg
-    - Fürstenfeldbruck
-    - Fürth
-    - Garmisch-Partenkirchen
-    - Geretsried
-    - Germering
-    - Günzburg
-    - Haßfurt
-    - Hof
-    - Ingolstadt
-    - Karlstadt
-    - Kaufbeuren
-    - Kelheim
-    - Kempten
-    - Kitzingen
-    - Königsbrunn
-    - Kronach
-    - Kulmbach
-    - Landsberg
-    - Landshut
-    - Lauf
-    - Lichtenfels
-    - Lindau
-    - Marktoberdorf
-    - Memmingen
-    - Miesbach
-    - Miltenberg
-    - Mindelheim
-    - Mühldorf
-    - Munich
-    - Neu-Ulm
-    - Neuburg
-    - Neumarkt
-    - Neustadt
-    - Neustadt
-    - Nuremberg
-    - Olching
-    - Passau
-    - Pfaffenhofen
-    - Pfarrkirchen
-    - Regen
-    - Regensburg
-    - Rosenheim
-    - Roth
-    - Schwabach
-    - Schwandorf
-    - Schweinfurt
-    - Sonthofen
-    - Starnberg
-    - Straubing
-    - Tirschenreuth
-    - Traunstein
-    - Unterschleißheim
-    - Weiden
-    - Weilheim
-    - Weißenburg
-    - Wunsiedel
-    - Würzburg
-    - Zirndorf
-  Berlin:
-    - Berlin
-  Brandenburg:
-    - Beeskow
-    - Brandenburg
-    - Cottbus
-    - Eberswalde
-    - Falkensee
-    - Forst
-    - Frankfurt (Oder)
-    - Fürstenwalde
-    - Hennigsdorf
-    - Herzberg
-    - Hohen Neuendorf
-    - Königs Wusterhausen
-    - Lübben
-    - Luckenwalde
-    - Ludwigsfelde
-    - Neuruppin
-    - Oranienburg
-    - Perleberg
-    - Potsdam
-    - Prenzlau
-    - Rathenow
-    - Schwedt (Oder)
-    - Seelow
-    - Senftenberg
-    - Strausberg
-    - Teltow
-  Bremen:
-    - Bremen
-    - Bremerhaven
-  Hamburg:
-    - Hamburg
-  Hesse:
-    - Bad Hersfeld
-    - Bad Homburg
-    - Bad Nauheim
-    - Bad Schwalbach
-    - Bad Vilbel
-    - Baunatal
-    - Bensheim
-    - Butzbach
-    - Darmstadt
-    - Dietzenbach
-    - Dreieich
-    - Erbach
-    - Eschwege
-    - Frankfurt
-    - Friedberg
-    - Friedrichsdorf
-    - Fulda
-    - Gießen
-    - Griesheim
-    - Groß-Gerau
-    - Hanau
-    - Heppenheim
-    - Hofheim
-    - Homberg
-    - Idstein
-    - Kassel
-    - Kelkheim (Taunus)
-    - Korbach
-    - Lampertheim
-    - Langen
-    - Lauterbach
-    - Limburg
-    - Maintal
-    - Marburg
-    - Mörfelden-Walldorf
-    - Neu Isenburg
-    - Neustadt
-    - Obertshausen
-    - Oberursel
-    - Offenbach
-    - Pfungstadt
-    - Rodgau
-    - Steinheim am Main
-    - Taunusstein
-    - Viernheim
-    - Weiterstadt
-    - Wetzlar
-    - Wiesbaden
-  Lower Saxony:
-    - Achim
-    - Aurich
-    - Bad Fallingbostel
-    - Barsinghausen
-    - Brake
-    - Bramsche
-    - Braunschweig
-    - Burgdorf
-    - Buxtehude
-    - Celle
-    - Cloppenburg
-    - Cuxhaven
-    - Delmenhorst
-    - Diepholz
-    - Einbeck
-    - Emden
-    - Garbsen
-    - Georgsmarienhütte
-    - Gifhorn
-    - Goslar
-    - Göttingen
-    - Hameln
-    - Hannover
-    - Helmstedt
-    - Hildesheim
-    - Holzminden
-    - Jever
-    - Laatzen
-    - Langenhagen
-    - Leer
-    - Lehrte
-    - Lingen
-    - Lohne
-    - Lüchow
-    - Lüneburg
-    - Melle
-    - Meppen
-    - Neustadt am Rübenberge
-    - Nienburg
-    - Norden
-    - Nordenham
-    - Nordhorn
-    - Northeim
-    - Oldenburg
-    - Osnabrück
-    - Osterholz-Scharmbeck
-    - Osterode
-    - Papenburg
-    - Peine
-    - Rinteln
-    - Rotenburg
-    - Salzgitter
-    - Seelze
-    - Springe
-    - Stade
-    - Stadthagen
-    - Uelzen
-    - Vechta
-    - Verden
-    - Westerstede
-    - Wilhelmshaven
-    - Winsen
-    - Wittmund
-    - Wolfenbüttel
-    - Wolfsburg
-    - Wunstorf
-  Mecklenburg-Western Pomerania:
-    - Greifswald
-    - Güstrow
-    - Neubrandenburg
-    - Parchim
-    - Rostock
-    - Schwerin
-    - Stralsund
-    - Wismar
-  North Rhine-Westphalia:
-    - Aachen
-    - Ahaus
-    - Ahlen
-    - Alsdorf
-    - Arnsberg
-    - Bad Honnef am Rhein
-    - Bad Oeynhausen
-    - Bad Salzuflen
-    - Baesweiler
-    - Beckum
-    - Bergheim
-    - Bergisch Gladbach
-    - Bergkamen
-    - Bielefeld
-    - Bocholt
-    - Bochum
-    - Bonn
-    - Borken
-    - Bornheim
-    - Bottrop
-    - Brilon
-    - Brühl
-    - Bünde
-    - Castrop-Rauxel
-    - Coesfeld
-    - Cologne
-    - Datteln
-    - Delbrück
-    - Derne
-    - Detmold
-    - Dinslaken
-    - Dormagen
-    - Dorsten
-    - Dortmund
-    - Duisburg
-    - Dülmen
-    - Düren
-    - Düsseldorf
-    - Emsdetten
-    - Ennepetal
-    - Erftstadt
-    - Erkelenz
-    - Erkrath
-    - Eschweiler
-    - Espelkamp
-    - Essen
-    - Euskirchen
-    - Frechen
-    - Geilenkirchen
-    - Geldern
-    - Gelsenkirchen
-    - Gevelsberg
-    - Gladbeck
-    - Goch
-    - Greven
-    - Grevenbroich
-    - Gronau
-    - Gummersbach
-    - Gütersloh
-    - Haan
-    - Hagen
-    - Hamm
-    - Hamminkeln
-    - Harsewinkel
-    - Hattingen
-    - Heiligenhaus
-    - Heinsberg
-    - Hemer
-    - Herford
-    - Herne
-    - Herten
-    - Herzogenrath
-    - Hilden
-    - Höxter
-    - Hückelhoven
-    - Hürth
-    - Ibbenbüren
-    - Iserlohn
-    - Jülich
-    - Kaarst
-    - Kamen
-    - Kamp-Lintfort
-    - Kempen
-    - Kerpen
-    - Kevelaer
-    - Kleve
-    - Königswinter
-    - Korschenbroich
-    - Krefeld
-    - Kreuztal
-    - Lage
-    - Langenfeld
-    - Leichlingen
-    - Lemgo
-    - Lennestadt
-    - Leverkusen
-    - Lippstadt
-    - Lohmar
-    - Löhne
-    - Lübbecke
-    - Lüdenscheid
-    - Lünen
-    - Marl
-    - Mechernich
-    - Meerbusch
-    - Meschede
-    - Mettmann
-    - Minden
-    - Moers
-    - Mönchengladbach
-    - Mülheim
-    - Münster
-    - Nettetal
-    - Neuss
-    - Niederkassel
-    - Oberhausen
-    - Oelde
-    - Oer-Erkenschwick
-    - Olpe
-    - Overath
-    - Paderborn
-    - Petershagen
-    - Plettenberg
-    - Porta Westfalica
-    - Pulheim
-    - Ratingen
-    - Recklinghausen
-    - Remscheid
-    - Rheda-Wiedenbrück
-    - Rheinbach
-    - Rheinberg
-    - Rheine
-    - Rietberg
-    - Rösrath
-    - Salzkotten
-    - Sankt Augustin
-    - Schloß Holte-Stukenbrock
-    - Schmallenberg
-    - Schwelm
-    - Schwerte
-    - Selm
-    - Siegburg
-    - Siegen
-    - Soest
-    - Solingen
-    - Sprockhövel
-    - Steinfurt
-    - Stolberg
-    - Sundern
-    - Tönisvorst
-    - Troisdorf
-    - Unna
-    - Velbert
-    - Verl
-    - Viersen
-    - Waltrop
-    - Warendorf
-    - Warstein
-    - Wegberg
-    - Werl
-    - Wermelskirchen
-    - Wesel
-    - Wesseling
-    - Wetter (Ruhr)
-    - Wiehl
-    - Willich
-    - Witten
-    - Wuppertal
-    - Würselen
-  Rhineland-Palatinate:
-    - Altenkirchen
-    - Alzey
-    - Andernach
-    - Bad Dürkheim
-    - Bad Ems
-    - Bad Kreuznach
-    - Bad Neuenahr-Ahrweiler
-    - Bingen am Rhein
-    - Birkenfeld
-    - Bitburg
-    - Cochem
-    - Daun
-    - Frankenthal
-    - Germersheim
-    - Idar-Oberstein
-    - Ingelheim
-    - Kaiserslautern
-    - Kirchheimbolanden
-    - Koblenz
-    - Kusel
-    - Landau
-    - Ludwigshafen
-    - Mainz
-    - Montabaur
-    - Neustadt
-    - Neuwied
-    - Pirmasens
-    - Simmern
-    - Speyer
-    - Trier
-    - Wittlich
-    - Worms
-    - Zweibrücken
-  Saarland:
-    - Homburg
-    - Merzig
-    - Neunkirchen
-    - Saarbrücken
-    - Saarlouis
-    - Sankt Ingbert
-    - Sankt Wendel
-    - Völklingen
-  Saxony:
-    - Annaberg-Buchholz
-    - Bautzen
-    - Bitterfeld
-    - Chemnitz
-    - Delitzsch
-    - Dresden
-    - Freiberg
-    - Freital
-    - Görlitz
-    - Grimma
-    - Hoyerswerda
-    - Leipzig
-    - Meißen
-    - Pirna
-    - Plauen
-    - Radebeul
-    - Riesa
-    - Torgau
-    - Zittau
-    - Zwickau
-  Saxony-Anhalt:
-    - Aschersleben
-    - Bernburg
-    - Burg
-    - Dessau-Roßlau
-    - Halberstadt
-    - Haldensleben
-    - Halle
-    - Köthen
-    - Magdeburg
-    - Merseburg
-    - Naumburg
-    - Salzwedel
-    - Sangerhausen
-    - Schönebeck
-    - Staßfurt
-    - Stendal
-    - Weißenfels
-    - Wernigerode
-    - Wittenberg
-    - Zeitz
-  Schleswig-Holstein:
-    - Ahrensburg
-    - Bad Oldesloe
-    - Bad Segeberg
-    - Elmshorn
-    - Eutin
-    - Flensburg
-    - Geesthacht
-    - Heide
-    - Husum
-    - Itzehoe
-    - Kiel
-    - Lübeck
-    - Neumünster
-    - Norderstedt
-    - Pinneberg
-    - Plön
-    - Ratzeburg
-    - Reinbek
-    - Rendsburg
-    - Schleswig
-    - Wedel
-  Thuringia:
-    - Altenburg
-    - Apolda
-    - Arnstadt
-    - Bad Salzungen
-    - Eisenach
-    - Eisenberg
-    - Erfurt
-    - Gera
-    - Gotha
-    - Greiz
-    - Heilbad Heiligenstadt
-    - Hildburghausen
-    - Ilmenau
-    - Jena
-    - Meiningen
-    - Mühlhausen
-    - Nordhausen
-    - Rudolstadt
-    - Saalfeld
-    - Schleiz
-    - Sömmerda
-    - Sondershausen
-    - Sonneberg
-    - Suhl
-    - Weimar
+Baden-Württemberg:
+  - Aalen
+  - Achern
+  - Albstadt
+  - Backnang
+  - Baden-Baden
+  - Balingen
+  - Biberach
+  - Bietigheim-Bissingen
+  - Böblingen
+  - Bretten
+  - Bruchsal
+  - Bühl
+  - Calw
+  - Crailsheim
+  - Ditzingen
+  - Ehingen an der Donau
+  - Emmendingen
+  - Esslingen
+  - Ettlingen
+  - Fellbach
+  - Filderstadt
+  - Freiburg im Breisgau
+  - Freudenstadt
+  - Friedrichshafen
+  - Gaggenau
+  - Geislingen an der Steige
+  - Göppingen
+  - Heidelberg
+  - Heidenheim
+  - Heilbronn
+  - Herrenberg
+  - Horb am Neckar
+  - Karlsruhe
+  - Kehl
+  - Kirchheim unter Teck
+  - Konstanz
+  - Kornwestheim
+  - Künzelsau
+  - Leimen
+  - Leinfelden-Echterdingen
+  - Leonberg
+  - Lörrach
+  - Ludwigsburg
+  - Mannheim
+  - Mosbach
+  - Mühlacker
+  - Neckarsulm
+  - Neustadt
+  - Nürtingen
+  - Offenburg
+  - Ostfildern
+  - Pforzheim
+  - Radolfzell am Bodensee
+  - Rastatt
+  - Ravensburg
+  - Reutlingen
+  - Rheinfelden (Baden)
+  - Rottweil
+  - Schorndorf
+  - Schwäbisch Gmünd
+  - Schwäbisch Hall
+  - Sigmaringen
+  - Sindelfingen
+  - Sinsheim
+  - Stuttgart
+  - Tauberbischofsheim
+  - Tübingen
+  - Tuttlingen
+  - Ulm
+  - Vaihingen an der Enz
+  - Villingen-Schwenningen
+  - Waiblingen
+  - Waldshut-Tiengen
+  - Wangen im Allgäu
+  - Weil am Rhein
+  - Weingarten
+  - Weinheim
+  - Wiesloch
+  - Winnenden
+Bavaria:
+  - Aichach
+  - Altötting
+  - Amberg
+  - Ansbach
+  - Aschaffenburg
+  - Augsburg
+  - Bad Kissingen
+  - Bad Neustadt
+  - Bad Reichenhall
+  - Bad Tölz
+  - Bamberg
+  - Bayreuth
+  - Cham
+  - Coburg
+  - Dachau
+  - Deggendorf
+  - Dillingen
+  - Dingolfing
+  - Donauwörth
+  - Ebersberg
+  - Eichstätt
+  - Erding
+  - Erlangen
+  - Forchheim
+  - Freising
+  - Freyung
+  - Friedberg
+  - Fürstenfeldbruck
+  - Fürth
+  - Garmisch-Partenkirchen
+  - Geretsried
+  - Germering
+  - Günzburg
+  - Haßfurt
+  - Hof
+  - Ingolstadt
+  - Karlstadt
+  - Kaufbeuren
+  - Kelheim
+  - Kempten
+  - Kitzingen
+  - Königsbrunn
+  - Kronach
+  - Kulmbach
+  - Landsberg
+  - Landshut
+  - Lauf
+  - Lichtenfels
+  - Lindau
+  - Marktoberdorf
+  - Memmingen
+  - Miesbach
+  - Miltenberg
+  - Mindelheim
+  - Mühldorf
+  - Munich
+  - Neu-Ulm
+  - Neuburg
+  - Neumarkt
+  - Neustadt
+  - Neustadt
+  - Nuremberg
+  - Olching
+  - Passau
+  - Pfaffenhofen
+  - Pfarrkirchen
+  - Regen
+  - Regensburg
+  - Rosenheim
+  - Roth
+  - Schwabach
+  - Schwandorf
+  - Schweinfurt
+  - Sonthofen
+  - Starnberg
+  - Straubing
+  - Tirschenreuth
+  - Traunstein
+  - Unterschleißheim
+  - Weiden
+  - Weilheim
+  - Weißenburg
+  - Wunsiedel
+  - Würzburg
+  - Zirndorf
+Berlin:
+  - Berlin
+Brandenburg:
+  - Beeskow
+  - Brandenburg
+  - Cottbus
+  - Eberswalde
+  - Falkensee
+  - Forst
+  - Frankfurt (Oder)
+  - Fürstenwalde
+  - Hennigsdorf
+  - Herzberg
+  - Hohen Neuendorf
+  - Königs Wusterhausen
+  - Lübben
+  - Luckenwalde
+  - Ludwigsfelde
+  - Neuruppin
+  - Oranienburg
+  - Perleberg
+  - Potsdam
+  - Prenzlau
+  - Rathenow
+  - Schwedt (Oder)
+  - Seelow
+  - Senftenberg
+  - Strausberg
+  - Teltow
+Bremen:
+  - Bremen
+  - Bremerhaven
+Hamburg:
+  - Hamburg
+Hesse:
+  - Bad Hersfeld
+  - Bad Homburg
+  - Bad Nauheim
+  - Bad Schwalbach
+  - Bad Vilbel
+  - Baunatal
+  - Bensheim
+  - Butzbach
+  - Darmstadt
+  - Dietzenbach
+  - Dreieich
+  - Erbach
+  - Eschwege
+  - Frankfurt
+  - Friedberg
+  - Friedrichsdorf
+  - Fulda
+  - Gießen
+  - Griesheim
+  - Groß-Gerau
+  - Hanau
+  - Heppenheim
+  - Hofheim
+  - Homberg
+  - Idstein
+  - Kassel
+  - Kelkheim (Taunus)
+  - Korbach
+  - Lampertheim
+  - Langen
+  - Lauterbach
+  - Limburg
+  - Maintal
+  - Marburg
+  - Mörfelden-Walldorf
+  - Neu Isenburg
+  - Neustadt
+  - Obertshausen
+  - Oberursel
+  - Offenbach
+  - Pfungstadt
+  - Rodgau
+  - Steinheim am Main
+  - Taunusstein
+  - Viernheim
+  - Weiterstadt
+  - Wetzlar
+  - Wiesbaden
+Lower Saxony:
+  - Achim
+  - Aurich
+  - Bad Fallingbostel
+  - Barsinghausen
+  - Brake
+  - Bramsche
+  - Braunschweig
+  - Burgdorf
+  - Buxtehude
+  - Celle
+  - Cloppenburg
+  - Cuxhaven
+  - Delmenhorst
+  - Diepholz
+  - Einbeck
+  - Emden
+  - Garbsen
+  - Georgsmarienhütte
+  - Gifhorn
+  - Goslar
+  - Göttingen
+  - Hameln
+  - Hannover
+  - Helmstedt
+  - Hildesheim
+  - Holzminden
+  - Jever
+  - Laatzen
+  - Langenhagen
+  - Leer
+  - Lehrte
+  - Lingen
+  - Lohne
+  - Lüchow
+  - Lüneburg
+  - Melle
+  - Meppen
+  - Neustadt am Rübenberge
+  - Nienburg
+  - Norden
+  - Nordenham
+  - Nordhorn
+  - Northeim
+  - Oldenburg
+  - Osnabrück
+  - Osterholz-Scharmbeck
+  - Osterode
+  - Papenburg
+  - Peine
+  - Rinteln
+  - Rotenburg
+  - Salzgitter
+  - Seelze
+  - Springe
+  - Stade
+  - Stadthagen
+  - Uelzen
+  - Vechta
+  - Verden
+  - Westerstede
+  - Wilhelmshaven
+  - Winsen
+  - Wittmund
+  - Wolfenbüttel
+  - Wolfsburg
+  - Wunstorf
+Mecklenburg-Western Pomerania:
+  - Greifswald
+  - Güstrow
+  - Neubrandenburg
+  - Parchim
+  - Rostock
+  - Schwerin
+  - Stralsund
+  - Wismar
+North Rhine-Westphalia:
+  - Aachen
+  - Ahaus
+  - Ahlen
+  - Alsdorf
+  - Arnsberg
+  - Bad Honnef am Rhein
+  - Bad Oeynhausen
+  - Bad Salzuflen
+  - Baesweiler
+  - Beckum
+  - Bergheim
+  - Bergisch Gladbach
+  - Bergkamen
+  - Bielefeld
+  - Bocholt
+  - Bochum
+  - Bonn
+  - Borken
+  - Bornheim
+  - Bottrop
+  - Brilon
+  - Brühl
+  - Bünde
+  - Castrop-Rauxel
+  - Coesfeld
+  - Cologne
+  - Datteln
+  - Delbrück
+  - Derne
+  - Detmold
+  - Dinslaken
+  - Dormagen
+  - Dorsten
+  - Dortmund
+  - Duisburg
+  - Dülmen
+  - Düren
+  - Düsseldorf
+  - Emsdetten
+  - Ennepetal
+  - Erftstadt
+  - Erkelenz
+  - Erkrath
+  - Eschweiler
+  - Espelkamp
+  - Essen
+  - Euskirchen
+  - Frechen
+  - Geilenkirchen
+  - Geldern
+  - Gelsenkirchen
+  - Gevelsberg
+  - Gladbeck
+  - Goch
+  - Greven
+  - Grevenbroich
+  - Gronau
+  - Gummersbach
+  - Gütersloh
+  - Haan
+  - Hagen
+  - Hamm
+  - Hamminkeln
+  - Harsewinkel
+  - Hattingen
+  - Heiligenhaus
+  - Heinsberg
+  - Hemer
+  - Herford
+  - Herne
+  - Herten
+  - Herzogenrath
+  - Hilden
+  - Höxter
+  - Hückelhoven
+  - Hürth
+  - Ibbenbüren
+  - Iserlohn
+  - Jülich
+  - Kaarst
+  - Kamen
+  - Kamp-Lintfort
+  - Kempen
+  - Kerpen
+  - Kevelaer
+  - Kleve
+  - Königswinter
+  - Korschenbroich
+  - Krefeld
+  - Kreuztal
+  - Lage
+  - Langenfeld
+  - Leichlingen
+  - Lemgo
+  - Lennestadt
+  - Leverkusen
+  - Lippstadt
+  - Lohmar
+  - Löhne
+  - Lübbecke
+  - Lüdenscheid
+  - Lünen
+  - Marl
+  - Mechernich
+  - Meerbusch
+  - Meschede
+  - Mettmann
+  - Minden
+  - Moers
+  - Mönchengladbach
+  - Mülheim
+  - Münster
+  - Nettetal
+  - Neuss
+  - Niederkassel
+  - Oberhausen
+  - Oelde
+  - Oer-Erkenschwick
+  - Olpe
+  - Overath
+  - Paderborn
+  - Petershagen
+  - Plettenberg
+  - Porta Westfalica
+  - Pulheim
+  - Ratingen
+  - Recklinghausen
+  - Remscheid
+  - Rheda-Wiedenbrück
+  - Rheinbach
+  - Rheinberg
+  - Rheine
+  - Rietberg
+  - Rösrath
+  - Salzkotten
+  - Sankt Augustin
+  - Schloß Holte-Stukenbrock
+  - Schmallenberg
+  - Schwelm
+  - Schwerte
+  - Selm
+  - Siegburg
+  - Siegen
+  - Soest
+  - Solingen
+  - Sprockhövel
+  - Steinfurt
+  - Stolberg
+  - Sundern
+  - Tönisvorst
+  - Troisdorf
+  - Unna
+  - Velbert
+  - Verl
+  - Viersen
+  - Waltrop
+  - Warendorf
+  - Warstein
+  - Wegberg
+  - Werl
+  - Wermelskirchen
+  - Wesel
+  - Wesseling
+  - Wetter (Ruhr)
+  - Wiehl
+  - Willich
+  - Witten
+  - Wuppertal
+  - Würselen
+Rhineland-Palatinate:
+  - Altenkirchen
+  - Alzey
+  - Andernach
+  - Bad Dürkheim
+  - Bad Ems
+  - Bad Kreuznach
+  - Bad Neuenahr-Ahrweiler
+  - Bingen am Rhein
+  - Birkenfeld
+  - Bitburg
+  - Cochem
+  - Daun
+  - Frankenthal
+  - Germersheim
+  - Idar-Oberstein
+  - Ingelheim
+  - Kaiserslautern
+  - Kirchheimbolanden
+  - Koblenz
+  - Kusel
+  - Landau
+  - Ludwigshafen
+  - Mainz
+  - Montabaur
+  - Neustadt
+  - Neuwied
+  - Pirmasens
+  - Simmern
+  - Speyer
+  - Trier
+  - Wittlich
+  - Worms
+  - Zweibrücken
+Saarland:
+  - Homburg
+  - Merzig
+  - Neunkirchen
+  - Saarbrücken
+  - Saarlouis
+  - Sankt Ingbert
+  - Sankt Wendel
+  - Völklingen
+Saxony:
+  - Annaberg-Buchholz
+  - Bautzen
+  - Bitterfeld
+  - Chemnitz
+  - Delitzsch
+  - Dresden
+  - Freiberg
+  - Freital
+  - Görlitz
+  - Grimma
+  - Hoyerswerda
+  - Leipzig
+  - Meißen
+  - Pirna
+  - Plauen
+  - Radebeul
+  - Riesa
+  - Torgau
+  - Zittau
+  - Zwickau
+Saxony-Anhalt:
+  - Aschersleben
+  - Bernburg
+  - Burg
+  - Dessau-Roßlau
+  - Halberstadt
+  - Haldensleben
+  - Halle
+  - Köthen
+  - Magdeburg
+  - Merseburg
+  - Naumburg
+  - Salzwedel
+  - Sangerhausen
+  - Schönebeck
+  - Staßfurt
+  - Stendal
+  - Weißenfels
+  - Wernigerode
+  - Wittenberg
+  - Zeitz
+Schleswig-Holstein:
+  - Ahrensburg
+  - Bad Oldesloe
+  - Bad Segeberg
+  - Elmshorn
+  - Eutin
+  - Flensburg
+  - Geesthacht
+  - Heide
+  - Husum
+  - Itzehoe
+  - Kiel
+  - Lübeck
+  - Neumünster
+  - Norderstedt
+  - Pinneberg
+  - Plön
+  - Ratzeburg
+  - Reinbek
+  - Rendsburg
+  - Schleswig
+  - Wedel
+Thuringia:
+  - Altenburg
+  - Apolda
+  - Arnstadt
+  - Bad Salzungen
+  - Eisenach
+  - Eisenberg
+  - Erfurt
+  - Gera
+  - Gotha
+  - Greiz
+  - Heilbad Heiligenstadt
+  - Hildburghausen
+  - Ilmenau
+  - Jena
+  - Meiningen
+  - Mühlhausen
+  - Nordhausen
+  - Rudolstadt
+  - Saalfeld
+  - Schleiz
+  - Sömmerda
+  - Sondershausen
+  - Sonneberg
+  - Suhl
+  - Weimar
