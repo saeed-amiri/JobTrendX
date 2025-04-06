@@ -42,8 +42,14 @@ def split_payload(payloads: pd.DataFrame,
     """splitting the payload of the emails based on the sections
     titles"""
     # Not implemented yet!
+    # Get the fixed sections in the Config
     sections: dict[str, dict[str, str]] = cfg.defaults.analysis.sections
+
+    # Get the name of the cities from a yaml file
     locations: dict[str, list[str]] = _get_locations(cfg)
+    cites: list[str] = [
+        city for _, items in locations.items() for city in items]
+
     payloads_uplift = _payload_clean_up(payloads)
     data_set: pd.DataFrame = _get_info(payloads_uplift)
 
