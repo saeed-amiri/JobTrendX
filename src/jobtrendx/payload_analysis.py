@@ -23,6 +23,8 @@ import re
 
 import pandas as pd
 
+from omegaconf import DictConfig
+
 __all__ = [
     'split_payload',
     'analysis_job_title',
@@ -31,14 +33,16 @@ __all__ = [
 
 
 def split_payload(payloads: pd.DataFrame,
-                  sections: dict[str, dict[str, str]]
+                  cfg: DictConfig
                   ) -> pd.DataFrame:
 
     """splitting the payload of the emails based on the sections
     titles"""
     # Not implemented yet!
+    sections: dict[str, dict[str, str]] = cfg.defaults.analysis.sections
     payloads_uplift = _payload_clean_up(payloads)
     data_set: pd.DataFrame = _get_info(payloads_uplift)
+    print(data_set)
 
     data = [
         (row.file_path,

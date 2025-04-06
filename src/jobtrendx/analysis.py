@@ -85,7 +85,7 @@ class PayloadAnalayzer:
 
     __slots__: list[str] = [
         "bodies",
-        "cfg_anlz",
+        "cfg",
     ]
 
     def __init__(self,
@@ -93,7 +93,7 @@ class PayloadAnalayzer:
                  cfg: DictConfig,
                  ) -> None:
         self.bodies = eml_df[['file_path', 'payload', 'eml_lang']]
-        self.cfg_anlz = cfg.defaults.analysis
+        self.cfg = cfg
 
     def analyze_sections(self,
                          log: logger.logging.Logger
@@ -111,7 +111,7 @@ class PayloadAnalayzer:
         returns the output as DataFrame. FilePaths are the index
         """
         return payload_analysis.split_payload(
-            self.bodies, self.cfg_anlz.sections)
+            self.bodies, self.cfg)
 
     def anlz_top_skills(self,
                         top_skills: pd.DataFrame
