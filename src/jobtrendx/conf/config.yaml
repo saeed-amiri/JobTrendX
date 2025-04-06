@@ -12,3 +12,6 @@ app:
     mode: "development"
 
 taxonomy_path: "/home/santiago/Documents/MyScripts/JobTrendX/src/jobtrendx/taxonomy"
+taxonomy_files:
+  locations: locations.yaml
+  job_titles: job_titles.yaml

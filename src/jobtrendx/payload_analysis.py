@@ -20,6 +20,7 @@ Samiri
 """
 
 import re
+import sys
 from pathlib import Path
 
 import yaml
@@ -42,7 +43,7 @@ def split_payload(payloads: pd.DataFrame,
     titles"""
     # Not implemented yet!
     sections: dict[str, dict[str, str]] = cfg.defaults.analysis.sections
-    locations: dict[str, list[str]] = _get_locations(cfg.taxonomy_path)
+    locations: dict[str, list[str]] = _get_locations(cfg)
     payloads_uplift = _payload_clean_up(payloads)
     data_set: pd.DataFrame = _get_info(payloads_uplift)
 
@@ -60,13 +61,33 @@ def split_payload(payloads: pd.DataFrame,
 
 # These two functions are for splitting the sections based on the spaces
 # Not functional yet! but i push them to the main
-def _get_locations(taxonomy_path: str) -> dict[str, list[str]]:
-    """read the yaml file of the locations and return the
-    names of the cities
+def _get_locations(cfg: DictConfig) -> dict[str, list[str]]:
     """
-    file_path: Path = Path(taxonomy_path, 'locations.yaml')
-    with open(file_path, 'r', encoding='utf-8') as f_loc:
-        return yaml.safe_load(f_loc)
+    Reads the YAML file containing location data and returns
+    a dictionary of city names.
+
+    Args:
+        cfg (DictConfig): Configuration object containing
+        paths to taxonomy files.
+
+    Returns:
+        dict[str, list[str]]: Dictionary of city names grouped
+        by categories.
+
+    Raises:
+        SystemExit: If the file is not found, has a format
+        error, or an unknown error occurs.
+    """
+    file_path = Path(cfg.taxonomy_path) / cfg.taxonomy_files['locations']
+    try:
+        with file_path.open('r', encoding='utf-8') as f_loc:
+            return yaml.safe_load(f_loc)
+    except FileNotFoundError:
+        sys.exit(f"\nFile Not Found:\n`{file_path}` does not exist!")
+    except yaml.YAMLError:
+        sys.exit(f"\nFile Format Error:\n`{file_path}` not a valid YAML file!")
+    except Exception as err:
+        sys.exit(f"Unknown Error in `{file_path}`: {err}")
 
 
 def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
