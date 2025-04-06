@@ -72,7 +72,7 @@ def _get_locations(cfg: DictConfig) -> dict[str, list[str]]:
 
     Returns:
         dict[str, list[str]]: Dictionary of city names grouped
-        by categories.
+        by states names.
 
     Raises:
         SystemExit: If the file is not found, has a format
