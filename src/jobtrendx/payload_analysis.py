@@ -46,10 +46,11 @@ def split_payload(payloads: pd.DataFrame,
     sections: dict[str, dict[str, str]] = cfg.defaults.analysis.sections
 
     # Get the name of the cities from a yaml file
-    locations: dict[str, list[str]] = _get_locations(cfg)
+    locations: dict[str, list[str]] = _fetch_from_yaml(cfg, 'locations')
+    job_titles: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
 
     payloads_uplift = _payload_clean_up(payloads)
-    data_set: pd.DataFrame = _get_info(payloads_uplift, locations)
+    data_set: pd.DataFrame = _get_info(payloads_uplift, locations, job_titles)
 
     data = [
         (row.file_path,
@@ -65,10 +66,12 @@ def split_payload(payloads: pd.DataFrame,
 
 # These two functions are for splitting the sections based on the spaces
 # Not functional yet! but i push them to the main
-def _get_locations(cfg: DictConfig) -> dict[str, list[str]]:
+def _fetch_from_yaml(cfg: DictConfig,
+                     file_type: str
+                     ) -> dict[str, list[str]]:
     """
     Reads the YAML file containing location data and returns
-    a dictionary of city names.
+    a dictionary of items in the yaml
 
     Args:
         cfg (DictConfig): Configuration object containing
@@ -82,7 +85,8 @@ def _get_locations(cfg: DictConfig) -> dict[str, list[str]]:
         SystemExit: If the file is not found, has a format
         error, or an unknown error occurs.
     """
-    file_path = Path(cfg.taxonomy_path) / cfg.taxonomy_files['locations']
+    # pylint: disable=broad-exception-caught
+    file_path = Path(cfg.taxonomy_path) / cfg.taxonomy_files[file_type]
     try:
         with file_path.open('r', encoding='utf-8') as f_loc:
             return yaml.safe_load(f_loc)
@@ -150,16 +154,21 @@ def _filter_item(item: list[str],
 
 
 def _get_info(payload: pd.DataFrame,
-              locations: dict[str, list[str]]
+              locations: dict[str, list[str]],
+              job_title: dict[str, list[str]]
               ) -> pd.DataFrame:
     """get the info from the payloads
     columns: list[str] = ['job', 'salary', 'city', 'state']
     """
     cities: list[str] = [
         city for _, item in locations.items() for city in item]
+    job_names: list[str] = [
+        j_t for _, item in job_title.items() for j_t in item]
+
     for _, row in payload.iterrows():
         title_i: str = _extract_title(row)
-        city: str = _get_city(title_i, cities)
+        city: str = _extract_matching_item(title_i, cities)
+        job_name: str = _extract_matching_item(title_i, job_names)
 
 
 def _extract_title(row: pd.Series) -> str:
@@ -175,17 +184,19 @@ def _extract_title(row: pd.Series) -> str:
     return title
 
 
-def _get_city(title: str, cities: list[str]) -> str:
+def _extract_matching_item(title: str,
+                           items: list[str]
+                           ) -> str:
     """
-    Checks if the name of the city is mentioned in the title
+    Checks if the name of the item is mentioned in the title
     as a separate word.
     """
-    for city in cities:
-        # Build a regex that looks for 'city' as a whole word,
+    for item in items:
+        # Build a regex that looks for 'item' as a whole word,
         # case-insensitive.
-        pattern = rf"\b{re.escape(city)}\b"
+        pattern = rf"\b{re.escape(item)}\b"
         if re.search(pattern, title, re.IGNORECASE):
-            return city
+            return item
     return "nan"
 
 
