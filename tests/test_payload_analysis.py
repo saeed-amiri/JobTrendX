@@ -11,7 +11,8 @@ import pandas as pd
 from omegaconf import DictConfig
 
 from jobtrendx.payload_analysis import _get_sections, _split_by_lang, \
-    _split_double_newline, _filter_item, _extract_title, _get_locations
+    _split_double_newline, _filter_item, _extract_title, _fetch_from_yaml, \
+    _extract_matching_item
 
 
 def test_get_sections_de() -> None:
@@ -256,11 +257,12 @@ def test_extract_title_multiple_matches():
     assert result == expected, f"Expected '{expected}', but got '{result}'"
 
 
-class TestGetLocations(unittest.TestCase):
-    """Test the yaml reader funcition"""
-    def test_get_locations_success(self):
+class TestFetchFromYaml(unittest.TestCase):
+    """Test the YAML reader function `_fetch_from_yaml`."""
+
+    def test_fetch_from_yaml_success(self):
         """
-        Test _get_locations successfully reads and parses a YAML file.
+        Test _fetch_from_yaml successfully reads and parses a YAML file.
         """
         cfg = DictConfig({
             "taxonomy_path": "/some/dir",
@@ -275,13 +277,15 @@ class TestGetLocations(unittest.TestCase):
         """
         mocked_open = mock_open(read_data=fake_yaml)
         with patch("pathlib.Path.open", mocked_open):
-            result = _get_locations(cfg)
-        self.assertEqual(result, {"cities": ["Berlin", "Munich"]},
-                         "Should parse YAML data correctly.")
+            result = _fetch_from_yaml(cfg, 'locations')
+        self.assertEqual(
+            result, {"cities": ["Berlin", "Munich"]},
+            "Should parse YAML data correctly."
+        )
 
-    def test_get_locations_file_not_found(self):
+    def test_fetch_from_yaml_file_not_found(self):
         """
-        Test _get_locations raises SystemExit when the file is missing.
+        Test _fetch_from_yaml raises SystemExit when the file is missing.
         """
         cfg = DictConfig({
             "taxonomy_path": "/some/dir",
@@ -293,12 +297,12 @@ class TestGetLocations(unittest.TestCase):
         mocked_open.side_effect = FileNotFoundError
         with patch("pathlib.Path.open", mocked_open), \
              self.assertRaises(SystemExit) as context:
-            _get_locations(cfg)
+            _fetch_from_yaml(cfg, 'locations')
         self.assertIn("does not exist!", str(context.exception))
 
-    def test_get_locations_format_error(self):
+    def test_fetch_from_yaml_format_error(self):
         """
-        Test _get_locations raises SystemExit when the YAML is invalid.
+        Test _fetch_from_yaml raises SystemExit when the YAML is invalid.
         """
         cfg = DictConfig({
             "taxonomy_path": "/some/dir",
@@ -311,12 +315,12 @@ class TestGetLocations(unittest.TestCase):
         with patch("pathlib.Path.open", mocked_open), \
              patch("yaml.safe_load", side_effect=yaml.YAMLError), \
              self.assertRaises(SystemExit) as context:
-            _get_locations(cfg)
+            _fetch_from_yaml(cfg, 'locations')
         self.assertIn("not a valid YAML file!", str(context.exception))
 
-    def test_get_locations_unknown_error(self):
+    def test_fetch_from_yaml_unknown_error(self):
         """
-        Test _get_locations raises SystemExit for any other exception.
+        Test _fetch_from_yaml raises SystemExit for any other exception.
         """
         cfg = DictConfig({
             "taxonomy_path": "/some/dir",
@@ -328,8 +332,48 @@ class TestGetLocations(unittest.TestCase):
         mocked_open.side_effect = ValueError("Some unknown error")
         with patch("pathlib.Path.open", mocked_open), \
              self.assertRaises(SystemExit) as context:
-            _get_locations(cfg)
+            _fetch_from_yaml(cfg, 'locations')
         self.assertIn("Unknown Error", str(context.exception))
+
+
+
+class TestExtractMatchingItem(unittest.TestCase):
+    def test_match_single_item(self):
+        """Checks that a simple match returns the expected item."""
+        items = ["Data Scientist", "Machine Learning"]
+        title = "We need a Data Scientist who can handle advanced analytics."
+        result = _extract_matching_item(title, items)
+        self.assertEqual(result, "Data Scientist")
+
+    def test_match_is_case_insensitive(self):
+        """Ensures matching is case-insensitive."""
+        items = ["datascientist", "engineer"]
+        title = "We are hiring a Senior DATAScientist to join our team."
+        result = _extract_matching_item(title, items)
+        self.assertEqual(result, "datascientist")
+
+    def test_partial_word_no_match(self):
+        """
+        Ensures partial words are not matched and "nan" is returned
+        if no full match is found.
+        """
+        items = ["Data"]
+        title = "We need a Database developer."
+        result = _extract_matching_item(title, items)
+        self.assertEqual(result, "nan")
+
+    def test_returns_first_of_multiple_items(self):
+        """
+        Checks that if multiple items can match, the function
+        returns the first match it finds in 'items'.
+        """
+        items = ["Data Scientist", "Data Engineer", "Data Analyst"]
+        title = "We need a Data Engineer, but we also need an Analyst."
+        # Because "Data Engineer" appears first in the list, and
+        # it matches the title text first, "Data Engineer" is returned.
+        # If the function checks them in order, that's what we'll get.
+        result = _extract_matching_item(title, items)
+        self.assertEqual(result, "Data Engineer")
 
 
 if __name__ == "__main__":
