@@ -47,11 +47,9 @@ def split_payload(payloads: pd.DataFrame,
 
     # Get the name of the cities from a yaml file
     locations: dict[str, list[str]] = _get_locations(cfg)
-    cites: list[str] = [
-        city for _, items in locations.items() for city in items]
 
     payloads_uplift = _payload_clean_up(payloads)
-    data_set: pd.DataFrame = _get_info(payloads_uplift)
+    data_set: pd.DataFrame = _get_info(payloads_uplift, locations)
 
     data = [
         (row.file_path,
@@ -151,13 +149,17 @@ def _filter_item(item: list[str],
     return filtered
 
 
-def _get_info(payload: pd.DataFrame) -> pd.DataFrame:
-    """get the info from the payloads"""
-    columns: list[str] = ['job', 'salary', 'location']
-    data: pd.DataFrame = pd.DataFrame(columns=columns)
-    titles: dict[str, str] = {}
+def _get_info(payload: pd.DataFrame,
+              locations: dict[str, list[str]]
+              ) -> pd.DataFrame:
+    """get the info from the payloads
+    columns: list[str] = ['job', 'salary', 'city', 'state']
+    """
+    cities: list[str] = [
+        city for _, item in locations.items() for city in item]
     for _, row in payload.iterrows():
-        titles[row['file_path']] = _extract_title(row)
+        title_i: str = _extract_title(row)
+        city: str = _get_city(title_i, cities)
 
 
 def _extract_title(row: pd.Series) -> str:
@@ -171,6 +173,20 @@ def _extract_title(row: pd.Series) -> str:
                         ), "")
             break
     return title
+
+
+def _get_city(title: str, cities: list[str]) -> str:
+    """
+    Checks if the name of the city is mentioned in the title
+    as a separate word.
+    """
+    for city in cities:
+        # Build a regex that looks for 'city' as a whole word,
+        # case-insensitive.
+        pattern = rf"\b{re.escape(city)}\b"
+        if re.search(pattern, title, re.IGNORECASE):
+            return city
+    return "nan"
 
 
 def _get_sections(payload: str,
