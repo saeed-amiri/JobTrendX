@@ -20,7 +20,9 @@ Samiri
 """
 
 import re
+from pathlib import Path
 
+import yaml
 import pandas as pd
 
 from omegaconf import DictConfig
@@ -40,9 +42,9 @@ def split_payload(payloads: pd.DataFrame,
     titles"""
     # Not implemented yet!
     sections: dict[str, dict[str, str]] = cfg.defaults.analysis.sections
+    locations: dict[str, list[str]] = _get_locations(cfg.taxonomy_path)
     payloads_uplift = _payload_clean_up(payloads)
     data_set: pd.DataFrame = _get_info(payloads_uplift)
-    print(data_set)
 
     data = [
         (row.file_path,
@@ -58,6 +60,15 @@ def split_payload(payloads: pd.DataFrame,
 
 # These two functions are for splitting the sections based on the spaces
 # Not functional yet! but i push them to the main
+def _get_locations(taxonomy_path: str) -> dict[str, list[str]]:
+    """read the yaml file of the locations and return the
+    names of the cities
+    """
+    file_path: Path = Path(taxonomy_path, 'locations.yaml')
+    with open(file_path, 'r', encoding='utf-8') as f_loc:
+        return yaml.safe_load(f_loc)
+
+
 def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
     """To split the payload more accurately"""
     payloads_up = payloads.copy()
