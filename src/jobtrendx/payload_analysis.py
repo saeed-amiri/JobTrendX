@@ -183,13 +183,13 @@ def _get_info(payload: pd.DataFrame,
 def _extract_title(row: pd.Series,
                    tags: list[str]
                    ) -> str:
-    """extract the title of the job"""
+    """Extract the title of the job."""
     title: str = 'Nan'
     for item in row['clean_payload']:
         if any(tag in item for tag in tags):
             title = next((
                         line for line in item.split('\n')
-                        if '(m/w/d)' in line or '(f/m/x)' in line
+                        if any(tag in line for tag in tags)
                         ), "")
             break
     return title
