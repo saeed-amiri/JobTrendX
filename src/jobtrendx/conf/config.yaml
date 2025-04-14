@@ -17,3 +17,4 @@ taxonomy_files:
   locations: locations.yaml
   job_titles: job_titles.yaml
   title_tags: title_tags.yaml
+  skills: skills.yaml

@@ -48,11 +48,12 @@ def split_payload(payloads: pd.DataFrame,
     # Get the name of the cities from a yaml file
     locations: dict[str, list[str]] = _fetch_from_yaml(cfg, 'locations')
     job_titles: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
-    general: dict[str, list[str]] = _fetch_from_yaml(cfg, 'title_tags')
+    tags: dict[str, list[str]] = _fetch_from_yaml(cfg, 'title_tags')
+    skills: dict[str, list[str]] = _fetch_from_yaml(cfg, 'skills')
 
     payloads_uplift = _payload_clean_up(payloads)
     data_set: pd.DataFrame = _get_info(
-        payloads_uplift, locations, job_titles, general)
+        payloads_uplift, locations, job_titles, tags, skills)
 
     data = [
         (row.file_path,
@@ -158,7 +159,8 @@ def _filter_item(item: list[str],
 def _get_info(payload: pd.DataFrame,
               locations: dict[str, list[str]],
               job_title: dict[str, list[str]],
-              tags: dict[str, list[str]]
+              tag_dict: dict[str, list[str]],
+              skill_dict: dict[str, list[str]]
               ) -> pd.DataFrame:
     """get the info from the payloads
     columns: list[str] = ['job', 'salary', 'city', 'state']
@@ -167,12 +169,15 @@ def _get_info(payload: pd.DataFrame,
         city for _, item in locations.items() for city in item]
     job_names: list[str] = [
         j_t for _, item in job_title.items() for j_t in item]
-    tags: list[str] = tags['tags']
+    tags: list[str] = tag_dict['tags']
+    all_skills: list[str] = [
+        j_t for _, item in skill_dict.items() for j_t in item]
 
     for _, row in payload.iterrows():
         title_i: str = _extract_title(row, tags)
         city: str = _extract_matching_item(title_i, cities)
         job_name: str = _extract_matching_item(title_i, job_names)
+        skills: list[str] = _extract_all_items(row, all_skills)
 
 
 def _extract_title(row: pd.Series,
@@ -204,6 +209,38 @@ def _extract_matching_item(title: str,
         if re.search(pattern, title, re.IGNORECASE):
             return item
     return "nan"
+
+
+def _extract_all_items(row: pd.Series,
+                       items: list[str],
+                       column: str = "clean_payload"
+                       ) -> list[str]:
+    """
+    Extract all matching items from the specified column of
+    a row.
+
+    Args:
+        row (pd.Series): A row of the DataFrame containing
+        the payload data.
+        items (list[str]): A list of items to search for in
+        the payload.
+        column (str): The column name in the row to search
+        within.
+
+    Returns:
+        list[str]: A list of matched items.
+        Returns ["nan"] if no matches are found.
+    """
+    matched: set[str] = set()
+    for item in items:
+        # Compile a case-insensitive regex pattern for the item.
+        pattern = re.compile(rf"\b{re.escape(item)}\b", re.IGNORECASE)
+
+        # Check if the pattern matches any line in the specified column.
+        if any(pattern.search(line) for line in row[column]):
+            matched.add(item)
+
+    return list(matched) if matched else ["nan"]
 
 
 def _get_sections(payload: str,
