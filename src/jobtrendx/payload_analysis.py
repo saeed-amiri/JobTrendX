@@ -175,8 +175,8 @@ def _get_info(payload: pd.DataFrame,
 
     for _, row in payload.iterrows():
         title_i: str = _extract_title(row, tags)
-        city: str = _extract_matching_item(title_i, cities)
         job_name: str = _extract_matching_item(title_i, job_names)
+        city: list[str] = _extract_all_items(row, cities)
         skills: list[str] = _extract_all_items(row, all_skills)
 
 
