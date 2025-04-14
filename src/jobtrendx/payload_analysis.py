@@ -48,7 +48,7 @@ def split_payload(payloads: pd.DataFrame,
     # Get the name of the cities from a yaml file
     locations: dict[str, list[str]] = _fetch_from_yaml(cfg, 'locations')
     job_titles: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
-    general: dict[str, list[str]] = _fetch_from_yaml(cfg, 'general')
+    general: dict[str, list[str]] = _fetch_from_yaml(cfg, 'title_tags')
 
     payloads_uplift = _payload_clean_up(payloads)
     data_set: pd.DataFrame = _get_info(
