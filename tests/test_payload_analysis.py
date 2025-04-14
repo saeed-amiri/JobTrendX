@@ -12,7 +12,7 @@ from omegaconf import DictConfig
 
 from jobtrendx.payload_analysis import _get_sections, _split_by_lang, \
     _split_double_newline, _filter_item, _extract_title, _fetch_from_yaml, \
-    _extract_matching_item
+    _extract_matching_item, _extract_all_items
 
 
 def test_get_sections_de() -> None:
@@ -340,8 +340,8 @@ class TestFetchFromYaml(unittest.TestCase):
         self.assertIn("Unknown Error", str(context.exception))
 
 
-
 class TestExtractMatchingItem(unittest.TestCase):
+    """test if we a single item work"""
     def test_match_single_item(self):
         """Checks that a simple match returns the expected item."""
         items = ["Data Scientist", "Machine Learning"]
@@ -378,6 +378,50 @@ class TestExtractMatchingItem(unittest.TestCase):
         # If the function checks them in order, that's what we'll get.
         result = _extract_matching_item(title, items)
         self.assertEqual(result, "Data Engineer")
+
+
+class TestExtractAllItems(unittest.TestCase):
+    """test if gettinge all the skills from the emails work"""
+
+    def test_extract_all_items_single_match(self):
+        """
+        Ensures a single item that appears in the payload is
+        matched.
+        """
+        row = pd.Series({
+            "clean_payload": [
+                "Python is a popular language for data science."
+            ]
+        })
+        items = ["Python", "R"]
+        found = _extract_all_items(row, items)
+        self.assertEqual(found, ["Python"])
+
+    def test_extract_all_items_multiple_matches(self):
+        """
+        Ensures multiple items are matched when they appear.
+        """
+        row = pd.Series({
+            "clean_payload": [
+                "We use TensorFlow and Spark for big data processing."
+            ]
+        })
+        items = ["TensorFlow", "Spark", "PyTorch"]
+        found = _extract_all_items(row, items)
+        self.assertCountEqual(found, ["TensorFlow", "Spark"])
+
+    def test_extract_all_items_no_match(self):
+        """
+        Ensures ["nan"] is returned when no items match.
+        """
+        row = pd.Series({
+            "clean_payload": [
+                "No recognized skill is mentioned here."
+            ]
+        })
+        items = ["Python", "TensorFlow"]
+        found = _extract_all_items(row, items)
+        self.assertEqual(found, ["nan"])
 
 
 if __name__ == "__main__":
