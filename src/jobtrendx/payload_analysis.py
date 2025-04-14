@@ -48,9 +48,11 @@ def split_payload(payloads: pd.DataFrame,
     # Get the name of the cities from a yaml file
     locations: dict[str, list[str]] = _fetch_from_yaml(cfg, 'locations')
     job_titles: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
+    general: dict[str, list[str]] = _fetch_from_yaml(cfg, 'general')
 
     payloads_uplift = _payload_clean_up(payloads)
-    data_set: pd.DataFrame = _get_info(payloads_uplift, locations, job_titles)
+    data_set: pd.DataFrame = _get_info(
+        payloads_uplift, locations, job_titles, general)
 
     data = [
         (row.file_path,
@@ -155,7 +157,8 @@ def _filter_item(item: list[str],
 
 def _get_info(payload: pd.DataFrame,
               locations: dict[str, list[str]],
-              job_title: dict[str, list[str]]
+              job_title: dict[str, list[str]],
+              general: dict[str, list[str]]
               ) -> pd.DataFrame:
     """get the info from the payloads
     columns: list[str] = ['job', 'salary', 'city', 'state']
@@ -166,16 +169,18 @@ def _get_info(payload: pd.DataFrame,
         j_t for _, item in job_title.items() for j_t in item]
 
     for _, row in payload.iterrows():
-        title_i: str = _extract_title(row)
+        title_i: str = _extract_title(row, general['tags'])
         city: str = _extract_matching_item(title_i, cities)
         job_name: str = _extract_matching_item(title_i, job_names)
 
 
-def _extract_title(row: pd.Series) -> str:
+def _extract_title(row: pd.Series,
+                   tags: list[str]
+                   ) -> str:
     """extract the title of the job"""
     title: str = 'Nan'
     for item in row['clean_payload']:
-        if any(tag in item for tag in ['(m/w/d)', '(f/m/x)']):
+        if any(tag in item for tag in tags):
             title = next((
                         line for line in item.split('\n')
                         if '(m/w/d)' in line or '(f/m/x)' in line
