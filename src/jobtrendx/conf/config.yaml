@@ -16,3 +16,4 @@ taxonomy_path: "/home/santiago/Documents/MyScripts/JobTrendX/src/jobtrendx/taxon
 taxonomy_files:
   locations: locations.yaml
   job_titles: job_titles.yaml
+  general: general.yaml
