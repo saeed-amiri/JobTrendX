@@ -207,7 +207,8 @@ def test_extract_title_none_found():
             "Another block of text without any markers."
         ]
     })
-    assert _extract_title(row) == "Nan"
+    tags: list[str] = ['(m/w/d)', '(f/m/x)']
+    assert _extract_title(row, tags) == "Nan"
 
 
 def test_extract_title_mwd_found():
@@ -220,8 +221,9 @@ def test_extract_title_mwd_found():
             "Job Title (m/w/d)\nAnd some extra lines here."
         ]
     })
+    tags: list[str] = ['(m/w/d)', '(f/m/x)']
     expected = "Job Title (m/w/d)"
-    result = _extract_title(row)
+    result = _extract_title(row, tags)
     assert result == expected, f"Expected '{expected}', but got '{result}'"
 
 
@@ -236,7 +238,8 @@ def test_extract_title_fmx_found():
         ]
     })
     expected = "Job Family Title (f/m/x)"
-    result = _extract_title(row)
+    tags: list[str] = ['(m/w/d)', '(f/m/x)']
+    result = _extract_title(row, tags)
     assert result == expected, f"Expected '{expected}', but got '{result}'"
 
 
@@ -253,7 +256,8 @@ def test_extract_title_multiple_matches():
     })
     # Should return the line from the first block it encounters
     expected = "Something else (m/w/d)"
-    result = _extract_title(row)
+    tags: list[str] = ['(m/w/d)', '(f/m/x)']
+    result = _extract_title(row, tags)
     assert result == expected, f"Expected '{expected}', but got '{result}'"
 
 
