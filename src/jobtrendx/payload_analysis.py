@@ -158,7 +158,7 @@ def _filter_item(item: list[str],
 def _get_info(payload: pd.DataFrame,
               locations: dict[str, list[str]],
               job_title: dict[str, list[str]],
-              general: dict[str, list[str]]
+              tags: dict[str, list[str]]
               ) -> pd.DataFrame:
     """get the info from the payloads
     columns: list[str] = ['job', 'salary', 'city', 'state']
@@ -167,9 +167,10 @@ def _get_info(payload: pd.DataFrame,
         city for _, item in locations.items() for city in item]
     job_names: list[str] = [
         j_t for _, item in job_title.items() for j_t in item]
+    tags: list[str] = tags['tags']
 
     for _, row in payload.iterrows():
-        title_i: str = _extract_title(row, general['tags'])
+        title_i: str = _extract_title(row, tags)
         city: str = _extract_matching_item(title_i, cities)
         job_name: str = _extract_matching_item(title_i, job_names)
 
