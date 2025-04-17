@@ -51,10 +51,17 @@ def split_payload(payloads: pd.DataFrame,
     tags: dict[str, list[str]] = _fetch_from_yaml(cfg, 'title_tags')
     skills: dict[str, list[str]] = _fetch_from_yaml(cfg, 'skills')
     languages: dict[str, list[str]] = _fetch_from_yaml(cfg, 'languages')
+    salaries: dict[str, list[str]] = _fetch_from_yaml(cfg, 'salaries')
 
     payloads_uplift = _payload_clean_up(payloads)
-    data_set: pd.DataFrame = _get_info(
-        payloads_uplift, locations, job_titles, tags, skills, languages)
+    data_set: pd.DataFrame = _get_info(payloads_uplift,
+                                       locations,
+                                       job_titles,
+                                       tags,
+                                       skills,
+                                       languages,
+                                       salaries,
+                                       )
 
     data = [
         (row.file_path,
@@ -171,6 +178,7 @@ def _get_info(payload: pd.DataFrame,
               tag_dict: dict[str, list[str]],
               skill_dict: dict[str, list[str]],
               languages_dict: dict[str, list[str]],
+              salaries_dict: dict[str, list[str]],
               ) -> pd.DataFrame:
     """get the info from the payloads
     columns: list[str] = ['job', 'salary', 'city', 'state']
@@ -184,6 +192,8 @@ def _get_info(payload: pd.DataFrame,
         j_t for _, item in skill_dict.items() for j_t in item]
     all_languages: list[str] = [
         lan for _, item in languages_dict.items() for lan in item]
+    salaries: list[str] = [
+        dollar for _, item in salaries_dict.items() for dollar in item]
 
     for _, row in payload.iterrows():
         title_i: str = _extract_title(row, tags)
@@ -191,6 +201,8 @@ def _get_info(payload: pd.DataFrame,
         city: list[str] = _extract_all_items(row, cities)
         skills: list[str] = _extract_all_items(row, all_skills)
         languages: list[str] = _extract_all_items(row, all_languages)
+        salary_i: tuple[float | str, float | str, str] = \
+            _extract_salary(row, salaries)
 
 
 def _extract_title(row: pd.Series,
@@ -254,6 +266,45 @@ def _extract_all_items(row: pd.Series,
             matched.add(item)
 
     return list(matched) if matched else ["nan"]
+
+
+def _extract_salary(row: pd.Series,
+                    items: list[str],
+                    column: str = "clean_payload"
+                    ) -> tuple[float | str, float | str, str]:
+    """find the line which contains the item and return it"""
+    for item in items:
+        # Compile a case-insensitive regex pattern for the item.
+        pattern = re.compile(rf"\b{re.escape(item)}\b", re.IGNORECASE)
+
+        # Check if the pattern matches any line in the specified column.
+        for line in row[column]:
+            if pattern.search(line):
+                return _get_salary_amount(line)
+    return "Nan", "Nan", "Nan"
+
+
+def _get_salary_amount(line: str) -> tuple[float | str,
+                                           float | str,
+                                           str]:
+    """return salary amount with unit"""
+    min_salary: float = 0.0
+    max_salary: float = 0.0
+    unit: str = "Nan"
+    for l_i in line.split('\n'):
+        if "€" in l_i:
+            salary_pattern = r"(\d{1,3}\.\d{3})\s*-\s*(\d{1,3}\.\d{3})\s*€/*"
+            match = re.search(salary_pattern, l_i)
+            if match:
+                min_salary = float(match.group(1).replace(".", ""))
+                max_salary = float(match.group(2).replace(".", ""))
+            if "€/Monat" in l_i:
+                min_salary *= 12
+                max_salary *= 12
+            unit = "€/Jahr"
+            return min_salary, max_salary, unit
+
+    return "Nan", "Nan", "Nan"
 
 
 def _get_sections(payload: str,
