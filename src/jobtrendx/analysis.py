@@ -97,11 +97,12 @@ class PayloadAnalayzer:
 
     def analyze_sections(self,
                          log: logger.logging.Logger
-                         ) -> None:
+                         ) -> pd.DataFrame:
         """spliting the payload and extracting the info from it"""
         log.info("Processing email bodies...")
 
         df_info: pd.DataFrame = self.split_bodies()
+        return df_info
 
     def split_bodies(self) -> pd.DataFrame:
         """split the payload sections and return them
