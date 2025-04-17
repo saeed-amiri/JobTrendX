@@ -184,6 +184,8 @@ def test_filter_item():
         "One newline\nHas [URL]",
         "Three newlines\n\n\nAnd four----dashes",
         "Two newlines\n\nAnd four----dashes",
+        "Diesen Job melden",
+        "Extra newline\nHas [URL]",
     ]
 
     result = _filter_item(items, max_newlines=2, min_dashes=3)
