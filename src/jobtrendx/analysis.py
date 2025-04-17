@@ -101,10 +101,7 @@ class PayloadAnalayzer:
         """spliting the payload and extracting the info from it"""
         log.info("Processing email bodies...")
 
-        sections: pd.DataFrame = self.split_bodies()
-
-        self.anlz_top_skills(sections[['eml_lang', 'top_skills']])
-        self.anlz_job_title(sections[['eml_lang', 'job_title']])
+        df_info: pd.DataFrame = self.split_bodies()
 
     def split_bodies(self) -> pd.DataFrame:
         """split the payload sections and return them
@@ -113,14 +110,3 @@ class PayloadAnalayzer:
         return payload_analysis.split_payload(
             self.bodies, self.cfg)
 
-    def anlz_top_skills(self,
-                        top_skills: pd.DataFrame
-                        ) -> pd.DataFrame:
-        """Analyzing top skills of the jobs"""
-        payload_analysis.analysis_top_skills(top_skills)
-
-    def anlz_job_title(self,
-                       job_title: pd.DataFrame
-                       ) -> pd.DataFrame:
-        """Analysing the job titles"""
-        payload_analysis.analysis_job_title(job_title)
