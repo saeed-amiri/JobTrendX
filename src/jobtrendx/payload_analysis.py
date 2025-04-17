@@ -128,6 +128,8 @@ def _filter_item(item: list[str],
                  ) -> list[str]:
     """
     Cleans the payloads by applying specific filtering criteria:
+
+    - Remove the extra job ads in the email
     - Removes items where the number of newlines is less than
       or equal to the number of '[URL]' occurrences.
     - Excludes items with `max_newlines` or fewer newlines
@@ -146,6 +148,12 @@ def _filter_item(item: list[str],
         Cleaned payloads.
     """
     filtered: list[str] = []
+
+    # Find the first index where "Diesen Job melden" appears
+    cut_index: int = next(
+        (i for i, x in enumerate(item) if "Diesen Job melden" in x), len(item))
+    item = item[:cut_index]
+
     for i in item:
         new_line_count: int = i.count('\n')
         url_count: int = i.count('[URL]')
