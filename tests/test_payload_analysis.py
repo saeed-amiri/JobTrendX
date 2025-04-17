@@ -10,9 +10,10 @@ import yaml
 import pandas as pd
 from omegaconf import DictConfig
 
-from jobtrendx.payload_analysis import _get_sections, _split_by_lang, \
+from jobtrendx.payload_analysis import _get_sections, \
     _split_double_newline, _filter_item, _extract_title, _fetch_from_yaml, \
-    _extract_matching_item, _extract_all_items
+    _extract_matching_item, _extract_all_items, _extract_salary, \
+    _get_salary_amount
 
 
 def test_get_sections_de() -> None:
@@ -107,37 +108,6 @@ def test_get_sections_en() -> None:
         'An inclusive and diverse work environment...\n'
 
 
-def test_split_by_lang() -> None:
-    """Test the _split_by_lang function. (Copilt)"""
-    data = {
-        "file_path": ["file1", "file2", "file3", "file4"],
-        "eml_lang": ["en", "de", "en", "de"],
-        "payload": ["payload1", "payload2", "payload3", "payload4"]
-    }
-    df = pd.DataFrame(data)
-
-    expected_en = pd.DataFrame({
-        "file_path": ["file1", "file3"],
-        "eml_lang": ["en", "en"],
-        "payload": ["payload1", "payload3"]
-    })
-
-    expected_de = pd.DataFrame({
-        "file_path": ["file2", "file4"],
-        "eml_lang": ["de", "de"],
-        "payload": ["payload2", "payload4"]
-    })
-
-    result = _split_by_lang(df)
-
-    assert "en" in result
-    assert "de" in result
-    pd.testing.assert_frame_equal(
-        result["en"].reset_index(drop=True), expected_en)
-    pd.testing.assert_frame_equal(
-        result["de"].reset_index(drop=True), expected_de)
-
-
 def test_split_double_newline() -> None:
     """Test the _split_double_newline function."""
     data = {
@@ -184,6 +154,8 @@ def test_filter_item():
         "One newline\nHas [URL]",
         "Three newlines\n\n\nAnd four----dashes",
         "Two newlines\n\nAnd four----dashes",
+        "Diesen Job melden",
+        "Extra newline\nHas [URL]",
     ]
 
     result = _filter_item(items, max_newlines=2, min_dashes=3)
@@ -422,6 +394,81 @@ class TestExtractAllItems(unittest.TestCase):
         items = ["Python", "TensorFlow"]
         found = _extract_all_items(row, items)
         self.assertEqual(found, ["nan"])
+
+
+class TestExtractSalaryFunctions(unittest.TestCase):
+    """Test extracing salaries"""
+
+    def test_extract_salary_monat(self):
+        """
+        Checks if a line mentioning salary per month is converted
+        to annual values.
+        """
+        row = pd.Series({
+            "clean_payload": [
+                "This is some text.",
+                "The estimated salary range is 5.500 - 7.500 €/Monat"
+            ]
+        })
+        items = ["salary", "€"]  # "€" will trigger the check.
+        min_salary, max_salary, unit = _extract_salary(row, items)
+        self.assertEqual(min_salary, 66000.0,
+                         "Should convert min monthly salary to annual.")
+        self.assertEqual(max_salary, 90000.0,
+                         "Should convert max monthly salary to annual.")
+        self.assertEqual(unit, "€/Jahr",
+                         "Uses '€/Jahr' when monthly data is found.")
+
+    def test_extract_salary_jahr(self):
+        """
+        Checks if a line with an annual salary remains unchanged.
+        """
+        row = pd.Series({
+            "clean_payload": [
+                "This is some text.",
+                "The estimated salary range is 66.000 - 90.000 €/Jahr"
+            ]
+        })
+        items = ["salary", "€"]
+        min_salary, max_salary, unit = _extract_salary(row, items)
+        self.assertEqual(min_salary, 66000.0)
+        self.assertEqual(max_salary, 90000.0)
+        self.assertEqual(unit, "€/Jahr")
+
+    def test_extract_salary_no_match(self):
+        """
+        Ensures "Nan", "Nan", "Nan" are returned when no salary keywords match.
+        """
+        row = pd.Series({
+            "clean_payload": [
+                "No salary provided here."
+            ]
+        })
+        items = ["€", "salary"]
+        min_salary, max_salary, unit = _extract_salary(row, items)
+        self.assertEqual(min_salary, "Nan")
+        self.assertEqual(max_salary, "Nan")
+        self.assertEqual(unit, "Nan")
+
+    def test_get_salary_amount_monat_direct(self):
+        """
+        Tests _get_salary_amount directly for a monthly range line.
+        """
+        line = "5.500 - 7.500 €/Monat"
+        min_sal, max_sal, unit = _get_salary_amount(line)
+        self.assertEqual(min_sal, 66000.0)
+        self.assertEqual(max_sal, 90000.0)
+        self.assertEqual(unit, "€/Jahr")
+
+    def test_get_salary_amount_no_euro(self):
+        """
+        Tests _get_salary_amount returns Nan if '€' is missing.
+        """
+        line = "66.000 - 90.000 per year"
+        min_sal, max_sal, unit = _get_salary_amount(line)
+        self.assertEqual(min_sal, "Nan")
+        self.assertEqual(max_sal, "Nan")
+        self.assertEqual(unit, "Nan")
 
 
 if __name__ == "__main__":

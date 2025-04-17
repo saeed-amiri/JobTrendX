@@ -21,6 +21,7 @@ Samiri
 
 import re
 import sys
+import typing
 from pathlib import Path
 
 import yaml
@@ -30,8 +31,6 @@ from omegaconf import DictConfig
 
 __all__ = [
     'split_payload',
-    'analysis_job_title',
-    'analysis_top_skills'
 ]
 
 
@@ -39,36 +38,36 @@ def split_payload(payloads: pd.DataFrame,
                   cfg: DictConfig
                   ) -> pd.DataFrame:
 
-    """splitting the payload of the emails based on the sections
-    titles"""
-    # Not implemented yet!
-    # Get the fixed sections in the Config
-    sections: dict[str, dict[str, str]] = cfg.defaults.analysis.sections
+    """splitting the payload of the emails and extract the
+    data from it and return a pd DataFrame"""
 
-    # Get the name of the cities from a yaml file
-    locations: dict[str, list[str]] = _fetch_from_yaml(cfg, 'locations')
-    job_titles: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
-    tags: dict[str, list[str]] = _fetch_from_yaml(cfg, 'title_tags')
     skills: dict[str, list[str]] = _fetch_from_yaml(cfg, 'skills')
+    tags: dict[str, list[str]] = _fetch_from_yaml(cfg, 'title_tags')
+    salaries: dict[str, list[str]] = _fetch_from_yaml(cfg, 'salaries')
+    locations: dict[str, list[str]] = _fetch_from_yaml(cfg, 'locations')
+    languages: dict[str, list[str]] = _fetch_from_yaml(cfg, 'languages')
+    job_titles: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
 
     payloads_uplift = _payload_clean_up(payloads)
-    data_set: pd.DataFrame = _get_info(
-        payloads_uplift, locations, job_titles, tags, skills)
+    data_set: dict[str, typing.Any] = _get_info(payloads_uplift,
+                                                locations,
+                                                job_titles,
+                                                tags,
+                                                skills,
+                                                languages,
+                                                salaries,
+                                                )
+    file_path = payloads['file_path']
+    eml_lang = payloads['eml_lang']
+    # Combine the extracted data into a DataFrame
+    df_info = pd.DataFrame({
+        'file_path': file_path,
+        'eml_lang': eml_lang,
+        **data_set
+    })
+    return df_info
 
-    data = [
-        (row.file_path,
-         row.eml_lang,
-         *_get_sections(row.payload, sections[row.eml_lang]).values())
-        for row in payloads.itertuples(index=False)
-    ]
 
-    column_names = \
-        ["file_path", "eml_lang"] + list(sections[next(iter(sections))].keys())
-    return pd.DataFrame(data, columns=column_names).set_index("file_path")
-
-
-# These two functions are for splitting the sections based on the spaces
-# Not functional yet! but i push them to the main
 def _fetch_from_yaml(cfg: DictConfig,
                      file_type: str
                      ) -> dict[str, list[str]]:
@@ -127,6 +126,8 @@ def _filter_item(item: list[str],
                  ) -> list[str]:
     """
     Cleans the payloads by applying specific filtering criteria:
+
+    - Remove the extra job ads in the email
     - Removes items where the number of newlines is less than
       or equal to the number of '[URL]' occurrences.
     - Excludes items with `max_newlines` or fewer newlines
@@ -145,6 +146,12 @@ def _filter_item(item: list[str],
         Cleaned payloads.
     """
     filtered: list[str] = []
+
+    # Find the first index where "Diesen Job melden" appears
+    cut_index: int = next(
+        (i for i, x in enumerate(item) if "Diesen Job melden" in x), len(item))
+    item = item[:cut_index]
+
     for i in item:
         new_line_count: int = i.count('\n')
         url_count: int = i.count('[URL]')
@@ -160,24 +167,50 @@ def _get_info(payload: pd.DataFrame,
               locations: dict[str, list[str]],
               job_title: dict[str, list[str]],
               tag_dict: dict[str, list[str]],
-              skill_dict: dict[str, list[str]]
-              ) -> pd.DataFrame:
-    """get the info from the payloads
-    columns: list[str] = ['job', 'salary', 'city', 'state']
-    """
-    cities: list[str] = [
-        city for _, item in locations.items() for city in item]
-    job_names: list[str] = [
-        j_t for _, item in job_title.items() for j_t in item]
-    tags: list[str] = tag_dict['tags']
-    all_skills: list[str] = [
-        j_t for _, item in skill_dict.items() for j_t in item]
+              skill_dict: dict[str, list[str]],
+              languages_dict: dict[str, list[str]],
+              salaries_dict: dict[str, list[str]],
+              ) -> dict[str, typing.Any]:
+    """Extract information from the payloads."""
+    # pylint: disable="too-many-arguments"
+    # pylint: disable="too-many-positional-arguments"
+    # pylint: disable="too-many-locals"
+
+    # Flatten dictionaries into lists
+    cities = [city for cities in locations.values() for city in cities]
+    job_names = [name for names in job_title.values() for name in names]
+    tags = tag_dict.get('tags', [])
+    all_skills = [
+        skill for skills in skill_dict.values() for skill in skills]
+    all_languages = [
+        lang for langs in languages_dict.values() for lang in langs]
+    salaries = [
+        salary for salary_list in salaries_dict.values()
+        for salary in salary_list]
+
+    # Initialize result lists
+    results: dict[str, typing.Any] = {
+        'job_title': [],
+        'location': [],
+        'skills': [],
+        'salary_min': [],
+        'salary_max': [],
+        'salary_unit': [],
+        'language': []
+    }
 
     for _, row in payload.iterrows():
-        title_i: str = _extract_title(row, tags)
-        job_name: str = _extract_matching_item(title_i, job_names)
-        city: list[str] = _extract_all_items(row, cities)
-        skills: list[str] = _extract_all_items(row, all_skills)
+        title = _extract_title(row, tags)
+        results['job_title'].append(_extract_matching_item(title, job_names))
+        results['location'].append(_extract_all_items(row, cities))
+        results['skills'].append(_extract_all_items(row, all_skills))
+        results['language'].append(_extract_all_items(row, all_languages))
+        salary_min, salary_max, salary_unit = _extract_salary(row, salaries)
+        results['salary_min'].append(salary_min)
+        results['salary_max'].append(salary_max)
+        results['salary_unit'].append(salary_unit)
+
+    return results
 
 
 def _extract_title(row: pd.Series,
@@ -243,6 +276,45 @@ def _extract_all_items(row: pd.Series,
     return list(matched) if matched else ["nan"]
 
 
+def _extract_salary(row: pd.Series,
+                    items: list[str],
+                    column: str = "clean_payload"
+                    ) -> tuple[float | str, float | str, str]:
+    """find the line which contains the item and return it"""
+    for item in items:
+        # Compile a case-insensitive regex pattern for the item.
+        pattern = re.compile(rf"\b{re.escape(item)}\b", re.IGNORECASE)
+
+        # Check if the pattern matches any line in the specified column.
+        for line in row[column]:
+            if pattern.search(line):
+                return _get_salary_amount(line)
+    return "Nan", "Nan", "Nan"
+
+
+def _get_salary_amount(line: str) -> tuple[float | str,
+                                           float | str,
+                                           str]:
+    """return salary amount with unit"""
+    min_salary: float = 0.0
+    max_salary: float = 0.0
+    unit: str = "Nan"
+    for l_i in line.split('\n'):
+        if "€" in l_i:
+            salary_pattern = r"(\d{1,3}\.\d{3})\s*-\s*(\d{1,3}\.\d{3})\s*€/*"
+            match = re.search(salary_pattern, l_i)
+            if match:
+                min_salary = float(match.group(1).replace(".", ""))
+                max_salary = float(match.group(2).replace(".", ""))
+            if "€/Monat" in l_i:
+                min_salary *= 12
+                max_salary *= 12
+            unit = "€/Jahr"
+            return min_salary, max_salary, unit
+
+    return "Nan", "Nan", "Nan"
+
+
 def _get_sections(payload: str,
                   sections: dict[str, str]
                   ) -> dict[str, str]:
@@ -276,53 +348,3 @@ def _get_sections(payload: str,
             section_data[current_key] += part + "\n"
 
     return section_data
-
-
-def analysis_top_skills(job_skills: pd.DataFrame) -> pd.DataFrame:
-    """Get the job top required skills as mentioned directly
-    in the emails
-    This section usually started with a sentence:
-    "Bei diesem Job kannst du mit folgenden Fähigkeiten punkten:"
-    """
-
-
-def analysis_job_title(job_title: pd.DataFrame
-                       ) -> dict[str, pd.DataFrame]:
-    """Analyze job titles based on language and return results."""
-
-    # Map language codes to their processing functions
-    lang_processors = {
-        "en": _anlz_job_titles_en,
-        "de": _anlz_job_titles_de,
-        # Add more languages here if needed
-    }
-
-    splited_df = _split_by_lang(job_title)  # Split job titles by language
-    results = {}
-
-    for lang, df in splited_df.items():
-        if lang in lang_processors:
-            results[lang] = lang_processors[lang](df)
-        else:
-            print(f"Warning: No processor for language '{lang}'")
-
-    return results
-
-
-def _split_by_lang(df_in: pd.DataFrame
-                   ) -> dict[str, pd.DataFrame]:
-    """split the dataframes based on the numbers of the langs"""
-    return {
-        lang: df_in[df_in["eml_lang"] == lang] for
-        lang in df_in["eml_lang"].unique()
-        }
-
-
-def _anlz_job_titles_en(job_title_en: pd.DataFrame
-                        ) -> pd.DataFrame:
-    """analyzing the job titles in English"""
-
-
-def _anlz_job_titles_de(job_title_de: pd.DataFrame
-                        ) -> pd.DataFrame:
-    """analyzing the job titles in German"""
