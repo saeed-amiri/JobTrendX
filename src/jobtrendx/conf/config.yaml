@@ -19,3 +19,4 @@ taxonomy_files:
   title_tags: title_tags.yaml
   skills: skills.yaml
   languages: language.yaml
+  salaries: salary.yaml
