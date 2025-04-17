@@ -1,15 +1,10 @@
-sections:
-  de:
-    job_title: "Beliebter Job"
-    top_skills: "Top-Fähigkeiten"
-    company_info: "Wer wir sind"
-    job_description: "Das wird dein Job"
-    requirements: "Das bringst du mit"
-    offer: "Das bieten wir dir"
-  en:
-    job_title: "Beliebter Job"
-    top_skills: "Top-Fähigkeiten"
-    company_info: "Wer wir sind"
-    job_description: "Your tasks"
-    requirements: "Your knowledge/experience"
-    offer: "We offer"
+df_columns:
+  - file_path
+  - eml_lang
+  - job_title
+  - location
+  - skills
+  - salary_min
+  - salary_max
+  - salary_unit
+  - language
