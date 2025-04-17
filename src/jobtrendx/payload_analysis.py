@@ -50,10 +50,11 @@ def split_payload(payloads: pd.DataFrame,
     job_titles: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
     tags: dict[str, list[str]] = _fetch_from_yaml(cfg, 'title_tags')
     skills: dict[str, list[str]] = _fetch_from_yaml(cfg, 'skills')
+    languages: dict[str, list[str]] = _fetch_from_yaml(cfg, 'languages')
 
     payloads_uplift = _payload_clean_up(payloads)
     data_set: pd.DataFrame = _get_info(
-        payloads_uplift, locations, job_titles, tags, skills)
+        payloads_uplift, locations, job_titles, tags, skills, languages)
 
     data = [
         (row.file_path,
@@ -160,7 +161,8 @@ def _get_info(payload: pd.DataFrame,
               locations: dict[str, list[str]],
               job_title: dict[str, list[str]],
               tag_dict: dict[str, list[str]],
-              skill_dict: dict[str, list[str]]
+              skill_dict: dict[str, list[str]],
+              languages_dict: dict[str, list[str]],
               ) -> pd.DataFrame:
     """get the info from the payloads
     columns: list[str] = ['job', 'salary', 'city', 'state']
@@ -172,12 +174,15 @@ def _get_info(payload: pd.DataFrame,
     tags: list[str] = tag_dict['tags']
     all_skills: list[str] = [
         j_t for _, item in skill_dict.items() for j_t in item]
+    all_languages: list[str] = [
+        lan for _, item in languages_dict.items() for lan in item]
 
     for _, row in payload.iterrows():
         title_i: str = _extract_title(row, tags)
         job_name: str = _extract_matching_item(title_i, job_names)
         city: list[str] = _extract_all_items(row, cities)
         skills: list[str] = _extract_all_items(row, all_skills)
+        languages: list[str] = _extract_all_items(row, all_languages)
 
 
 def _extract_title(row: pd.Series,
