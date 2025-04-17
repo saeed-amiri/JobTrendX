@@ -10,7 +10,7 @@ import yaml
 import pandas as pd
 from omegaconf import DictConfig
 
-from jobtrendx.payload_analysis import _get_sections, _split_by_lang, \
+from jobtrendx.payload_analysis import _get_sections, \
     _split_double_newline, _filter_item, _extract_title, _fetch_from_yaml, \
     _extract_matching_item, _extract_all_items, _extract_salary, \
     _get_salary_amount
@@ -106,37 +106,6 @@ def test_get_sections_en() -> None:
         'Educated to a degree level in Computer Science, Data Science...\n'
     assert sections['benefits'] == \
         'An inclusive and diverse work environment...\n'
-
-
-def test_split_by_lang() -> None:
-    """Test the _split_by_lang function. (Copilt)"""
-    data = {
-        "file_path": ["file1", "file2", "file3", "file4"],
-        "eml_lang": ["en", "de", "en", "de"],
-        "payload": ["payload1", "payload2", "payload3", "payload4"]
-    }
-    df = pd.DataFrame(data)
-
-    expected_en = pd.DataFrame({
-        "file_path": ["file1", "file3"],
-        "eml_lang": ["en", "en"],
-        "payload": ["payload1", "payload3"]
-    })
-
-    expected_de = pd.DataFrame({
-        "file_path": ["file2", "file4"],
-        "eml_lang": ["de", "de"],
-        "payload": ["payload2", "payload4"]
-    })
-
-    result = _split_by_lang(df)
-
-    assert "en" in result
-    assert "de" in result
-    pd.testing.assert_frame_equal(
-        result["en"].reset_index(drop=True), expected_en)
-    pd.testing.assert_frame_equal(
-        result["de"].reset_index(drop=True), expected_de)
 
 
 def test_split_double_newline() -> None:
