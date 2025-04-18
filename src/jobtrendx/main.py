@@ -10,6 +10,7 @@ PYTHONPATH=src python -m jobtrendx.main defaults.paths.emails="<NEW_DIR>"
 import typing
 
 import hydra
+import pandas as pd
 from omegaconf import DictConfig
 
 from . import logger
@@ -35,6 +36,7 @@ def main(cfg: DictConfig) -> None:
         email_prc.eml_dict
     anlaz = analysis.AnalysisEmails(eml_dict=eml_dict, cfg=cfg)
     anlaz.analyzing(log=LOG)
+    df_info: pd.DataFrame = anlaz.df_info
 
 
 if __name__ == "__main__":
