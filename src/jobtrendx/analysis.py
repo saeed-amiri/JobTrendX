@@ -32,6 +32,7 @@ from omegaconf import DictConfig
 from . import logger
 from . import tools
 from . import payload_analysis
+from . import terms_unify
 
 
 class AnalysisEmails:
@@ -77,3 +78,17 @@ class AnalysisEmails:
         log.info('\nThe DataFrame from the emails extrcted, with column:\n'
                  f'\t{df_info.columns.to_list()}\n')
         return df_info
+
+    def unify_terms(self,
+                    log: logger.logging.Logger
+                    ) -> pd.DataFrame:
+        """unfiy the terms in the titles and skills
+        The terms could be in english or many different
+        German translation of them, for example:
+        Data Scientist could be named as:
+            - Data Scientist
+            - Datascientist
+            - Datenwissenschaftler
+            - Wissenschaftler Daten
+        """
+        terms_unify.term_unifier(self.df_info, self.cfg)

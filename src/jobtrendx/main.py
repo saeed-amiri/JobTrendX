@@ -35,6 +35,7 @@ def main(cfg: DictConfig) -> None:
         email_prc.eml_dict
     anlaz = analysis.AnalysisEmails(eml_dict=eml_dict, cfg=cfg)
     anlaz.analyzing(log=LOG)
+    anlaz.unify_terms(log=LOG)
 
 
 if __name__ == "__main__":
