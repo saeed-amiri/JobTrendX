@@ -37,7 +37,11 @@ from . import payload_analysis
 class AnalysisEmails:
     """Analysing the emails"""
 
-    __slots__: list[str] = ['cfg', 'eml_dict']
+    __slots__: list[str] = ['cfg', 'eml_dict', 'df_info']
+
+    eml_dict: dict[Path, "email.message.EmailMesagge"]
+    cfg: DictConfig
+    df_info: pd.DataFrame
 
     def __init__(self,
                  eml_dict: dict[Path, "email.message.EmailMesagge"],
@@ -51,7 +55,7 @@ class AnalysisEmails:
                   ) -> None:
         """Initiate analyzing"""
         eml_df: pd.DataFrame = self.extract_email_data()
-        self.analyze_email_payload(eml_df, log)
+        self.df_info = self.analyze_email_payload(eml_df, log)
 
     def extract_email_data(self) -> pd.DataFrame:
         """initiate the analysis"""
@@ -65,49 +69,11 @@ class AnalysisEmails:
     def analyze_email_payload(self,
                               eml_df: pd.DataFrame,
                               log: logger.logging.Logger
-                              ) -> None:
+                              ) -> pd.DataFrame:
         """call the sub-class to analysis the payload"""
-        payload_analyzer = PayloadAnalayzer(eml_df=eml_df, cfg=self.cfg)
-        payload_analyzer.analyze_sections(log=log)
-
-
-class PayloadAnalayzer:
-    """analysing the emails' payload
-    "payload" sections are:
-        job_title
-        company_info
-        job_description
-        requirements
-        offer
-    are in both 'en' and 'de' languages.
-    Each section will be analysis separately.
-    """
-
-    __slots__: list[str] = [
-        "bodies",
-        "cfg",
-    ]
-
-    def __init__(self,
-                 eml_df: pd.DataFrame,
-                 cfg: DictConfig,
-                 ) -> None:
-        self.bodies = eml_df[['file_path', 'payload', 'eml_lang']]
-        self.cfg = cfg
-
-    def analyze_sections(self,
-                         log: logger.logging.Logger
-                         ) -> pd.DataFrame:
-        """spliting the payload and extracting the info from it"""
-        log.info("Processing email bodies...")
-
-        df_info: pd.DataFrame = self.split_bodies()
+        bodies = eml_df[['file_path', 'payload', 'eml_lang']]
+        df_info: pd.DataFrame = \
+            payload_analysis.split_payload(bodies, self.cfg)
+        log.info('\nThe DataFrame from the emails extrcted, with column:\n'
+                 f'\t{df_info.columns.to_list()}\n')
         return df_info
-
-    def split_bodies(self) -> pd.DataFrame:
-        """split the payload sections and return them
-        returns the output as DataFrame. FilePaths are the index
-        """
-        return payload_analysis.split_payload(
-            self.bodies, self.cfg)
-
