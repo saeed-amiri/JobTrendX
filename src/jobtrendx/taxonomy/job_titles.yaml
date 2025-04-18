@@ -1,25 +1,37 @@
-data_scientist:
+Data Scientist:
   - Datascientist
   - Data Scientist
   - Datenwissenschaftler
   - Wissenschaftler Daten
-  - Datenanalyse
+
+Machine Learning:
   - KI
   - KI Forscher
   - ML
   - Machine Learning
   - Machine Learning Engineer 
-data_engineer:
+
+Data Engineer:
   - Data Engineer
   - Dateningenieur
   - Engineer Data
-  - Fachbereich Data
-data_analyst:
+
+Data analyst:
+  - Datenanalyse
   - Data Analyst
   - Datenanalyst
-  - Data Architect
   - Analyst Data
-  - Supply Analyst
   - Analyst Operations
-finance:
+
+Business Analyst:
   - Business Analyst
+  - Supply Analyst
+
+Data Domain:
+  - Fachbereich Data
+  - Bereich Daten
+  - Abteilung Data
+
+Data Architect:
+  - Data Architect
+  - Datenarchitekt
