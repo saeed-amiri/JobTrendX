@@ -12,6 +12,7 @@ app:
     mode: "development"
 
 # DO NOT CHENGE!
+# The keywords for extracting them from emails
 taxonomy_path: "/home/santiago/Documents/MyScripts/JobTrendX/src/jobtrendx/taxonomy"
 taxonomy_files:
   locations: locations.yaml
@@ -20,3 +21,8 @@ taxonomy_files:
   skills: skills.yaml
   languages: language.yaml
   salaries: salary.yaml
+
+# Translation table for keyword unification
+lexicon_path: "/home/santiago/Documents/MyScripts/JobTrendX/src/jobtrendx/lexicon"
+lexicon_files:
+  job_titles: job_titles.yaml
