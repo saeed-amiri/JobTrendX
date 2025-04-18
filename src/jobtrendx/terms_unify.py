@@ -13,9 +13,7 @@ Machine Learning:
 S. Amiri
 """
 
-import re
 import sys
-import typing
 from pathlib import Path
 
 import yaml
@@ -33,3 +31,61 @@ def term_unifier(df_info: pd.DataFrame,
                  cfg: DictConfig
                  ) -> pd.DataFrame:
     """unify the terms in the columns"""
+    job_lexcion: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
+    df_info = _replace_str(job_lexcion, df_info, 'job_title')
+
+
+def _replace_str(lexicon: dict[str, list[str]],
+                 df: pd.DataFrame,
+                 column: str
+                 ) -> pd.DataFrame:
+    """
+    Replace the strings in the specified column with the corresponding
+    keys from the lexicon dictionary.
+    """
+    # Create a reverse mapping of all values to their corresponding keys
+    value_to_key = _invert_lexicon(lexicon=lexicon)
+
+    # Replace values in the column using the mapping
+    df[column] = df[column].apply(
+        lambda item: value_to_key.get(item, item) if pd.notna(item) else item
+    )
+    return df
+
+
+def _invert_lexicon(lexicon: dict[str, list[str]]
+                    ) -> dict[str, str]:
+    """Invert the lexicon to simplify the search"""
+    return {value: key for key, values in lexicon.items() for value in values}
+
+
+def _fetch_from_yaml(cfg: DictConfig,
+                     file_type: str
+                     ) -> dict[str, list[str]]:
+    """
+    Reads the YAML file containing location data and returns
+    a dictionary of items in the yaml
+
+    Args:
+        cfg (DictConfig): Configuration object containing
+        paths to lexicon files.
+
+    Returns:
+        dict[str, list[str]]: Dictionary of city names grouped
+        by states names.
+
+    Raises:
+        SystemExit: If the file is not found, has a format
+        error, or an unknown error occurs.
+    """
+    # pylint: disable=broad-exception-caught
+    file_path = Path(cfg.lexicon_path) / cfg.lexicon_files[file_type]
+    try:
+        with file_path.open('r', encoding='utf-8') as f_loc:
+            return yaml.safe_load(f_loc)
+    except FileNotFoundError:
+        sys.exit(f"\nFile Not Found:\n`{file_path}` does not exist!")
+    except yaml.YAMLError:
+        sys.exit(f"\nFile Format Error:\n`{file_path}` not a valid YAML file!")
+    except Exception as err:
+        sys.exit(f"Unknown Error in `{file_path}`: {err}")
