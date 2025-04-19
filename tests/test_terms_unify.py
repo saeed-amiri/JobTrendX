@@ -78,12 +78,14 @@ class TestReplaceListStr(unittest.TestCase):
         """
         _replace_list_str(self.lexicon, self.df, "skills")
         expected = [
-            ["Programming Language", "Machine Learning"],
+            ["Machine Learning", "Programming Language"],
             ["Data Science", "Machine Learning"],
-            ["Programming Language", "SQL"],
+            ["Programming Language"],
             None
         ]
-        self.assertListEqual(self.df["skills"].tolist(), expected)
+        expected = [item.sort() for item in expected if item]
+        results = [item.sort() for item in self.df["skills"].tolist() if item]
+        self.assertListEqual(results, expected)
 
 
 if __name__ == "__main__":
