@@ -77,6 +77,7 @@ class AnalysisEmails:
             payload_analysis.split_payload(bodies, self.cfg)
         log.info('\nThe DataFrame from the emails extrcted, with column:\n'
                  f'\t{df_info.columns.to_list()}\n')
+
         return df_info
 
     def unify_terms(self,
@@ -91,4 +92,6 @@ class AnalysisEmails:
             - Datenwissenschaftler
             - Wissenschaftler Daten
         """
-        terms_unify.term_unifier(self.df_info, self.cfg)
+        log.info('\nThe DataFrame columns terms are unified\n')
+
+        return terms_unify.term_unifier(self.df_info, self.cfg)
