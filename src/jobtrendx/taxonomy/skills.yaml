@@ -43,6 +43,7 @@ data_visualization_tools:
   - Power BI
   - Microsoft BI
   - Looker
+  - Qlik
 
 data_engineering_tools:
   - Apache
