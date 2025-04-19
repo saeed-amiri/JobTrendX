@@ -26,3 +26,4 @@ taxonomy_files:
 lexicon_path: "/home/santiago/Documents/MyScripts/JobTrendX/src/jobtrendx/lexicon"
 lexicon_files:
   job_titles: job_titles.yaml
+  skills: skills.yaml
