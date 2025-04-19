@@ -17,6 +17,7 @@ tools_and_environments:
   - Jupyter Notebook
   - JupyterLab
   - Visual Studio Code
+  - vcode
   - Spyder
   - Anaconda
   - Streamlit
@@ -237,5 +238,4 @@ majors_and_fields:
   - Softwareentwicklung
   - Cybersecurity
   - Cybersicherheit
-  - Operations Research
   - Operations Research
