@@ -32,7 +32,13 @@ def term_unifier(df_info: pd.DataFrame,
                  ) -> pd.DataFrame:
     """unify the terms in the columns"""
     job_lexcion: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
+    skill_lexicon: dict[str, list[str]] = _fetch_from_yaml(cfg, 'skills')
+    language_lexicon: dict[str, list[str]] = _fetch_from_yaml(cfg, 'languages')
+
     df_info = _replace_str(job_lexcion, df_info, 'job_title')
+    df_info = _replace_list_str(skill_lexicon, df_info, 'skills')
+    df_info = _replace_list_str(language_lexicon, df_info, 'language')
+    return df_info
 
 
 def _replace_str(lexicon: dict[str, list[str]],
@@ -50,6 +56,29 @@ def _replace_str(lexicon: dict[str, list[str]],
     df[column] = df[column].apply(
         lambda item: value_to_key.get(item, item) if pd.notna(item) else item
     )
+    return df
+
+
+def _replace_list_str(lexicon: dict[str, list[str]],
+                      df: pd.DataFrame,
+                      column: str
+                      ) -> pd.DataFrame:
+    """
+    Replace the strings in a list of strings in the specified
+    column with the corresponding keys from the lexicon
+    dictionary. Deduplicates the resulting list.
+    """
+    # Create a reverse mapping of all values to their corresponding keys
+    value_to_key = _invert_lexicon(lexicon=lexicon)
+
+    # Replace and deduplicate values in the column
+    def process_list(item_list):
+        if isinstance(item_list, list):
+            # Replace items and deduplicate in one step
+            return list({value_to_key.get(item, item) for item in item_list})
+        return item_list
+
+    df[column] = df[column].apply(process_list)
     return df
 
 

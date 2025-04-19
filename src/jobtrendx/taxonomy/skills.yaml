@@ -17,6 +17,7 @@ tools_and_environments:
   - Jupyter Notebook
   - JupyterLab
   - Visual Studio Code
+  - vcode
   - Spyder
   - Anaconda
   - Streamlit
@@ -43,6 +44,7 @@ data_visualization_tools:
   - Power BI
   - Microsoft BI
   - Looker
+  - Qlik
 
 data_engineering_tools:
   - Apache
@@ -236,5 +238,4 @@ majors_and_fields:
   - Softwareentwicklung
   - Cybersecurity
   - Cybersicherheit
-  - Operations Research
   - Operations Research

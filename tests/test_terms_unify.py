@@ -7,7 +7,8 @@ import unittest
 
 import pandas as pd
 
-from jobtrendx.terms_unify import _replace_str, _invert_lexicon
+from jobtrendx.terms_unify import _replace_str, _invert_lexicon, \
+    _replace_list_str
 
 
 class TestReplaceStr(unittest.TestCase):
@@ -49,6 +50,42 @@ class TestReplaceStr(unittest.TestCase):
             "Data Engineer": "Data Engineer"
         }
         self.assertDictEqual(inverted, expected)
+
+
+class TestReplaceListStr(unittest.TestCase):
+    """test if the replace in the list works"""
+
+    def setUp(self):
+        """Set up a sample DataFrame and lexicon for testing."""
+        self.df = pd.DataFrame({
+            "skills": [
+                ["Python", "ML", "KI", "Python"],
+                ["Data Science", "AI", "KI"],
+                ["SQL", "Python", "SQL"],
+                None
+            ]
+        })
+        self.lexicon = {
+            "Machine Learning": ["ML", "KI"],
+            "Programming Language": ["Python", "R"],
+            "Data Science": ["Data Science", "AI"]
+        }
+
+    def test_replace_list_str(self):
+        """
+        Test if _replace_list_str correctly replaces and
+        deduplicates terms.
+        """
+        _replace_list_str(self.lexicon, self.df, "skills")
+        expected = [
+            ["Machine Learning", "Programming Language"],
+            ["Data Science", "Machine Learning"],
+            ["Programming Language"],
+            None
+        ]
+        expected = [item.sort() for item in expected if item]
+        results = [item.sort() for item in self.df["skills"].tolist() if item]
+        self.assertListEqual(results, expected)
 
 
 if __name__ == "__main__":
