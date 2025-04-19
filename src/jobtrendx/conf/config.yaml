@@ -27,3 +27,4 @@ lexicon_path: "/home/santiago/Documents/MyScripts/JobTrendX/src/jobtrendx/lexico
 lexicon_files:
   job_titles: job_titles.yaml
   skills: skills.yaml
+  languages: language.yaml

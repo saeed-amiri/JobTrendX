@@ -32,10 +32,13 @@ def term_unifier(df_info: pd.DataFrame,
                  ) -> pd.DataFrame:
     """unify the terms in the columns"""
     job_lexcion: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
-    skills_lexicon: dict[str, list[str]] = _fetch_from_yaml(cfg, 'skills')
+    skill_lexicon: dict[str, list[str]] = _fetch_from_yaml(cfg, 'skills')
+    language_lexicon: dict[str, list[str]] = _fetch_from_yaml(cfg, 'languages')
 
     df_info = _replace_str(job_lexcion, df_info, 'job_title')
-    df_info = _replace_list_str(skills_lexicon, df_info, 'skills')
+    df_info = _replace_list_str(skill_lexicon, df_info, 'skills')
+    df_info = _replace_list_str(language_lexicon, df_info, 'language')
+    return df_info
 
 
 def _replace_str(lexicon: dict[str, list[str]],
