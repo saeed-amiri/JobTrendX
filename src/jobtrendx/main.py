@@ -16,6 +16,7 @@ from omegaconf import DictConfig
 from . import logger
 from . import email_processor
 from . import analysis
+from . import clean_dataframe
 
 if typing.TYPE_CHECKING:
     from pathlib import Path
@@ -39,6 +40,8 @@ def main(cfg: DictConfig) -> None:
     anlaz.analyzing(log=LOG)
     anlaz.unify_terms(log=LOG)
     df_i: pd.DataFrame = anlaz.df_info
+
+    df_cleaned: pd.DataFrame = clean_dataframe.remove_duplicate(df_info=df_i)
 
 
 if __name__ == "__main__":
