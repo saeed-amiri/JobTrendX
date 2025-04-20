@@ -96,6 +96,5 @@ def _convert_strings_to_lists(df: pd.DataFrame,
         to lists.
     """
     for col in cols:
-        df.loc[:, col] = df[col].apply(lambda x: x.split('-')
-                                       if isinstance(x, list) else x)
+        df.loc[:, col] = df[col].apply(lambda x: x.split('-'))
     return df
