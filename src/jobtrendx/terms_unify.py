@@ -79,6 +79,8 @@ def _replace_list_str(lexicon: dict[str, list[str]],
         return item_list
 
     df[column] = df[column].apply(process_list)
+    df[column] = df[column].apply(lambda x: sorted(x) if
+                                  isinstance(x, list) else x)
     return df
 
 
