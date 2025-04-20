@@ -35,6 +35,7 @@ cloud_platforms:
   - Google Cloud Platform
   - IBM Cloud
   - Heroku
+  - Cloud-Technologien
 
 data_visualization_tools:
   - Matplotlib
@@ -236,6 +237,7 @@ majors_and_fields:
   - Robotik
   - Software Engineering
   - Softwareentwicklung
+  - Erfahrungsdesign
   - Cybersecurity
   - Cybersicherheit
   - Operations Research
