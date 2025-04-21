@@ -38,7 +38,7 @@ class StatisticsManager:
         """analyzing the job titles"""
         summary: pd.DataFrame
         summary, self.job_title_top = \
-            tools.anlz_titles(self.df_info['job_title'])
+            tools.anlz_string_cols(self.df_info['job_title'])
 
-        log.info(f'\nJob title summary:\n{summary}'
-                 f'\n\tTop jobs:\n\t{self.job_title_top}')
+        log.info(f'\n\nJob title summary:\n{summary}'
+                 f'\n\n{self.job_title_top}\n')

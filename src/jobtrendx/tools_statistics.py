@@ -4,11 +4,11 @@ import pandas as pd
 
 
 __all__ = [
-    'anlz_titles'
+    'anlz_string_cols'
 ]
 
 
-def anlz_titles(titles: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
+def anlz_string_cols(titles: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
     """
     Analyze the titles of the jobs, count them, and return
     statistics.
