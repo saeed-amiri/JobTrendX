@@ -16,12 +16,14 @@ class StatisticsManager:
     __slots__: list[str] = [
         'df_info',
         'job_title_top',
-        'skills_count'
+        'skills_count',
+        'lang_count'
     ]
 
     df_info: pd.DataFrame
     job_title_top: pd.Series
     skills_count: pd.Series
+    lang_count: pd.Series
 
     def __init__(self,
                  df_info: pd.DataFrame,
@@ -34,6 +36,7 @@ class StatisticsManager:
         """call the methods and set the objects"""
         self._analyze_job_titles(log)
         self._analyze_skills(log)
+        self._analyze_languages(log)
 
     def _analyze_job_titles(self,
                             log: logger.logging.Logger
@@ -55,3 +58,13 @@ class StatisticsManager:
 
         log.info(f'\n\nSkills summary:\n{summary}'
                  f'\n\n{self.skills_count.head(8)}\n')
+
+    def _analyze_languages(self,
+                           log: logger.logging.Logger
+                           ) -> None:
+        """analysis the skills"""
+        summary: pd.DataFrame
+        summary, self.lang_count = tools.anlz_list_cols(self.df_info.language)
+
+        log.info(f'\n\nLanguages summary:\n{summary}'
+                 f'\n\n{self.lang_count.head(8)}\n')
