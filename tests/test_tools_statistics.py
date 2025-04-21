@@ -4,7 +4,7 @@ Tests for the statistics tools
 
 import unittest
 import pandas as pd
-from jobtrendx.tools_statistics import anlz_titles
+from jobtrendx.tools_statistics import anlz_string_cols
 
 
 class TestAnlzTitles(unittest.TestCase):
@@ -17,12 +17,12 @@ class TestAnlzTitles(unittest.TestCase):
             "Machine Learning Engineer", None, "nan", "Nan", ""
         ])
 
-    def test_anlz_titles_summary(self):
+    def test_anlz_string_cols_summary(self):
         """
-        Test if anlz_titles correctly calculates the summary
+        Test if anlz_string_cols correctly calculates the summary
         statistics.
         """
-        summary, _ = anlz_titles(self.titles)
+        summary, _ = anlz_string_cols(self.titles)
         expected_summary = pd.DataFrame({
             'Total': [8],
             'Valid': [4],
@@ -31,12 +31,12 @@ class TestAnlzTitles(unittest.TestCase):
         })
         pd.testing.assert_frame_equal(summary, expected_summary)
 
-    def test_anlz_titles_top_counts(self):
+    def test_anlz_string_cols_top_counts(self):
         """
-        Test if anlz_titles correctly calculates the top
+        Test if anlz_string_cols correctly calculates the top
         counts.
         """
-        _, top = anlz_titles(self.titles)
+        _, top = anlz_string_cols(self.titles)
         expected_top = pd.Series({
             "Data Scientist": 2,
             "Data Engineer": 1,
