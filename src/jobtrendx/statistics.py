@@ -45,3 +45,13 @@ class StatisticsManager:
 
         log.info(f'\n\nJob title summary:\n{summary}'
                  f'\n\n{self.job_title_top}\n')
+
+    def _analyze_skills(self,
+                        log: logger.logging.Logger
+                        ) -> None:
+        """analysis the skills"""
+        summary: pd.DataFrame
+        summary, self.skills_count = tools.anlz_list_cols(self.df_info.skills)
+
+        log.info(f'\n\nSkills summary:\n{summary}'
+                 f'\n\n{self.skills_count.head(8)}\n')
