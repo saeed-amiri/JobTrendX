@@ -4,7 +4,7 @@ Tests for the statistics tools
 
 import unittest
 import pandas as pd
-from jobtrendx.tools_statistics import anlz_string_cols
+from jobtrendx.tools_statistics import anlz_string_cols, anlz_list_cols
 
 
 class TestAnlzTitles(unittest.TestCase):
@@ -27,7 +27,7 @@ class TestAnlzTitles(unittest.TestCase):
             'Total': [8],
             'Valid': [4],
             'Missing': [4],
-            'Unique Titles': [3]
+            'Unique col': [3]
         })
         pd.testing.assert_frame_equal(summary, expected_summary)
 
@@ -43,6 +43,51 @@ class TestAnlzTitles(unittest.TestCase):
             "Machine Learning Engineer": 1
         }, name='count')
         pd.testing.assert_series_equal(top, expected_top)
+
+
+
+class TestAnlzListCols(unittest.TestCase):
+    """test analyzing the columns with series in them"""
+
+    def setUp(self):
+        """Set up sample data for testing."""
+        self.data = pd.Series([
+            ["Python", "SQL", "Python"],
+            ["Java", "C++"],
+            None,
+            [],
+            ["Python", "Java"],
+            ["SQL"],
+            None
+        ])
+
+    def test_anlz_list_cols_summary(self):
+        """
+        Test if anlz_list_cols correctly calculates the
+        summary statistics.
+        """
+        summary, _ = anlz_list_cols(self.data)
+        expected_summary = pd.DataFrame({
+            "Total": [7],
+            "Valid": [5],
+            "Missing": [2],
+            "Unique Items": [4]
+        })
+        pd.testing.assert_frame_equal(summary, expected_summary)
+
+    def test_anlz_list_cols_counts(self):
+        """
+        Test if anlz_list_cols correctly calculates the top
+        counts."""
+        _, counts = anlz_list_cols(self.data)
+        expected_counts = pd.Series({
+            "Python": 3,
+            "SQL": 2,
+            "Java": 2,
+            "C++": 1
+        }, name='count')
+        pd.testing.assert_series_equal(counts, expected_counts)
+
 
 
 if __name__ == "__main__":
