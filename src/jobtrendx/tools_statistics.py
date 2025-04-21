@@ -22,7 +22,7 @@ def anlz_titles(titles: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
         with statistics and a Series with the top counts.
     """
     titles = titles.astype(str).str.strip()
-    titles = titles.replace(['nan', 'Nan', ''], pd.NA)
+    titles = titles.replace(['nan', 'Nan', 'None', '', None], pd.NA)
 
     total: int = len(titles)
     missing: int = titles.isna().sum()
