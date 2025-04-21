@@ -40,5 +40,5 @@ class StatisticsManager:
         summary, self.job_title_top = \
             tools.anlz_titles(self.df_info['job_title'])
 
-        log.info(f'\nJob title summary:\n\t{summary}'
+        log.info(f'\nJob title summary:\n{summary}'
                  f'\n\tTop jobs:\n\t{self.job_title_top}')
