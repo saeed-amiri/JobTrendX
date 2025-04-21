@@ -17,6 +17,7 @@ from . import logger
 from . import email_processor
 from . import analysis
 from . import clean_dataframe
+from . import statistics
 
 if typing.TYPE_CHECKING:
     from pathlib import Path
@@ -42,6 +43,9 @@ def main(cfg: DictConfig) -> None:
     df_i: pd.DataFrame = anlaz.df_info
 
     df_cleaned: pd.DataFrame = clean_dataframe.remove_duplicate(df_info=df_i)
+
+    stats = statistics.StatisticsManager(df_info=df_cleaned)
+    stats.statistics(log=LOG)
 
 
 if __name__ == "__main__":
