@@ -10,8 +10,8 @@ __all__ = [
 
 def anlz_string_cols(col: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
     """
-    Analyze the col of the jobs, count them, and return
-    statistics.
+    Analyze the col of the strings (e.g., jobs), count them,
+    and return statistics.
 
     Args:
         col (pd.Series): A pandas Series containing job
@@ -29,7 +29,7 @@ def anlz_string_cols(col: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
     valids: int = total - missing
 
     unique: int = col.nunique(dropna=True)
-    top = col.value_counts(dropna=True)
+    counts = col.value_counts(dropna=True)
 
     summary = pd.DataFrame({
         'Total': [total],
