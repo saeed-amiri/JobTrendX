@@ -15,11 +15,13 @@ class StatisticsManager:
 
     __slots__: list[str] = [
         'df_info',
-        'job_title_top'
+        'job_title_top',
+        'skills_count'
     ]
 
     df_info: pd.DataFrame
     job_title_top: pd.Series
+    skills_count: pd.Series
 
     def __init__(self,
                  df_info: pd.DataFrame,
@@ -31,10 +33,11 @@ class StatisticsManager:
                    ) -> None:
         """call the methods and set the objects"""
         self._analyze_job_titles(log)
+        self._analyze_skills(log)
 
     def _analyze_job_titles(self,
-                      log: logger.logging.Logger
-                      ) -> None:
+                            log: logger.logging.Logger
+                            ) -> None:
         """analyzing the job titles"""
         summary: pd.DataFrame
         summary, self.job_title_top = \
