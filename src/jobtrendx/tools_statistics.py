@@ -6,7 +6,8 @@ import pandas as pd
 
 
 __all__ = [
-    'anlz_string_cols'
+    'anlz_string_cols',
+    'anlz_list_cols'
 ]
 
 
