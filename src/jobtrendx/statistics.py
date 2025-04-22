@@ -17,13 +17,17 @@ class StatisticsManager:
         'df_info',
         'job_title_top',
         'skills_count',
-        'lang_count'
+        'lang_count',
+        'salary_min',
+        'salary_max'
     ]
 
     df_info: pd.DataFrame
     job_title_top: pd.Series
     skills_count: pd.Series
     lang_count: pd.Series
+    salary_min: pd.Series
+    salary_max: pd.Series
 
     def __init__(self,
                  df_info: pd.DataFrame,
@@ -37,6 +41,7 @@ class StatisticsManager:
         self._analyze_job_titles(log)
         self._analyze_skills(log)
         self._analyze_languages(log)
+        self._analyze_salaries(log)
 
     def _analyze_job_titles(self,
                             log: logger.logging.Logger
@@ -68,3 +73,13 @@ class StatisticsManager:
 
         log.info(f'\n\nLanguages summary:\n{summary}'
                  f'\n\n{self.lang_count.head(8)}\n')
+
+    def _analyze_salaries(self,
+                          log: logger.logging.Logger
+                          ) -> None:
+        """analyze salary columns"""
+        for col_name in ['salary_min', 'salary_max']:
+            summary, attr_value = \
+                tools.anlz_numerical_cols(self.df_info[col_name])
+            setattr(self, col_name, attr_value)
+            log.info(f'\n\n{col_name.capitalize()} Summary:\n{summary}')
