@@ -1,0 +1,79 @@
+2025-04-22 17:39:07
+/home/santiago/Documents/working_dirs/jobtrendx
+
+INFO: [email_processor in email_processor.py]
+	- EmailProcessor: Processed 964 emails successfully.
+
+INFO: [analysis in analysis.py]
+	- 
+The DataFrame from the emails extrcted, with column:
+	['file_path', 'eml_lang', 'job_title', 'location', 'skills', 'salary_min', 'salary_max', 'salary_unit', 'language']
+
+
+INFO: [analysis in analysis.py]
+	- 
+The DataFrame columns terms are unified
+
+
+INFO: [statistics in statistics.py]
+	- 
+
+Job title summary:
+   Total  Valid  Missing  Unique col
+0    692    491      201           6
+
+job_title
+Data Scientist      183
+Data Engineer       174
+Data analyst         91
+Machine Learning     23
+Data Architect       14
+Business Analyst      6
+Name: count, dtype: int64
+
+
+INFO: [statistics in statistics.py]
+	- 
+
+Skills summary:
+   Total  Valid  Missing  Unique Items
+0    692    692        0           116
+
+Python                     442
+Computer Science           401
+SQL                        393
+IT                         273
+Mathematics                272
+Machine Learning           228
+Artificial Intelligence    206
+Optimization               201
+Name: count, dtype: int64
+
+
+INFO: [statistics in statistics.py]
+	- 
+
+Languages summary:
+   Total  Valid  Missing  Unique Items
+0    692    692        0             3
+
+German     432
+nan        241
+English    221
+Name: count, dtype: int64
+
+
+INFO: [statistics in statistics.py]
+	- 
+
+Salary_min Summary:
+   Total  Valid  Missing          Mean      Std Dev  Min      Max
+0    692    595       97  55412.137815  9214.349083  0.0  97000.0
+
+INFO: [statistics in statistics.py]
+	- 
+
+Salary_max Summary:
+   Total  Valid  Missing          Mean       Std Dev  Min       Max
+0    692    595       97  77463.857143  11238.301364  0.0  123000.0
+
