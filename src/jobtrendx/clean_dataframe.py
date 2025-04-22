@@ -24,6 +24,7 @@ def remove_duplicate(df_info: pd.DataFrame,
     df_info = _convert_list_to_string(df_info, list_cols)
     df_info = _drop_duplicates(df_info)
     df_info = _convert_strings_to_lists(df_info, list_cols)
+    df_info = _order_dataframe(df_info, 'file_path')
     return df_info
 
 
@@ -97,4 +98,22 @@ def _convert_strings_to_lists(df: pd.DataFrame,
     """
     for col in cols:
         df.loc[:, col] = df[col].apply(lambda x: x.split('-'))
+    return df
+
+
+def _order_dataframe(df: pd.DataFrame,
+                     col: str
+                     ) -> pd.DataFrame:
+    """
+    Order the dataframe by the specified column.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame.
+        col (str): The column name to sort by.
+
+    Returns:
+        pd.DataFrame: The sorted DataFrame.
+    """
+    if col in df.columns:
+        df = df.sort_values(by=col, ascending=True, ignore_index=True)
     return df
