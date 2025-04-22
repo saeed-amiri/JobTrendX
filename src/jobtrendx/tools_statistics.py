@@ -80,3 +80,43 @@ def anlz_list_cols(col: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
     })
 
     return summary, counts
+
+
+def anlz_numerical_cols(col: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
+    """
+    Analyze columns containing numerical data, calculate
+    statistics,
+    and return a summary DataFrame and a Series with
+    descriptive statistics.
+
+    Args:
+        col (pd.Series): A pandas Series containing numerical
+        data.
+
+    Returns:
+        tuple[pd.DataFrame, pd.Series]: A summary DataFrame
+        with statistics and a Series with descriptive
+        statistics.
+    """
+    col = col.replace(['nan', 'Nan', 'None', '', None], pd.NA)
+    clean_col: pd.Series = col.dropna().astype(float)
+
+    total: int = len(col)
+    missing: int = col.isna().sum()
+    valids: int = total - missing
+
+    # Calculate descriptive statistics
+    descriptive_stats = clean_col.describe()
+
+    # Create a summary DataFrame
+    summary = pd.DataFrame({
+        "Total": [total],
+        "Valid": [valids],
+        "Missing": [missing],
+        "Mean": [descriptive_stats["mean"]],
+        "Std Dev": [descriptive_stats["std"]],
+        "Min": [descriptive_stats["min"]],
+        "Max": [descriptive_stats["max"]]
+    })
+
+    return summary, descriptive_stats
