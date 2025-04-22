@@ -7,7 +7,8 @@ import pandas as pd
 
 __all__ = [
     'anlz_string_cols',
-    'anlz_list_cols'
+    'anlz_list_cols',
+    'anlz_numerical_cols'
 ]
 
 
@@ -100,6 +101,8 @@ def anlz_numerical_cols(col: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
     """
     col = col.replace(['nan', 'Nan', 'None', '', None], pd.NA)
     clean_col: pd.Series = col.dropna().astype(float)
+    # Drop rows with zero values
+    clean_col = clean_col[clean_col != 0]
 
     total: int = len(col)
     missing: int = col.isna().sum()
