@@ -9,7 +9,8 @@ import pandas as pd
 
 
 __all__ = [
-    'remove_duplicate'
+    'remove_duplicate',
+    'set_languages'
 ]
 
 
@@ -116,4 +117,33 @@ def _order_dataframe(df: pd.DataFrame,
     """
     if col in df.columns:
         df = df.sort_values(by=col, ascending=True, ignore_index=True)
+    return df
+
+
+def set_languages(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Replace 'nan' in the 'language' column with the detected
+    language from the 'eml_lang' column. The 'eml_lang'
+    column contains language codes ('en' or 'de'), while the
+    'language' column is a list of strings.
+    If 'language' contains ['nan'], it will be replaced with
+    ['English'] or ['German'] based on 'eml_lang'.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame.
+
+    Returns:
+        pd.DataFrame: DataFrame with updated 'language' column.
+    """
+    lang_map = {'en': 'English', 'de': 'German'}
+
+    def replace_nan_with_eml_lang(language, eml_lang):
+        if 'nan' in language:
+            return [lang_map.get(eml_lang, eml_lang)]
+        return language
+
+    df['language'] = df.apply(
+        lambda row: replace_nan_with_eml_lang(row['language'],
+                                              row['eml_lang']),
+        axis=1)
     return df
