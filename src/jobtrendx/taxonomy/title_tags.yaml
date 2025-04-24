@@ -1,28 +1,41 @@
 tags:
   - m/w/d
-  - m/...
-  - d/w/m
-  - d/...
   - w/d/m
-  - w/...
+  - d/w/m
   - w/m/d
   - d/m/w
+  - m/...
+  - d/...
+  - w/...
   - m/f/x
   - f/m/x
-  - f/...
+  - f/m/d
+  - m/f/d
   - x/f/m
+  - f/...
   - x/...
+  - m/w
+  - w/m
+  - f/m
+  - m/f
   - (mwd)
   - (dwm)
   - (wmd)
   - (fmx)
   - (fmx)
+  - (fmd)
   - (xfm)
   - w|m|d
+  - f|m|d
   - m|w|d
+  - m|f|d
   - m|d|w
+  - m|d|f
   - w|d|m
+  - f|d|m
+  - m/w/divers
   - all genders
+  - (all genders)
   - Hol dir den Job
   - Du bist gefragt
   - Du passt perfekt
