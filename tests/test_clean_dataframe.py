@@ -9,7 +9,8 @@ from jobtrendx.clean_dataframe import (
     _get_list_columns,
     _convert_list_to_string,
     _drop_duplicates,
-    _convert_strings_to_lists
+    _convert_strings_to_lists,
+    set_languages
 )
 
 
@@ -65,6 +66,56 @@ class TestRemoveDuplicate(unittest.TestCase):
         self.assertListEqual(df_cleaned["skills"].tolist(), expected_skills)
         self.assertListEqual(df_cleaned["job_title"].tolist(),
                              expected_job_titles)
+
+
+class TestSetLanguages(unittest.TestCase):
+    """test for seting the language"""
+
+    def setUp(self):
+        """Set up sample data for testing."""
+        self.df = pd.DataFrame({
+            "language": [["nan"], ["English"], ["nan"], ["German"]],
+            "eml_lang": ["en", "en", "de", "de"]
+        })
+
+    def test_set_languages(self):
+        """
+        Test if set_languages correctly replaces 'nan' in the
+        'language' column.
+        """
+        updated_df = set_languages(self.df)
+        expected_languages = [
+            ["English"], ["English"], ["German"], ["German"]]
+        self.assertListEqual(updated_df["language"].tolist(),
+                             expected_languages)
+
+    def test_no_replacement_needed(self):
+        """
+        Test if set_languages leaves non-'nan' languages
+        unchanged.
+        """
+        df_no_nan = pd.DataFrame({
+            "language": [["English"], ["German"]],
+            "eml_lang": ["en", "de"]
+        })
+        updated_df = set_languages(df_no_nan)
+        expected_languages = [["English"], ["German"]]
+        self.assertListEqual(updated_df["language"].tolist(),
+                             expected_languages)
+
+    def test_unknown_eml_lang(self):
+        """
+        Test if set_languages handles unknown 'eml_lang'
+        values.
+        """
+        df_unknown_lang = pd.DataFrame({
+            "language": [["nan"], ["nan"]],
+            "eml_lang": ["fr", "es"]
+        })
+        updated_df = set_languages(df_unknown_lang)
+        expected_languages = [["fr"], ["es"]]
+        self.assertListEqual(updated_df["language"].tolist(),
+                             expected_languages)
 
 
 if __name__ == "__main__":
