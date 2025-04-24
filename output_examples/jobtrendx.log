@@ -1,4 +1,4 @@
-2025-04-24 16:52:45
+2025-04-24 18:57:30
 /home/santiago/Documents/working_dirs/jobtrendx
 
 INFO: [email_processor in email_processor.py]
@@ -59,11 +59,10 @@ INFO: [statistics in statistics.py]
 
 Languages summary:
    Total  Valid  Missing  Unique Items
-0    656    656        0             3
+0    656    656        0             2
 
-German     412
-nan        227
-English    209
+German     592
+English    256
 Name: count, dtype: int64
 
 
