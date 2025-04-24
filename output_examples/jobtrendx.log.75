@@ -1,8 +1,8 @@
-2025-04-22 19:01:10
+2025-04-24 16:52:45
 /home/santiago/Documents/working_dirs/jobtrendx
 
 INFO: [email_processor in email_processor.py]
-	- EmailProcessor: Processed 963 emails successfully.
+	- EmailProcessor: Processed 953 emails successfully.
 
 INFO: [analysis in analysis.py]
 	- 
@@ -20,18 +20,19 @@ INFO: [statistics in statistics.py]
 
 Job title summary:
    Total  Valid  Missing  Unique col
-0    682    576      106           9
+0    656    650        6          10
 
 job_title
-Data Scientist        198
-Data Engineer         172
-Data analyst          155
-Machine Learning       25
-Data Architect         13
-Business Analyst        9
-Data-Scientist          2
-Scientist               1
-Software Developer      1
+Data Scientist                      241
+Data Engineer                       167
+Data Analyst                        146
+Business Intelligence                24
+Machine Learning Engineer            23
+Business Analyst                     19
+Data Architect                       17
+Scientist                             6
+Artificial Intelligence Engineer      6
+Software Developer                    1
 Name: count, dtype: int64
 
 
@@ -40,16 +41,16 @@ INFO: [statistics in statistics.py]
 
 Skills summary:
    Total  Valid  Missing  Unique Items
-0    682    682        0           116
+0    656    656        0           116
 
-Python                     436
-Computer Science           398
-SQL                        383
-IT                         271
-Mathematics                271
-Machine Learning           225
-Artificial Intelligence    202
-Optimization               201
+Python                     421
+Computer Science           382
+SQL                        368
+IT                         269
+Mathematics                261
+Machine Learning           220
+Artificial Intelligence    200
+Optimization               192
 Name: count, dtype: int64
 
 
@@ -58,11 +59,11 @@ INFO: [statistics in statistics.py]
 
 Languages summary:
    Total  Valid  Missing  Unique Items
-0    682    682        0             3
+0    656    656        0             3
 
-German     426
-nan        237
-English    220
+German     412
+nan        227
+English    209
 Name: count, dtype: int64
 
 
@@ -71,11 +72,12 @@ INFO: [statistics in statistics.py]
 
 Salary_min Summary:
    Total  Valid  Missing          Mean      Std Dev      Min      Max
-0    682    585       97  55630.912521  8687.660977  32760.0  97000.0
+0    656    560       96  55530.146953  8540.850004  32760.0  88400.0
 
 INFO: [statistics in statistics.py]
 	- 
 
 Salary_max Summary:
    Total  Valid  Missing          Mean       Std Dev      Min       Max
-0    682    585       97  77761.569468  10326.969267  48000.0  123000.0
+0    656    560       96  77746.586022  10159.985252  48000.0  110500.0
+
