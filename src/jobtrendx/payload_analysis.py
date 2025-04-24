@@ -162,11 +162,16 @@ def _filter_item(item: list[str],
     cut_index: int = next(
         (i for i, x in enumerate(item) if "Diesen Job melden" in x), len(item))
     item = item[:cut_index]
-
+    title_line: bool = False
     for i in item:
         new_line_count: int = i.count('\n')
         url_count: int = i.count('[URL]')
         dash_count: int = i.count('-')
+        if any(re.search(rf"\b{re.escape(tag)}\b", i, re.IGNORECASE)
+               for tag in tags) and not title_line:
+            filtered.append(i)
+            title_line = True
+            continue
         if new_line_count > url_count and not (
             new_line_count <= max_newlines and dash_count > min_dashes
         ):
