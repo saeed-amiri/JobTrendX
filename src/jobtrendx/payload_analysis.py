@@ -147,6 +147,17 @@ def _filter_item(item: list[str],
     """
     filtered: list[str] = []
 
+    tags = ['m/w/d', 'w/d/m', 'd/w/m', 'w/m/d', 'd/m/w',
+            'm/...', 'd/...', 'w/...',
+            'm/f/x', 'f/m/x', 'f/m/d', 'm/f/d', 'x/f/m',
+            'f/...', 'x/...',
+            'm/w', 'w/m', 'f/m', 'm/f',
+            '(mwd)', '(dwm)', '(wmd)',
+            '(fmx)', '(fmx)', '(fmd)', '(xfm)',
+            'w|m|d', 'f|m|d', 'm|w|d', 'm|f|d', 'm|d|w',
+            'm|d|f', 'w|d|m', 'f|d|m',
+            'm/w/divers', 'all genders', '(all genders)'
+            ]
     # Find the first index where "Diesen Job melden" appears
     cut_index: int = next(
         (i for i, x in enumerate(item) if "Diesen Job melden" in x), len(item))
