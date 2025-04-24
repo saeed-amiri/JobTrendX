@@ -43,6 +43,7 @@ def main(cfg: DictConfig) -> None:
     df_i: pd.DataFrame = anlaz.df_info
 
     df_cleaned: pd.DataFrame = clean_dataframe.remove_duplicate(df_info=df_i)
+    df_cleaned: pd.DataFrame = clean_dataframe.set_languages(df=df_cleaned)
 
     stats = statistics.StatisticsManager(df_info=df_cleaned)
     stats.statistics(log=LOG)
