@@ -18,6 +18,7 @@ from . import email_processor
 from . import analysis
 from . import clean_dataframe
 from . import statistics
+from . import visualization
 
 if typing.TYPE_CHECKING:
     from pathlib import Path
@@ -47,6 +48,9 @@ def main(cfg: DictConfig) -> None:
 
     stats = statistics.StatisticsManager(df_info=df_cleaned)
     stats.statistics(log=LOG)
+
+    visuales = visualization.Visualizer(stats=stats)
+    visuales.primary_plots(log=LOG)
 
 
 if __name__ == "__main__":
