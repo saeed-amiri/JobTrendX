@@ -11,7 +11,9 @@ dependencies = [
     "pytest",
     "hydra-core",
     "pandas",
-    "langdetect"
+    "langdetect",
+    "matplotlib",
+    "seaborn"
 ]
 
 [tool.setuptools]
