@@ -28,4 +28,28 @@ class Visualizer:
                       log: logger.logging.Logger
                       ) -> None:
         """plot the main plots for the data"""
-        tools.plot_counts_series(self.stats.job_title_top)
+        self._job_titles(log)
+        self._skills(log)
+    
+    def _job_titles(self,
+                    log: logger.logging.Logger
+                    ) -> None:
+        """plot the job titles"""
+        try:
+            tools.plot_counts_series(self.stats.job_title_top,
+                                     threshold=0.03,
+                                     data_name='job titles')
+        except Exception as err:
+            log.info(f'\nNot posssible to plot `Job titles`!\n')
+
+
+    def _skills(self,
+                log: logger.logging.Logger
+                ) -> None:
+        """plot the job titles"""
+        try:
+            tools.plot_counts_series(self.stats.skills_count,
+                                     threshold=0.015,
+                                     data_name='skills')
+        except Exception as err:
+            log.info(f'\nNot posssible to plot `Skills`!\n')
