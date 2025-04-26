@@ -28,4 +28,4 @@ class Visualizer:
                       log: logger.logging.Logger
                       ) -> None:
         """plot the main plots for the data"""
-        tools.plot_job_titles(self.stats.job_title_top)
+        tools.plot_counts_series(self.stats.job_title_top)

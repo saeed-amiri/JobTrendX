@@ -8,28 +8,28 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 
 
-def plot_job_titles(job_counts: pd.Series,
-                    threshold: float = 0.03
-                    ) -> None:
+def plot_counts_series(counts: pd.Series,
+                       threshold: float = 0.03
+                       ) -> None:
     """
-    Plot a professional pie chart for job titles, grouping
+    Plot a professional pie chart for counts, grouping
     minor categories into 'Other'.
 
     Parameters:
     -----------
-    job_counts : pd.Series
+    counts : pd.Series
         Series with job titles as index and counts as values.
     threshold : float
         Minimum fraction to display separately. Others will
         be grouped.
     """
     # Normalize and group small slices
-    total = job_counts.sum()
-    fraction = job_counts / total
+    total = counts.sum()
+    fraction = counts / total
     mask = fraction < threshold
 
-    major = job_counts[~mask].copy()
-    minor = job_counts[mask]
+    major = counts[~mask].copy()
+    minor = counts[mask]
 
     other_label = "Other:"
     grouped = major.copy()
@@ -56,18 +56,18 @@ def plot_job_titles(job_counts: pd.Series,
     handles = []
     labels = []
 
-    for i, title in enumerate(grouped.index):
-        if title == other_label:
+    for i, item in enumerate(grouped.index):
+        if item == other_label:
             # Add colored "Other:" label
-            handles.append(Patch(facecolor=colors[i], label=title))
-            labels.append(title)
+            handles.append(Patch(facecolor=colors[i], label=item))
+            labels.append(item)
             # Add plain text sub-items without color boxes
             for sub in minor.index[:10]:
                 handles.append(Patch(facecolor='none', edgecolor='none'))
                 labels.append(f"  - {sub}")
         else:
-            handles.append(Patch(facecolor=colors[i], label=title))
-            labels.append(title)
+            handles.append(Patch(facecolor=colors[i], label=item))
+            labels.append(item)
 
     ax.legend(
         handles,
