@@ -5,6 +5,7 @@ Plotting tools for visualizaing the data from statistics
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 
@@ -25,6 +26,7 @@ def plot_counts_series(counts: pd.Series,
         Minimum fraction to display separately. Others will
         be grouped.
     """
+    # pylint: disable=too-many-locals
     # Normalize and group small slices
     other_label = "Other:"
     total = counts.sum()
@@ -40,6 +42,7 @@ def plot_counts_series(counts: pd.Series,
     colors = _set_colors(length=length)
 
     fig, ax = plt.subplots(figsize=(10, 10))
+
     wedges = _create_donut_chart_wedges(grouped, explode, colors, ax)
 
     xy_wedge, xy_shifted = _calculate_wedge_centers(wedges, angle_threshold)
@@ -65,9 +68,9 @@ def plot_counts_series(counts: pd.Series,
     _save_fig(fig=fig, data_name=data_name)
 
 
-def _create_legend(ax,
-                   handles,
-                   labels
+def _create_legend(ax: mpl.axes._axes.Axes,
+                   handles: list,
+                   labels: list[str]
                    ) -> None:
     """Set the legend"""
     ax.legend(
@@ -80,14 +83,18 @@ def _create_legend(ax,
     )
 
 
-def _place_wedge_labels(total,
-                        grouped,
-                        ax,
-                        wedges,
-                        angle_threshold,
-                        xy_wedge,
-                        xy_shifted) -> None:
-    """Add the legend to the wedges"""
+def _place_wedge_labels(total: float,
+                        grouped: pd.Series,
+                        ax: mpl.axes._axes.Axes,
+                        wedges: list[mpl.patches.Wedge],
+                        angle_threshold: float,
+                        xy_wedge: list[tuple[float, float]],
+                        xy_shifted: list[tuple[float, float]]
+                        ) -> None:
+    """Find the locations for the legends of wedges"""
+    # pylint: disable=too-many-locals
+    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-positional-arguments
     for i, (p, loc_wedge, loc_shifted) in enumerate(zip(wedges,
                                                         xy_wedge,
                                                         xy_shifted)):
@@ -113,12 +120,13 @@ def _place_wedge_labels(total,
                         xytext=(1.3*np.sign(x_shifted), 1.3*y_shifted),
                         horizontalalignment=horizontalalignment,
                         fontsize=9,
-                        arrowprops={"arrowstyle":"-",
-                                    "connectionstyle":connectionstyle})
+                        arrowprops={"arrowstyle": "-",
+                                    "connectionstyle": connectionstyle}
+                        )
 
 
-def _calculate_wedge_centers(wedges,
-                             angle_threshold
+def _calculate_wedge_centers(wedges: list[mpl.patches.Wedge],
+                             angle_threshold: float
                              ) -> tuple[list[tuple[float, float]],
                                         list[tuple[float, float]]]:
     """find the centers of the wedges"""
@@ -146,9 +154,9 @@ def _calculate_wedge_centers(wedges,
     return xy_wedge, xy_shifted
 
 
-def _create_donut_chart_wedges(grouped,
-                               explode,
-                               colors,
+def _create_donut_chart_wedges(grouped: pd.Series,
+                               explode: list[float],
+                               colors: list[str],
                                ax
                                ) -> list:
     """Create the wedgs"""
@@ -159,7 +167,7 @@ def _create_donut_chart_wedges(grouped,
         explode=explode,
         startangle=60,
         labeldistance=1.1,  # push labels outward
-        wedgeprops={"width":0.5}  # make it a donut
+        wedgeprops={"width": 0.5}  # make it a donut
         )
 
     return wedges
