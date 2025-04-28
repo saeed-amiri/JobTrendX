@@ -117,7 +117,7 @@ def _place_wedge_labels(total: float,
 
             ax.annotate(f"{pct:.1f}%  ({int(grouped.values[i])})",
                         xy=(x_wedge, y_wedge),
-                        xytext=(1.3*np.sign(x_shifted), 1.3*y_shifted),
+                        xytext=(0.75*np.sign(x_shifted), 1.3*y_shifted),
                         horizontalalignment=horizontalalignment,
                         fontsize=9,
                         arrowprops={"arrowstyle": "-",
@@ -165,7 +165,7 @@ def _create_donut_chart_wedges(grouped: pd.Series,
         labels=None,
         colors=colors,
         explode=explode,
-        startangle=60,
+        startangle=82,
         labeldistance=1.1,  # push labels outward
         wedgeprops={"width": 0.5}  # make it a donut
         )
