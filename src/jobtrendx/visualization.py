@@ -47,9 +47,9 @@ class Visualizer:
                 log: logger.logging.Logger
                 ) -> None:
         """plot the job titles"""
-#        try:
-        tools.plot_counts_series(self.stats.skills_count,
+        try:
+            tools.plot_counts_series(self.stats.skills_count,
                                      threshold=0.015,
                                      data_name='skills')
-        #except Exception as err:
-        #    log.info(f'\nNot posssible to plot `Skills`!\n')
+        except Exception as err:
+            log.info(f'\nNot posssible to plot `Skills`!\n')
