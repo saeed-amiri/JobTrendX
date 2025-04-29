@@ -36,9 +36,10 @@ class Visualizer:
                     ) -> None:
         """plot the job titles"""
         try:
-            tools.plot_counts_series(self.stats.job_title_top,
-                                     threshold=0.03,
-                                     data_name='job titles')
+            plot = tools.PlotCountsSeries(counts=self.stats.job_title_top,
+                                          threshold=0.03,
+                                          data_name='job titles')
+            plot.plot()
         except Exception as err:
             log.info(f'\nNot posssible to plot `Job titles`!\n{err}')
 
@@ -48,8 +49,9 @@ class Visualizer:
                 ) -> None:
         """plot the job titles"""
         try:
-            tools.plot_counts_series(self.stats.skills_count,
-                                     threshold=0.015,
-                                     data_name='skills')
+            plot = tools.PlotCountsSeries(counts=self.stats.skills_count,
+                                          threshold=0.015,
+                                          data_name='skills')
+            plot.plot()
         except Exception as err:
             log.info(f'\nNot posssible to plot `Skills`!\n{err}')
