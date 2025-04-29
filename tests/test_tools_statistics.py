@@ -3,9 +3,10 @@ Tests for the statistics tools
 """
 
 import unittest
+from unittest.mock import patch
 import pandas as pd
 from jobtrendx.tools_statistics import anlz_string_cols, anlz_list_cols, \
-    anlz_numerical_cols
+    anlz_numerical_cols, anlz_by_category
 
 
 class TestAnlzTitles(unittest.TestCase):
@@ -132,6 +133,59 @@ class TestAnlzNumericalCols(unittest.TestCase):
         })
         pd.testing.assert_series_equal(descriptive_stats,
                                        expected_descriptive_stats)
+
+
+class TestAnlzByCategory(unittest.TestCase):
+    """Test the catogory statistics"""
+
+    def setUp(self):
+        """Set up sample data for testing."""
+        self.col = pd.Series([
+            ["Python", "SQL", "Java"],
+            ["Python", "C++"],
+            ["JavaScript", "HTML", "CSS"],
+            None,
+            ["Python", "JavaScript"],
+            ["SQL"],
+            None
+        ])
+        self.cfg = {
+            "taxonomy_path": "/path/to/taxonomy",
+            "taxonomy_files": {
+                "skills": "skills.yaml"
+            }
+        }
+        self.taxonomy = {
+            "Programming Languages": ["Python", "Java", "C++", "JavaScript"],
+            "Web Development": ["HTML", "CSS", "JavaScript"],
+            "Databases": ["SQL", "MongoDB"]
+        }
+
+    @patch("jobtrendx.tools_statistics._fetch_from_yaml")
+    def test_anlz_by_category(self, mock_fetch_from_yaml):
+        """Test if anlz_by_category correctly analyzes categories."""
+        mock_fetch_from_yaml.return_value = self.taxonomy
+
+        summary, counts = anlz_by_category(self.col, self.cfg, "skills")
+
+        # Expected summary
+        expected_summary = pd.DataFrame({
+            "Total": [7],
+            "Valid": [5],
+            "Missing": [2],
+            "Unique Categories": [3]
+        })
+
+        # Expected counts
+        expected_counts = pd.Series({
+            "Programming Languages": 7,
+            "Web Development": 4,
+            "Databases": 2
+        }, name="Count")
+
+        # Assertions
+        pd.testing.assert_frame_equal(summary, expected_summary)
+        pd.testing.assert_series_equal(counts, expected_counts)
 
 
 if __name__ == "__main__":
