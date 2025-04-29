@@ -9,6 +9,7 @@ import pandas as pd
 from . import logger
 from . import tools_statistics as tools
 
+from omegaconf import DictConfig
 
 class StatisticsManager:
     """do the math"""
@@ -17,6 +18,7 @@ class StatisticsManager:
         'df_info',
         'job_title_top',
         'skills_count',
+        'skills_category',
         'lang_count',
         'salary_min',
         'salary_max',
@@ -44,6 +46,14 @@ class StatisticsManager:
         self._analyze_skills()
         self._analyze_languages()
         self._analyze_salaries()
+
+    def statistics_by_category(self,
+                               cfg: DictConfig
+                               ) -> None:
+        """Look at the data by the catogory each belong to"""
+        summary, self.skills_category = \
+            tools.anlz_by_category(self.df_info['skills'], cfg, 'skills')
+        print(summary)
 
     def _analyze_job_titles(self) -> None:
         """analyzing the job titles"""

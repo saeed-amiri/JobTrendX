@@ -48,6 +48,7 @@ def main(cfg: DictConfig) -> None:
 
     stats = statistics.StatisticsManager(df_info=df_cleaned, log=LOG)
     stats.statistics()
+    stats.statistics_by_category(cfg=cfg)
 
     visuales = visualization.Visualizer(stats=stats)
     visuales.primary_plots(log=LOG)
