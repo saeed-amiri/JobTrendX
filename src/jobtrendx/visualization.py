@@ -40,7 +40,7 @@ class Visualizer:
                                      threshold=0.03,
                                      data_name='job titles')
         except Exception as err:
-            log.info(f'\nNot posssible to plot `Job titles`!\n')
+            log.info(f'\nNot posssible to plot `Job titles`!\n{err}')
 
 
     def _skills(self,
@@ -52,4 +52,4 @@ class Visualizer:
                                      threshold=0.015,
                                      data_name='skills')
         except Exception as err:
-            log.info(f'\nNot posssible to plot `Skills`!\n')
+            log.info(f'\nNot posssible to plot `Skills`!\n{err}')
