@@ -1,4 +1,4 @@
-programming_languages:
+Programming Languages:
   - R
   - C
   - C++
@@ -13,7 +13,7 @@ programming_languages:
   - MATLAB
   - Fortran
 
-tools_and_environments:
+Dev Tools:
   - Jupyter Notebook
   - JupyterLab
   - Visual Studio Code
@@ -23,12 +23,12 @@ tools_and_environments:
   - Streamlit
   - FastAPI
 
-operating_systems:
+Operating Systems:
   - Linux
   - Windows
   - macOS
 
-cloud_platforms:
+Cloud Platforms:
   - AWS
   - Azure
   - GCP
@@ -37,25 +37,21 @@ cloud_platforms:
   - Heroku
   - Cloud-Technologien
 
-data_visualization_tools:
-  - Matplotlib
-  - Seaborn
-  - Plotly
-  - Tableau
-  - Power BI
-  - Microsoft BI
-  - Looker
-  - Qlik
 
-data_engineering_tools:
+Data Engineering:
   - Apache
   - Hadoop
   - Spark
   - Kafka
   - Airflow
+  - dbt
   - data build tool
 
-databases:
+Big Data:
+  - Databricks
+  - Flink
+
+Databases:
   - MySQL
   - PostgreSQL
   - MongoDB
@@ -65,9 +61,36 @@ databases:
   - SQLite
   - Microsoft SQL Server
 
-machine_learning:
-  - Machine Learning
-  - Maschinelles Lernen
+Data Processing:
+  - pandas
+  - NumPy
+  - Dask
+  - PySpark
+
+Data Exchange:
+  - JSON
+  - XML
+  - Parquet
+  - Avro
+  - YAML
+  - CSV
+  - Excel
+
+Python Visualization Libraries:
+  - Matplotlib
+  - Seaborn
+  - Plotly
+
+Business Intelligence Platforms:
+  - Tableau
+  - Power BI
+  - Microsoft BI
+  - Looker
+  - Qlik
+
+Machine Learning:
+  - MLflow
+  - Kubeflow
   - scikit-learn
   - TensorFlow
   - PyTorch
@@ -78,8 +101,10 @@ machine_learning:
   - MLlib
   - Spark ML
   - Hugging Face Transformers
- 
-artificial_intelligence:
+  - Machine Learning
+  - Maschinelles Lernen
+
+Artificial Intelligence:
   - AI
   - Artificial Intelligence
   - KI
@@ -93,61 +118,31 @@ artificial_intelligence:
   - Natural Language Processing
   - VNS
   - Verarbeitung natürlicher Sprache
-  - Computer Vision (CV)
-  - Maschinelles Sehen (MS)
+  - Computer Vision
+  - CV
+  - Maschinelles Sehen
+  - MS
   - Reinforcement Learning
-  - Bestärkendes Lernen (BL)
+  - Bestärkendes Lernen
+  - BL
 
-big_data_technologies:
-  - Databricks
-  - Flink
-
-statistical_tools_and_packages:
-  - Python Statsmodels
-  - SPSS
-  - SAS
-  - Excel
-  - SciPy
-
-NLP_tools:
+Natural Language:
   - spaCy
-  - NLTK (Natural Language Toolkit)
+  - Natural Language Toolkit
+  - NLTK
   - Gensim
   - BERT
   - GPT models
   - OpenAI API
 
-MLOps_and_devops:
-  - MLflow
-  - Kubeflow
-  - Jenkins
-  - CircleCI
-  - GitLab CI/CD
-
-version_control:
-  - Git
-  - GitHub
-  - GitLab
-  - Docker
-  - Bitbucket
-  - Kubernetes
-
-data_format_and_exchange:
-  - JSON
-  - XML
-  - Parquet
-  - Avro
-  - YAML
-  - CSV
+Statistical Tools:
+  - Python Statsmodels
+  - SPSS
+  - SAS
+  - SciPy
   - Excel
 
-data_cleaning_and_processing:
-  - pandas
-  - NumPy
-  - Dask
-  - PySpark
-
-mathematics_and_statistics:
+Mathematics and Optimization:
   - Linear Algebra
   - Lineare Algebra
   - Calculus
@@ -161,7 +156,7 @@ mathematics_and_statistics:
   - Graph Theory
   - Graphentheorie
 
-data_science_methods:
+Data Science Methods:
   - Hypothesis Testing
   - Hypothesentests
   - Regression Analysis
@@ -177,7 +172,18 @@ data_science_methods:
   - Anomaly Detection
   - Anomalieerkennung
 
-soft_skills:
+Version Control:
+  - Jenkins
+  - CircleCI
+  - GitLab CI/CD
+  - Git
+  - GitHub
+  - GitLab
+  - Bitbucket
+  - Docker
+  - Kubernetes
+
+Soft Skills:
   - Critical Thinking
   - Kritisches Denken
   - Problem-Solving
@@ -189,7 +195,7 @@ soft_skills:
   - Teamwork
   - Teamarbeit
 
-project_management:
+Project Management:
   - Agile
   - Scrum
   - Kanban
@@ -197,29 +203,31 @@ project_management:
   - Trello
   - Confluence
 
-ethics_and_law:
-  - GDPR (General Data Protection Regulation)
-  - DSGVO (Datenschutz-Grundverordnung)
+Ethics and Law:
+  - General Data Protection Regulation
+  - GDPR
+  - DSGVO
+  - Datenschutz-Grundverordnung
   - Data Privacy
   - Datenschutz
   - Data Security
   - Datensicherheit
 
-degree:
+Academic Degrees:
   - B.A.
   - Bachelor
   - M.Sc
   - Master of Science
-  - Dimploma
+  - Diploma
   - Habilitation
   - Postdoctoral
   - Postdoc
 
-majors_and_fields:
+Majors:
   - Computer Science
   - Informatik
-  - Mathematik
   - Mathematics
+  - Mathematik
   - Engineering
   - Ingenieurwesen
   - Electrical Engineering
@@ -229,7 +237,8 @@ majors_and_fields:
   - Physics
   - Physik
   - Economics
-  - Volkswirtschaftslehre (VWL)
+  - VWL
+  - Volkswirtschaftslehre
   - Quantitative Finance
   - Bioinformatics
   - Bioinformatik
@@ -237,7 +246,7 @@ majors_and_fields:
   - Robotik
   - Software Engineering
   - Softwareentwicklung
-  - Erfahrungsdesign
   - Cybersecurity
   - Cybersicherheit
   - Operations Research
+  - Erfahrungsdesign

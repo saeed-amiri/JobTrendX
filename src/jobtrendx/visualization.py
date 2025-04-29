@@ -14,6 +14,8 @@ class Visualizer:
     """
     Visualize the statistics
     """
+    # pylint: disable=broad-exception-caught
+    # pylint: disable=too-few-public-methods
 
     __slots__ = ['stats']
 
@@ -30,26 +32,53 @@ class Visualizer:
         """plot the main plots for the data"""
         self._job_titles(log)
         self._skills(log)
-    
+        self._skills_category(log)
+
     def _job_titles(self,
                     log: logger.logging.Logger
                     ) -> None:
         """plot the job titles"""
         try:
-            tools.plot_counts_series(self.stats.job_title_top,
-                                     threshold=0.03,
-                                     data_name='job titles')
+            plot = tools.PlotCountsSeries(counts=self.stats.job_title_top,
+                                          threshold=0.03,
+                                          data_name='job titles')
+            plot.plot()
         except Exception as err:
-            log.info(f'\nNot posssible to plot `Job titles`!\n')
-
+            log.info(f'\nNot posssible to plot `Job titles`!\n{err}')
 
     def _skills(self,
                 log: logger.logging.Logger
                 ) -> None:
-        """plot the job titles"""
+        """plot the job skills"""
         try:
-            tools.plot_counts_series(self.stats.skills_count,
-                                     threshold=0.015,
-                                     data_name='skills')
+            plot = tools.PlotCountsSeries(counts=self.stats.skills_count,
+                                          threshold=0.015,
+                                          data_name='skills')
+            plot.plot()
         except Exception as err:
-            log.info(f'\nNot posssible to plot `Skills`!\n')
+            log.info(f'\nNot posssible to plot `Skills`!\n{err}')
+
+    def _language(self,
+                  log: logger.logging.Logger
+                  ) -> None:
+        """plot the languages"""
+        try:
+            plot = tools.PlotCountsSeries(counts=self.stats.lang_count,
+                                          threshold=0.1,
+                                          data_name='language')
+            plot.plot()
+        except Exception as err:
+            log.info(f'\nNot posssible to plot `Language`!\n{err}')
+
+    def _skills_category(self,
+                         log: logger.logging.Logger
+                         ) -> None:
+        """plot the job skills"""
+        print(self.stats.skills_category)
+        try:
+            plot = tools.PlotCountsSeries(counts=self.stats.skills_category,
+                                          threshold=0.03,
+                                          data_name='skills Category')
+            plot.plot()
+        except Exception as err:
+            log.info(f'\nNot posssible to plot `Skills Category`!\n{err}')
