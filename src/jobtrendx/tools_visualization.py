@@ -193,7 +193,7 @@ class PlotCountsSeries:
             labels=None,
             colors=colors,
             explode=explode,
-            startangle=82,
+            startangle=87,
             labeldistance=1.1,
             wedgeprops={"width": 0.5}
         )
