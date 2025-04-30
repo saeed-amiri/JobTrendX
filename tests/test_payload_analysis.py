@@ -11,10 +11,10 @@ import pandas as pd
 from omegaconf import DictConfig
 
 from jobtrendx.payload_analysis import \
-    _split_double_newline, _filter_item, _extract_title, _fetch_from_yaml, \
+    _split_double_newline, _filter_item, _extract_title, \
     _extract_matching_item, _extract_all_items, _extract_salary, \
     _get_salary_amount
-
+from jobtrendx.sub_tools import fetch_from_yaml
 
 def test_split_double_newline() -> None:
     """Test the _split_double_newline function."""
@@ -142,11 +142,11 @@ def test_extract_title_multiple_matches():
 
 
 class TestFetchFromYaml(unittest.TestCase):
-    """Test the YAML reader function `_fetch_from_yaml`."""
+    """Test the YAML reader function `fetch_from_yaml`."""
 
-    def test_fetch_from_yaml_success(self):
+    def testfetch_from_yaml_success(self):
         """
-        Test _fetch_from_yaml successfully reads and parses a YAML file.
+        Test fetch_from_yaml successfully reads and parses a YAML file.
         """
         cfg = DictConfig({
             "taxonomy_path": "/some/dir",
@@ -161,15 +161,16 @@ class TestFetchFromYaml(unittest.TestCase):
         """
         mocked_open = mock_open(read_data=fake_yaml)
         with patch("pathlib.Path.open", mocked_open):
-            result = _fetch_from_yaml(cfg, 'locations')
+            result = fetch_from_yaml(
+                cfg.taxonomy_path, cfg.taxonomy_files['locations'])
         self.assertEqual(
             result, {"cities": ["Berlin", "Munich"]},
             "Should parse YAML data correctly."
         )
 
-    def test_fetch_from_yaml_file_not_found(self):
+    def testfetch_from_yaml_file_not_found(self):
         """
-        Test _fetch_from_yaml raises SystemExit when the file is missing.
+        Test fetch_from_yaml raises SystemExit when the file is missing.
         """
         cfg = DictConfig({
             "taxonomy_path": "/some/dir",
@@ -181,12 +182,12 @@ class TestFetchFromYaml(unittest.TestCase):
         mocked_open.side_effect = FileNotFoundError
         with patch("pathlib.Path.open", mocked_open), \
              self.assertRaises(SystemExit) as context:
-            _fetch_from_yaml(cfg, 'locations')
+            fetch_from_yaml(cfg.taxonomy_path, cfg.taxonomy_files['locations'])
         self.assertIn("does not exist!", str(context.exception))
 
-    def test_fetch_from_yaml_format_error(self):
+    def testfetch_from_yaml_format_error(self):
         """
-        Test _fetch_from_yaml raises SystemExit when the YAML is invalid.
+        Test fetch_from_yaml raises SystemExit when the YAML is invalid.
         """
         cfg = DictConfig({
             "taxonomy_path": "/some/dir",
@@ -199,12 +200,12 @@ class TestFetchFromYaml(unittest.TestCase):
         with patch("pathlib.Path.open", mocked_open), \
              patch("yaml.safe_load", side_effect=yaml.YAMLError), \
              self.assertRaises(SystemExit) as context:
-            _fetch_from_yaml(cfg, 'locations')
+            fetch_from_yaml(cfg.taxonomy_path, cfg.taxonomy_files['locations'])
         self.assertIn("not a valid YAML file!", str(context.exception))
 
-    def test_fetch_from_yaml_unknown_error(self):
+    def testfetch_from_yaml_unknown_error(self):
         """
-        Test _fetch_from_yaml raises SystemExit for any other exception.
+        Test fetch_from_yaml raises SystemExit for any other exception.
         """
         cfg = DictConfig({
             "taxonomy_path": "/some/dir",
@@ -216,7 +217,7 @@ class TestFetchFromYaml(unittest.TestCase):
         mocked_open.side_effect = ValueError("Some unknown error")
         with patch("pathlib.Path.open", mocked_open), \
              self.assertRaises(SystemExit) as context:
-            _fetch_from_yaml(cfg, 'locations')
+           fetch_from_yaml(cfg.taxonomy_path, cfg.taxonomy_files['locations'])
         self.assertIn("Unknown Error", str(context.exception))
 
 

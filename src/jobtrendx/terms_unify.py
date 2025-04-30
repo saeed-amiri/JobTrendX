@@ -13,13 +13,11 @@ Machine Learning:
 S. Amiri
 """
 
-import sys
-from pathlib import Path
-
-import yaml
 import pandas as pd
 
 from omegaconf import DictConfig
+
+from . import sub_tools as sub
 
 
 __all__ = [
@@ -31,9 +29,12 @@ def term_unifier(df_info: pd.DataFrame,
                  cfg: DictConfig
                  ) -> pd.DataFrame:
     """unify the terms in the columns"""
-    job_lexcion: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
-    skill_lexicon: dict[str, list[str]] = _fetch_from_yaml(cfg, 'skills')
-    language_lexicon: dict[str, list[str]] = _fetch_from_yaml(cfg, 'languages')
+    job_lexcion: dict[str, list[str]] = sub.fetch_from_yaml(
+        cfg.lexicon_path, cfg.lexicon_files['job_titles'])
+    skill_lexicon: dict[str, list[str]] = sub.fetch_from_yaml(
+        cfg.lexicon_path, cfg.lexicon_files['skills'])
+    language_lexicon: dict[str, list[str]] = sub.fetch_from_yaml(
+        cfg.lexicon_path, cfg.lexicon_files['languages'])
 
     df_info = _replace_str(job_lexcion, df_info, 'job_title')
     df_info = _replace_list_str(skill_lexicon, df_info, 'skills')
@@ -88,35 +89,3 @@ def _invert_lexicon(lexicon: dict[str, list[str]]
                     ) -> dict[str, str]:
     """Invert the lexicon to simplify the search"""
     return {value: key for key, values in lexicon.items() for value in values}
-
-
-def _fetch_from_yaml(cfg: DictConfig,
-                     file_type: str
-                     ) -> dict[str, list[str]]:
-    """
-    Reads the YAML file containing location data and returns
-    a dictionary of items in the yaml
-
-    Args:
-        cfg (DictConfig): Configuration object containing
-        paths to lexicon files.
-
-    Returns:
-        dict[str, list[str]]: Dictionary of city names grouped
-        by states names.
-
-    Raises:
-        SystemExit: If the file is not found, has a format
-        error, or an unknown error occurs.
-    """
-    # pylint: disable=broad-exception-caught
-    file_path = Path(cfg.lexicon_path) / cfg.lexicon_files[file_type]
-    try:
-        with file_path.open('r', encoding='utf-8') as f_loc:
-            return yaml.safe_load(f_loc)
-    except FileNotFoundError:
-        sys.exit(f"\nFile Not Found:\n`{file_path}` does not exist!")
-    except yaml.YAMLError:
-        sys.exit(f"\nFile Format Error:\n`{file_path}` not a valid YAML file!")
-    except Exception as err:
-        sys.exit(f"Unknown Error in `{file_path}`: {err}")
