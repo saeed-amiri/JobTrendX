@@ -13,9 +13,10 @@ import pytest
 import pandas as pd
 
 from jobtrendx.tools_processor import check_directory, check_dir_not_empty, \
-    returns_all_files_in_dir, returns_eml_files, returns_eml_path, \
-    _extract_attachments, _clean_eml_payload, eml_to_dataframe, \
-    detect_language, _detect_single_language, _check_language
+    returns_all_files_in_dir, returns_eml_files, returns_eml_path
+    
+from jobtrendx.tools_analysis import detect_language, _check_language, \
+    _extract_attachments, _clean_eml_payload, eml_to_dataframe
 
 
 def test_check_directory_exists() -> None:
