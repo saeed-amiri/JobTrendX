@@ -20,14 +20,13 @@ Samiri
 """
 
 import re
-import sys
 import typing
-from pathlib import Path
 
-import yaml
 import pandas as pd
 
 from omegaconf import DictConfig
+
+from . import sub_tools as sub
 
 __all__ = [
     'split_payload',
@@ -41,12 +40,18 @@ def split_payload(payloads: pd.DataFrame,
     """splitting the payload of the emails and extract the
     data from it and return a pd DataFrame"""
 
-    skills: dict[str, list[str]] = _fetch_from_yaml(cfg, 'skills')
-    tags: dict[str, list[str]] = _fetch_from_yaml(cfg, 'title_tags')
-    salaries: dict[str, list[str]] = _fetch_from_yaml(cfg, 'salaries')
-    locations: dict[str, list[str]] = _fetch_from_yaml(cfg, 'locations')
-    languages: dict[str, list[str]] = _fetch_from_yaml(cfg, 'languages')
-    job_titles: dict[str, list[str]] = _fetch_from_yaml(cfg, 'job_titles')
+    skills: dict[str, list[str]] = sub.fetch_from_yaml(
+        cfg.taxonomy_path, cfg.taxonomy_files['skills'])
+    tags: dict[str, list[str]] = sub.fetch_from_yaml(
+        cfg.taxonomy_path, cfg.taxonomy_files['title_tags'])
+    salaries: dict[str, list[str]] = sub.fetch_from_yaml(
+        cfg.taxonomy_path, cfg.taxonomy_files['salaries'])
+    locations: dict[str, list[str]] = sub.fetch_from_yaml(
+        cfg.taxonomy_path, cfg.taxonomy_files['locations'])
+    languages: dict[str, list[str]] = sub.fetch_from_yaml(
+        cfg.taxonomy_path, cfg.taxonomy_files['languages'])
+    job_titles: dict[str, list[str]] = sub.fetch_from_yaml(
+        cfg.taxonomy_path, cfg.taxonomy_files['job_titles'])
 
     payloads_uplift = _payload_clean_up(payloads)
     data_set: dict[str, typing.Any] = _get_info(payloads_uplift,
@@ -66,39 +71,6 @@ def split_payload(payloads: pd.DataFrame,
         **data_set
     })
     return df_info
-
-
-def _fetch_from_yaml(cfg: DictConfig,
-                     file_type: str
-                     ) -> dict[str, list[str]]:
-    """
-    Reads the YAML file containing location data and returns
-    a dictionary of items in the yaml
-
-    Args:
-        cfg (DictConfig): Configuration object containing
-        paths to taxonomy files.
-
-    Returns:
-        dict[str, list[str]]: Dictionary of city names grouped
-        by states names.
-
-    Raises:
-        SystemExit: If the file is not found, has a format
-        error, or an unknown error occurs.
-    """
-    # pylint: disable=broad-exception-caught
-    file_path = Path(cfg.taxonomy_path) / cfg.taxonomy_files[file_type]
-    try:
-        with file_path.open('r', encoding='utf-8') as f_loc:
-            return yaml.safe_load(f_loc)
-    except FileNotFoundError:
-        sys.exit(f"\nFile Not Found:\n`{file_path}` does not exist!")
-    except yaml.YAMLError:
-        sys.exit(f"\nFile Format Error:\n`{file_path}` not a valid YAML file!")
-    except Exception as err:
-        sys.exit(f"Unknown Error in `{file_path}`: {err}")
-
 
 def _payload_clean_up(payloads: pd.DataFrame) -> pd.DataFrame:
     """To split the payload more accurately"""

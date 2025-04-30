@@ -5,9 +5,11 @@ Tests for the statistics tools
 import unittest
 from unittest.mock import patch
 import pandas as pd
+
+from omegaconf import DictConfig
 from jobtrendx.tools_statistics import anlz_string_cols, anlz_list_cols, \
     anlz_numerical_cols, anlz_by_category
-
+from jobtrendx.sub_tools import fetch_from_yaml
 
 class TestAnlzTitles(unittest.TestCase):
     """Test the titles analysis"""
@@ -136,7 +138,7 @@ class TestAnlzNumericalCols(unittest.TestCase):
 
 
 class TestAnlzByCategory(unittest.TestCase):
-    """Test the catogory statistics"""
+    """Test the category statistics"""
 
     def setUp(self):
         """Set up sample data for testing."""
@@ -149,19 +151,19 @@ class TestAnlzByCategory(unittest.TestCase):
             ["SQL"],
             None
         ])
-        self.cfg = {
+        self.cfg = DictConfig({
             "taxonomy_path": "/path/to/taxonomy",
             "taxonomy_files": {
                 "skills": "skills.yaml"
             }
-        }
+        })
         self.taxonomy = {
             "Programming Languages": ["Python", "Java", "C++", "JavaScript"],
             "Web Development": ["HTML", "CSS", "JavaScript"],
             "Databases": ["SQL", "MongoDB"]
         }
 
-    @patch("jobtrendx.tools_statistics._fetch_from_yaml")
+    @patch("jobtrendx.sub_tools.fetch_from_yaml")
     def test_anlz_by_category(self, mock_fetch_from_yaml):
         """Test if anlz_by_category correctly analyzes categories."""
         mock_fetch_from_yaml.return_value = self.taxonomy
