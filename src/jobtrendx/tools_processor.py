@@ -6,8 +6,6 @@ import sys
 from pathlib import Path
 import email
 from email import policy
-from langdetect import detect
-
 
 from . import colors_text as ct
 
@@ -83,4 +81,3 @@ def returns_email_contant(eml_paths: list[Path]
         eml_dict[file_path] = msg
         del msg
     return eml_dict
-
