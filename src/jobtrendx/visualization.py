@@ -83,3 +83,10 @@ class Visualizer:
                              data_name='skills Category')
         except Exception as err:
             log.info(f'\nNot posssible to plot `Skills Category`!\n{err}')
+
+    def _nested_skills(self,
+                       log: logger.logging.Logger
+                       ) -> None:
+        """plot the nested pie"""
+        plot = tools.PlotNestedPie()
+        plot.plot_nested_pie(self.stats.nested)
