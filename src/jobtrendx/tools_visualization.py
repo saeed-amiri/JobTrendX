@@ -26,9 +26,14 @@ class PlotCountsSeries:
     Plot Pie chart for the data in a pd.Series
     """
     # pylint: disable=too-few-public-methods
+    counts: pd.Series
+    total: float
+    data_name: str
+
     def __init__(self,
                  threshold: float = 0.03,
-                 data_name: str = 'counts'):
+                 angle_threshold: float = 10
+                 ) -> None:
         """
         Initialize the PlotCountsSeries class.
 
@@ -42,21 +47,20 @@ class PlotCountsSeries:
             Name of the data being visualized.
         """
         self.threshold = threshold
-        self.data_name = data_name
         self.other_label = "Other:"
-        self.angle_threshold = 10.0
-        self.counts: pd.Series
-        self.total: float
+        self.angle_threshold = angle_threshold
 
-    def plot(self,
-             counts: pd.Series,
-             ) -> None:
+    def plot_series(self,
+                    counts: pd.Series,
+                    data_name: str = 'counts'
+                    ) -> None:
         """
         Plot a professional pie chart for counts, grouping
         minor categories into 'Other'.
         """
         self.total = counts.sum()
         self.counts = counts
+        self.data_name = data_name
 
         grouped, minor = self._normalize_others()
         length: int = len(grouped)
