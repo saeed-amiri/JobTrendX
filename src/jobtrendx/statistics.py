@@ -19,6 +19,7 @@ class StatisticsManager:
         'job_title_top',
         'skills_count',
         'skills_category',
+        'nested',
         'lang_count',
         'salary_min',
         'salary_max',
@@ -53,7 +54,7 @@ class StatisticsManager:
         """Look at the data by the catogory each belong to"""
         summary, self.skills_category = \
             tools.anlz_by_category(self.df_info['skills'], cfg, 'skills')
-        print(summary)
+        self.nested = tools.anlz_for_nested_pie(self.df_info['skills'], cfg, 'skills')
 
     def _analyze_job_titles(self) -> None:
         """analyzing the job titles"""

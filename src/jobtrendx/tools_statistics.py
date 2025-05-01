@@ -1,7 +1,7 @@
 """Do the statistics for analyzing the ads"""
 
+from collections import defaultdict
 from itertools import chain
-
 import pandas as pd
 
 from omegaconf import DictConfig
@@ -189,3 +189,37 @@ def anlz_by_category(col: pd.Series,
     counts = counts.sort_values(ascending=False)
 
     return summary, counts
+
+
+def anlz_for_nested_pie(col: pd.Series,
+                        cfg: DictConfig,
+                        subjest: str
+                        ) -> None:
+    """
+    Get the data for the nested pie
+    """
+    # Load taxonomy
+    taxonomy = sub.fetch_from_yaml(cfg.taxonomy_path,
+                                   cfg.taxonomy_files[subjest])
+
+    # Flatten skills column
+    clean_col = col.dropna().apply(lambda x: x if isinstance(x, list) else [])
+    flat_skills = list(chain.from_iterable(clean_col))
+    # Map skills to categories
+    skill_to_category = {}
+    for category, skills in taxonomy.items():
+        for skill in skills:
+            skill_to_category[skill] = category
+
+    # Count each skill, grouped under category
+    nested_counts = defaultdict(lambda: defaultdict(int))
+    for skill in flat_skills:
+        category = skill_to_category.get(skill)
+        if category:
+            nested_counts[category][skill] += 1
+    # Sort nested_counts keys after populating it
+    nested_counts = {
+        cat: dict(
+            sorted(skills.items(), key=lambda item: item[1], reverse=True))
+        for cat, skills in nested_counts.items()}
+    return nested_counts

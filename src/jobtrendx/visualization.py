@@ -33,16 +33,17 @@ class Visualizer:
         self._job_titles(log)
         self._skills(log)
         self._skills_category(log)
+        self._nested_skills(log)
 
     def _job_titles(self,
                     log: logger.logging.Logger
                     ) -> None:
         """plot the job titles"""
         try:
-            plot = tools.PlotCountsSeries(counts=self.stats.job_title_top,
-                                          threshold=0.03,
-                                          data_name='job titles')
-            plot.plot()
+            plot = tools.PlotCountsSeries(threshold=0.03,
+                                          angle_threshold=10.0)
+            plot.plot_series(counts=self.stats.job_title_top,
+                             data_name='job titles')
         except Exception as err:
             log.info(f'\nNot posssible to plot `Job titles`!\n{err}')
 
@@ -51,10 +52,10 @@ class Visualizer:
                 ) -> None:
         """plot the job skills"""
         try:
-            plot = tools.PlotCountsSeries(counts=self.stats.skills_count,
-                                          threshold=0.015,
-                                          data_name='skills')
-            plot.plot()
+            plot = tools.PlotCountsSeries(threshold=0.015,
+                                          angle_threshold=10.0)
+            plot.plot_series(counts=self.stats.skills_count,
+                             data_name='skills')
         except Exception as err:
             log.info(f'\nNot posssible to plot `Skills`!\n{err}')
 
@@ -63,10 +64,10 @@ class Visualizer:
                   ) -> None:
         """plot the languages"""
         try:
-            plot = tools.PlotCountsSeries(counts=self.stats.lang_count,
-                                          threshold=0.1,
-                                          data_name='language')
-            plot.plot()
+            plot = tools.PlotCountsSeries(threshold=0.1,
+                                          angle_threshold=10.0)
+            plot.plot_series(counts=self.stats.lang_count,
+                             data_name='language')
         except Exception as err:
             log.info(f'\nNot posssible to plot `Language`!\n{err}')
 
@@ -74,11 +75,18 @@ class Visualizer:
                          log: logger.logging.Logger
                          ) -> None:
         """plot the job skills"""
-        print(self.stats.skills_category)
         try:
-            plot = tools.PlotCountsSeries(counts=self.stats.skills_category,
-                                          threshold=0.03,
-                                          data_name='skills Category')
-            plot.plot()
+            plot = tools.PlotCountsSeries(threshold=0.03,
+                                          angle_threshold=10.0)
+
+            plot.plot_series(counts=self.stats.skills_category,
+                             data_name='skills Category')
         except Exception as err:
             log.info(f'\nNot posssible to plot `Skills Category`!\n{err}')
+
+    def _nested_skills(self,
+                       log: logger.logging.Logger
+                       ) -> None:
+        """plot the nested pie"""
+        plot = tools.PlotNestedPie()
+        plot.plot_nested_pie(self.stats.nested)
