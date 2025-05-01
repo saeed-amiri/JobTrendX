@@ -76,9 +76,8 @@ class Visualizer:
         """plot the job skills"""
         print(self.stats.skills_category)
         try:
-            plot = tools.PlotCountsSeries(counts=self.stats.skills_category,
-                                          threshold=0.03,
+            plot = tools.PlotCountsSeries(threshold=0.03,
                                           data_name='skills Category')
-            plot.plot()
+            plot.plot(counts=self.stats.skills_category)
         except Exception as err:
             log.info(f'\nNot posssible to plot `Skills Category`!\n{err}')
