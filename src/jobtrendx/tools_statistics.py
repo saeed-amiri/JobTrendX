@@ -224,7 +224,8 @@ def anlz_for_nested_pie(col: pd.Series,
             sorted(skills.items(), key=lambda item: item[1], reverse=True))
         for cat, skills in nested_counts.items()}
     # Sort keys
-    nested_counts = {
-        k: v for k, v in sorted(nested_counts.items(),
-                                key=lambda item: sum(item[1].values()))}
+    nested_counts = {k: v for k, v in
+                     sorted(nested_counts.items(),
+                            key=lambda item: sum(item[1].values()),
+                            reverse=True)}
     return nested_counts
