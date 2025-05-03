@@ -27,7 +27,7 @@ class PlotCountsSeries:
     """
     # pylint: disable=too-few-public-methods
     counts: pd.Series
-    data_name: float
+    data_name: str
     total: float
 
     def __init__(self,
@@ -249,7 +249,7 @@ class PlotCountsSeries:
         return handles, labels
 
     def _save_fig(self,
-                  fig
+                  fig: mpl.figure.Figure
                   ) -> None:
         """Save figure"""
         plt.tight_layout()
