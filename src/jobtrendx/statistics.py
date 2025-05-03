@@ -5,11 +5,12 @@ S.Amiri
 
 
 import pandas as pd
+from omegaconf import DictConfig
 
 from . import logger
 from . import tools_statistics as tools
 
-from omegaconf import DictConfig
+
 
 class StatisticsManager:
     """do the math"""
@@ -19,7 +20,7 @@ class StatisticsManager:
         'job_title_top',
         'skills_count',
         'skills_category',
-        'nested',
+        'skills_detail',
         'lang_count',
         'salary_min',
         'salary_max',
@@ -32,6 +33,8 @@ class StatisticsManager:
     lang_count: pd.Series
     salary_min: pd.Series
     salary_max: pd.Series
+    skills_category: pd.Series
+    skills_detail: pd.DataFrame
     log: logger.logging.Logger
 
     def __init__(self,
@@ -52,9 +55,8 @@ class StatisticsManager:
                                cfg: DictConfig
                                ) -> None:
         """Look at the data by the catogory each belong to"""
-        summary, self.skills_category = \
-            tools.anlz_by_category(self.df_info['skills'], cfg, 'skills')
-        self.nested = tools.anlz_for_nested_pie(self.df_info['skills'], cfg, 'skills')
+        self._analyze_skills_category(cfg)
+        self._analyze_skills_details(cfg)
 
     def _analyze_job_titles(self) -> None:
         """analyzing the job titles"""
@@ -62,24 +64,24 @@ class StatisticsManager:
         summary, self.job_title_top = \
             tools.anlz_string_cols(self.df_info['job_title'])
 
-        self.log.info(f'\n\nJob title summary:\n{summary}'
-                 f'\n\n{self.job_title_top}\n')
+        self.log.info(f'Job title summary:\n{summary}'
+                      f'{self.job_title_top}\n')
 
     def _analyze_skills(self) -> None:
         """analysis the skills"""
         summary: pd.DataFrame
         summary, self.skills_count = tools.anlz_list_cols(self.df_info.skills)
 
-        self.log.info(f'\n\nSkills summary:\n{summary}'
-                 f'\n\n{self.skills_count.head(8)}\n')
+        self.log.info(f'Skills summary:\n{summary}'
+                      f'{self.skills_count.head(8)}\n')
 
     def _analyze_languages(self) -> None:
         """analysis the skills"""
         summary: pd.DataFrame
         summary, self.lang_count = tools.anlz_list_cols(self.df_info.language)
 
-        self.log.info(f'\n\nLanguages summary:\n{summary}'
-                 f'\n\n{self.lang_count.head(8)}\n')
+        self.log.info(f'Languages summary:\n{summary}'
+                      f'{self.lang_count.head(8)}\n')
 
     def _analyze_salaries(self) -> None:
         """analyze salary columns"""
@@ -87,4 +89,21 @@ class StatisticsManager:
             summary, attr_value = \
                 tools.anlz_numerical_cols(self.df_info[col_name])
             setattr(self, col_name, attr_value)
-            self.log.info(f'\n\n{col_name.capitalize()} Summary:\n{summary}')
+            self.log.info(f'{col_name.capitalize()} Summary:\n{summary}')
+
+    def _analyze_skills_category(self,
+                                 cfg: DictConfig
+                                 ) -> None:
+        """analyze the skills by their categories"""
+        summary, self.skills_category = \
+            tools.anlz_by_category(self.df_info['skills'], cfg, 'skills')
+        self.log.info(f'Skills category summary:\n{summary}'
+                      f'{self.skills_category}\n')
+
+    def _analyze_skills_details(self,
+                                cfg: DictConfig
+                                ) -> None:
+        """analyze the details of the skills"""
+        self.skills_detail = \
+            tools.anlz_for_details(self.df_info['skills'], cfg, 'skills')
+        self.log.info('Analyzing each category of skills.\n')
