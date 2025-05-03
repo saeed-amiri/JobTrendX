@@ -52,12 +52,15 @@ class PlotCountsSeries:
 
     def plot_series(self,
                     counts: pd.Series,
-                    data_name: str = 'counts'
-                    ) -> None:
+                    data_name: str = 'counts',
+                    ax_return: bool = False
+                    ) -> None | tuple[mpl.figure.Figure, mpl.axes._axes.Axes]:
         """
         Plot a professional pie chart for counts, grouping
         minor categories into 'Other'.
         """
+        # pylint: disable=too-many-locals
+
         self.counts = counts
         self.data_name = data_name
         self.total = counts.sum()
@@ -88,7 +91,10 @@ class PlotCountsSeries:
         ax.set_title(f"Distribution of {self.data_name.capitalize()}",
                      fontsize=16,
                      weight='bold')
+        if ax_return:
+            return fig, ax
         self._save_fig(fig)
+        return None
 
     def _create_legend(self,
                        ax: mpl.axes._axes.Axes,
