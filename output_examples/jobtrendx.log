@@ -1,4 +1,4 @@
-2025-04-29 18:28:32
+2025-05-03 18:56:13
 /home/santiago/Documents/working_dirs/jobtrendx
 
 INFO: [email_processor in email_processor.py]
@@ -16,16 +16,12 @@ The DataFrame columns terms are unified
 
 
 INFO: [statistics in statistics.py]
-	- 
-
-Job title summary:
+	- Job title summary:
    Total  Valid  Missing  Unique col
-0    657    651        6          10
-
-job_title
+0    658    652        6          10job_title
 Data Scientist                      242
 Data Engineer                       167
-Data Analyst                        146
+Data Analyst                        147
 Business Intelligence                24
 Machine Learning Engineer            23
 Business Analyst                     19
@@ -37,13 +33,9 @@ Name: count, dtype: int64
 
 
 INFO: [statistics in statistics.py]
-	- 
-
-Skills summary:
+	- Skills summary:
    Total  Valid  Missing  Unique Items
-0    657    657        0           125
-
-Python                     423
+0    658    658        0           125Python                     423
 Computer Science           384
 SQL                        369
 IT                         270
@@ -55,28 +47,53 @@ Name: count, dtype: int64
 
 
 INFO: [statistics in statistics.py]
-	- 
-
-Languages summary:
+	- Languages summary:
    Total  Valid  Missing  Unique Items
-0    657    657        0             2
-
-German     593
-English    256
+0    658    658        0             2German     595
+English    255
 Name: count, dtype: int64
 
 
 INFO: [statistics in statistics.py]
-	- 
-
-Salary_min Summary:
+	- Salary_min Summary:
    Total  Valid  Missing          Mean      Std Dev      Min      Max
-0    657    561       96  55530.629696  8525.334463  32760.0  88400.0
+0    658    562       96  55508.610714  8533.628498  32760.0  88400.0
 
 INFO: [statistics in statistics.py]
-	- 
-
-Salary_max Summary:
+	- Salary_max Summary:
    Total  Valid  Missing          Mean       Std Dev      Min       Max
-0    657    561       96  77728.434705  10160.622327  48000.0  110500.0
+0    658    562       96  77711.776786  10159.180803  48000.0  110500.0
+
+INFO: [statistics in statistics.py]
+	- Skills category summary:
+   Total  Valid  Missing  Unique Categories
+0    658    658        0                 23Majors                             1324
+Programming Languages              1110
+Mathematics and Optimization        422
+Artificial Intelligence             385
+Machine Learning                    384
+Cloud Platforms                     336
+Data Engineering                    285
+Business Intelligence Platforms     266
+Version Control                     179
+Project Management                  137
+Databases                           133
+Statistical Tools                   103
+Soft Skills                          97
+Data Processing                      86
+Data Exchange                        74
+Big Data                             55
+Data Science Methods                 48
+Academic Degrees                     40
+Operating Systems                    32
+Ethics and Law                       16
+Python Visualization Libraries       15
+Natural Language                     10
+Dev Tools                             8
+Name: Count, dtype: int64
+
+
+INFO: [statistics in statistics.py]
+	- Analyzing each category of skills.
+
 
