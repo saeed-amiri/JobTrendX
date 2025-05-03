@@ -3,7 +3,6 @@ Plotting tools for visualizaing the data from statistics
 """
 
 from dataclasses import dataclass
-from itertools import cycle
 
 import numpy as np
 import pandas as pd
@@ -28,7 +27,7 @@ class PlotCountsSeries:
     """
     # pylint: disable=too-few-public-methods
     counts: pd.Series
-    data_name: float
+    data_name: str
     total: float
 
     def __init__(self,
@@ -53,12 +52,15 @@ class PlotCountsSeries:
 
     def plot_series(self,
                     counts: pd.Series,
-                    data_name: str = 'counts'
-                    ) -> None:
+                    data_name: str = 'counts',
+                    ax_return: bool = False
+                    ) -> None | tuple[mpl.figure.Figure, mpl.axes._axes.Axes]:
         """
         Plot a professional pie chart for counts, grouping
         minor categories into 'Other'.
         """
+        # pylint: disable=too-many-locals
+
         self.counts = counts
         self.data_name = data_name
         self.total = counts.sum()
@@ -89,7 +91,10 @@ class PlotCountsSeries:
         ax.set_title(f"Distribution of {self.data_name.capitalize()}",
                      fontsize=16,
                      weight='bold')
+        if ax_return:
+            return fig, ax
         self._save_fig(fig)
+        return None
 
     def _create_legend(self,
                        ax: mpl.axes._axes.Axes,
@@ -250,119 +255,9 @@ class PlotCountsSeries:
         return handles, labels
 
     def _save_fig(self,
-                  fig
+                  fig: mpl.figure.Figure
                   ) -> None:
         """Save figure"""
         plt.tight_layout()
         fout: str = self.data_name.replace(' ', '_')
         fig.savefig(fname=f'{fout}.jpeg')
-
-
-@dataclass
-class NestedPieData:
-    """Struct for nested Pie"""
-    inner_labels: list[str]
-    inner_sizes: list[int]
-    outer_labels: list[str]
-    outer_sizes: list[int]
-    outer_colors: list[str]
-    color_map: dict[str, tuple[float, float, float]]
-
-
-class PlotNestedPie:
-    """
-    Class to plot a nested (donut-style) pie chart for
-    hierarchical categorical data.
-    """
-    # pylint: disable=too-few-public-methods
-
-
-    def __init__(self) -> None:
-    # pylint: disable=no-member
-        self.default_palette = plt.cm.tab20.colors
-
-    def plot_nested_pie(self,
-                        nested_counts: dict[str, dict[str, int]],
-                        title: str = "Nested Skill Distribution"
-                        ) -> None:
-        """Plot nested pie chart"""
-        data = self._prepare_nested_data(nested_counts)
-
-        fig, ax = plt.subplots(figsize=(15, 15))
-        ax.axis('equal')
-
-        explode = [0.05] * len(data.outer_sizes)
-
-        # Outer Pie
-        wedges, texts = ax.pie(
-            data.outer_sizes,
-            radius=1.4,
-            labels=data.outer_labels,
-            labeldistance=1.05,
-            colors=data.outer_colors,
-            explode=explode,
-            wedgeprops={'width':0.3, 'edgecolor':'w'})
-
-        self._adjust_label_rotation(wedges, texts)
-
-        # Inner Pie
-        inner_colors = [data.color_map[cat] for cat in data.inner_labels]
-        ax.pie(data.inner_sizes,
-               radius=1.0,
-               labels=None,
-               labeldistance=0.7,
-               colors=inner_colors,
-               wedgeprops={'width':0.3, 'edgecolor':'w'})
-
-        # Center Text
-        total = sum(data.inner_sizes)
-        ax.text(
-            0, 0, f"{total}", va='center', ha='center', fontsize=18,
-            weight='bold')
-
-        plt.title(title, fontsize=16, weight='bold')
-        self._save_fig(fig=fig)
-
-    def _prepare_nested_data(self,
-                             nested_counts: dict[str, dict[str, int]]
-                             ) -> NestedPieData:
-        inner_labels = list(nested_counts.keys())
-        inner_sizes = [
-            sum(skills.values()) for skills in nested_counts.values()]
-        color_cycle = cycle(self.default_palette)
-        color_map = dict(zip(inner_labels, color_cycle))
-
-        outer_labels = []
-        outer_sizes = []
-        outer_colors = []
-
-        for category in inner_labels:
-            cat_color = color_map[category]
-            for skill, count in nested_counts[category].items():
-                outer_labels.append(skill)
-                outer_sizes.append(count)
-                outer_colors.append(cat_color)
-
-        return NestedPieData(
-            inner_labels=inner_labels,
-            inner_sizes=inner_sizes,
-            outer_labels=outer_labels,
-            outer_sizes=outer_sizes,
-            outer_colors=outer_colors,
-            color_map=color_map
-        )
-
-    def _adjust_label_rotation(self, wedges, texts) -> None:
-        for text, wedge in zip(texts, wedges):
-            angle = (wedge.theta2 + wedge.theta1) / 2
-            loc_x, _ = np.cos(np.deg2rad(angle)), np.sin(np.deg2rad(angle))
-            alignment = {-1: "right", 1: "left"}[int(np.sign(loc_x))]
-            text.set_horizontalalignment(alignment)
-            text.set_rotation(angle if angle <= 180 else angle - 360)
-
-    def _save_fig(self,
-                  fig
-                  ) -> None:
-        plt.tight_layout()
-        fig.savefig(fname='nested_pie.jpeg')
-        plt.close(fig=fig)

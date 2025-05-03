@@ -11,7 +11,8 @@ __all__ = [
     'anlz_string_cols',
     'anlz_list_cols',
     'anlz_numerical_cols',
-    'anlz_by_category'
+    'anlz_by_category',
+    'anlz_for_details'
 ]
 
 
@@ -191,10 +192,10 @@ def anlz_by_category(col: pd.Series,
     return summary, counts
 
 
-def anlz_for_nested_pie(col: pd.Series,
-                        cfg: DictConfig,
-                        subjest: str
-                        ) -> None:
+def anlz_for_details(col: pd.Series,
+                     cfg: DictConfig,
+                     subjest: str
+                     ) -> defaultdict[str, pd.Series]:
     """
     Get the data for the nested pie
     """
@@ -207,19 +208,20 @@ def anlz_for_nested_pie(col: pd.Series,
     flat_skills = list(chain.from_iterable(clean_col))
     # Map skills to categories
     skill_to_category = {}
-    for category, skills in taxonomy.items():
+    for cat, skills in taxonomy.items():
         for skill in skills:
-            skill_to_category[skill] = category
+            skill_to_category[skill] = cat
 
     # Count each skill, grouped under category
-    nested_counts = defaultdict(lambda: defaultdict(int))
+    nested_dict: defaultdict[str, defaultdict[str, int]] = \
+        defaultdict(lambda: defaultdict(int))
     for skill in flat_skills:
-        category = skill_to_category.get(skill)
+        category: str | None = skill_to_category.get(skill)
         if category:
-            nested_counts[category][skill] += 1
-    # Sort nested_counts keys after populating it
-    nested_counts = {
-        cat: dict(
-            sorted(skills.items(), key=lambda item: item[1], reverse=True))
-        for cat, skills in nested_counts.items()}
-    return nested_counts
+            nested_dict[category][skill] += 1
+
+    # Convert to defaultdict of Series
+    dict_series: defaultdict[str, pd.Series] = defaultdict(
+        pd.Series, {k: pd.Series(v) for k, v in nested_dict.items()}
+    )
+    return dict_series
