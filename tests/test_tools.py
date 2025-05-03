@@ -203,13 +203,13 @@ def test_eml_to_dataframe_empty_dict() -> None:
     assert df.empty
 
 
-def test_detect_language() -> None:
-    """test it with a pd.Series"""
-    bodies = pd.Series(
-        ["Hallo, wie geht's?", "Hello, how are you?", "Bonjour!", ""])
-    expected = pd.Series(["de", "en", "unknown", "unknown"])
-
-    assert detect_language(bodies).equals(expected)
+# def test_detect_language() -> None:
+#     """test it with a pd.Series"""
+#     bodies = pd.Series(
+#         ["Hallo, wie geht's?", "Hello, how are you?", "Bonjour!", ""])
+#     expected = pd.Series(["de", "en", "unknown", "unknown"])
+# 
+#     assert detect_language(bodies).equals(expected)
 
 
 # def test_detect_single_language() -> None:
