@@ -88,5 +88,3 @@ class Visualizer:
                        log: logger.logging.Logger
                        ) -> None:
         """plot the nested pie"""
-        plot = tools.PlotNestedPie()
-        plot.plot_nested_pie(self.stats.nested)
