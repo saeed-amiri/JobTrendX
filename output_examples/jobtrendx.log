@@ -1,4 +1,4 @@
-2025-05-03 18:56:13
+2025-05-04 18:21:43
 /home/santiago/Documents/working_dirs/jobtrendx
 
 INFO: [email_processor in email_processor.py]
@@ -18,10 +18,10 @@ The DataFrame columns terms are unified
 INFO: [statistics in statistics.py]
 	- Job title summary:
    Total  Valid  Missing  Unique col
-0    658    652        6          10job_title
-Data Scientist                      242
+0    656    650        6          10job_title
+Data Scientist                      241
 Data Engineer                       167
-Data Analyst                        147
+Data Analyst                        146
 Business Intelligence                24
 Machine Learning Engineer            23
 Business Analyst                     19
@@ -35,43 +35,43 @@ Name: count, dtype: int64
 INFO: [statistics in statistics.py]
 	- Skills summary:
    Total  Valid  Missing  Unique Items
-0    658    658        0           125Python                     423
-Computer Science           384
+0    656    656        0           121Python                     422
+Computer Science           383
 SQL                        369
-IT                         270
-Mathematics                262
+IT                         269
+Mathematics                261
 Machine Learning           220
-Artificial Intelligence    201
-Optimization               194
+Artificial Intelligence    200
+Optimization               193
 Name: count, dtype: int64
 
 
 INFO: [statistics in statistics.py]
 	- Languages summary:
    Total  Valid  Missing  Unique Items
-0    658    658        0             2German     595
+0    656    656        0             2German     593
 English    255
 Name: count, dtype: int64
 
 
 INFO: [statistics in statistics.py]
 	- Salary_min Summary:
-   Total  Valid  Missing          Mean      Std Dev      Min      Max
-0    658    562       96  55508.610714  8533.628498  32760.0  88400.0
+   Total  Valid  Missing          Mean    Std Dev      Min      Max
+0    656    560       96  55538.749104  8530.8204  32760.0  88400.0
 
 INFO: [statistics in statistics.py]
 	- Salary_max Summary:
    Total  Valid  Missing          Mean       Std Dev      Min       Max
-0    658    562       96  77711.776786  10159.180803  48000.0  110500.0
+0    656    560       96  77742.284946  10164.456108  48000.0  110500.0
 
 INFO: [statistics in statistics.py]
 	- Skills category summary:
    Total  Valid  Missing  Unique Categories
-0    658    658        0                 23Majors                             1324
-Programming Languages              1110
-Mathematics and Optimization        422
-Artificial Intelligence             385
-Machine Learning                    384
+0    656    656        0                 23Majors                             1318
+Languages                          1115
+Optimization                        418
+Machine Learning                    382
+AI                                  378
 Cloud Platforms                     336
 Data Engineering                    285
 Business Intelligence Platforms     266
@@ -79,12 +79,12 @@ Version Control                     179
 Project Management                  137
 Databases                           133
 Statistical Tools                   103
-Soft Skills                          97
+Soft Skills                          96
 Data Processing                      86
 Data Exchange                        74
 Big Data                             55
 Data Science Methods                 48
-Academic Degrees                     40
+Academic Degrees                     39
 Operating Systems                    32
 Ethics and Law                       16
 Python Visualization Libraries       15
