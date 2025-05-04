@@ -325,6 +325,7 @@ class GridPlot:
             # Adjust row_nr and col_nr to fit the data
             total_items = len(data)
             self.row_nr = int(np.ceil(total_items / self.col_nr))
+            log.info(f'\nThe number of row changed to {self.row_nr}')
             return data
 
     def mk_grids(self,
