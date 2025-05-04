@@ -11,6 +11,7 @@ import seaborn as sns
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+import matplotlib.gridspec as gridspec
 
 from . import logger
 
@@ -315,6 +316,23 @@ class GridPlot:
             total_items = len(data)
             self.row_nr = int(np.ceil(total_items / self.col_nr))
             return data
+
+    def mk_grids(self,
+                 data: defaultdict[str, pd.Series]
+                ) -> None:
+        """make the grids and plots"""
+        plt.close('all')
+        fig = plt.figure(figsize=(20, 20))
+        gs = gridspec.GridSpec(self.row_nr, self.col_nr, figure=fig)
+        data_items = list(data.items())
+        for idx, (key, series) in enumerate(data_items[:-1]):
+            row, col = divmod(idx, self.col_nr)
+            if row >= self.row_nr:
+                break
+            ax = fig.add_subplot(gs[row, col])
+            plotter = PlotCountsSeries(threshold=0.02, angle_threshold=15)
+            plotter.plot_series(series, data_name=key, ax=ax, ax_return=True)
+        save_fig(fig, fname='detail')
 
     @staticmethod
     def _get_major_data(data: defaultdict[str, pd.Series],
