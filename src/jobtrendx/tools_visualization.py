@@ -75,7 +75,11 @@ class PlotCountsSeries:
         explode = [0.05] * length
         colors = self._set_colors(length=length)
 
-        fig, ax = plt.subplots(figsize=(10, 10))
+        if ax is None:
+            fig, ax = plt.subplots(figsize=(10, 10))
+        else:
+            fig = ax.figure
+
         wedges = self._create_donut_chart_wedges(grouped, explode, colors, ax)
         xy_wedge, xy_shifted = self._calculate_wedge_centers(wedges)
 
@@ -93,12 +97,14 @@ class PlotCountsSeries:
         handles, labels = self._handle_legend(grouped, minor, colors)
 
         self._create_legend(ax, handles, labels)
-        ax.set_title(f"Distribution of {self.data_name.capitalize()}",
+        ax.set_title(self.data_name.capitalize(),
+                     loc='left',
                      fontsize=16,
                      weight='bold')
         if ax_return:
             return fig, ax
-        self._save_fig(fig)
+        fout: str = self.data_name.replace(' ', '_')
+        save_fig(fig, fout)
         return None
 
     def _create_legend(self,
@@ -259,13 +265,13 @@ class PlotCountsSeries:
                 labels.append(item)
         return handles, labels
 
-    def _save_fig(self,
-                  fig: mpl.figure.Figure
-                  ) -> None:
-        """Save figure"""
-        plt.tight_layout()
-        fout: str = self.data_name.replace(' ', '_')
-        fig.savefig(fname=f'{fout}.jpeg')
+
+def save_fig(fig: mpl.figure.Figure,
+             fname: str
+             ) -> None:
+    """Save figure"""
+    plt.tight_layout()
+    fig.savefig(fname=f'{fname}.jpeg')
 
 
 class GridPlot:
