@@ -4,6 +4,8 @@ plot and diagrams for the analysis of the job ads
 S.Amiri
 """
 
+from collections import defaultdict
+import pandas as pd
 
 from . import logger
 from . import statistics
@@ -33,7 +35,7 @@ class Visualizer:
         self._job_titles(log)
         self._skills(log)
         self._skills_category(log)
-        self._nested_skills(log)
+        self._skills_detail(log)
 
     def _job_titles(self,
                     log: logger.logging.Logger
@@ -84,7 +86,15 @@ class Visualizer:
         except Exception as err:
             log.info(f'\nNot posssible to plot `Skills Category`!\n{err}')
 
-    def _nested_skills(self,
+    def _skills_detail(self,
                        log: logger.logging.Logger
                        ) -> None:
         """plot the nested pie"""
+        try:
+            girds_plot = tools.GridPlot(row_nr=4, col_nr=2)
+            normalized_data: defaultdict[str, pd.Series] = \
+                girds_plot.normalize_data(self.stats.skills_detail, log=log)
+
+            girds_plot.mk_grids(normalized_data)
+        except Exception as err:
+                log.info(f'\nNot posssible to plot `Skills Detail`!\n{err}')

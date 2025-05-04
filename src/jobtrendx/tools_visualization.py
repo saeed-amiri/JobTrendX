@@ -2,6 +2,7 @@
 Plotting tools for visualizaing the data from statistics
 """
 
+from collections import defaultdict
 from dataclasses import dataclass
 
 import numpy as np
@@ -10,6 +11,9 @@ import seaborn as sns
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+import matplotlib.gridspec as gridspec
+
+from . import logger
 
 
 @dataclass
@@ -53,7 +57,8 @@ class PlotCountsSeries:
     def plot_series(self,
                     counts: pd.Series,
                     data_name: str = 'counts',
-                    ax_return: bool = False
+                    ax_return: bool = False,
+                    ax: mpl.axes._axes.Axes | None = None
                     ) -> None | tuple[mpl.figure.Figure, mpl.axes._axes.Axes]:
         """
         Plot a professional pie chart for counts, grouping
@@ -70,7 +75,11 @@ class PlotCountsSeries:
         explode = [0.05] * length
         colors = self._set_colors(length=length)
 
-        fig, ax = plt.subplots(figsize=(10, 10))
+        if ax is None:
+            fig, ax = plt.subplots(figsize=(10, 10))
+        else:
+            fig = ax.figure
+
         wedges = self._create_donut_chart_wedges(grouped, explode, colors, ax)
         xy_wedge, xy_shifted = self._calculate_wedge_centers(wedges)
 
@@ -88,12 +97,14 @@ class PlotCountsSeries:
         handles, labels = self._handle_legend(grouped, minor, colors)
 
         self._create_legend(ax, handles, labels)
-        ax.set_title(f"Distribution of {self.data_name.capitalize()}",
+        ax.set_title(self.data_name.capitalize(),
+                     loc='left',
                      fontsize=16,
                      weight='bold')
         if ax_return:
             return fig, ax
-        self._save_fig(fig)
+        fout: str = self.data_name.replace(' ', '_')
+        save_fig(fig, fout)
         return None
 
     def _create_legend(self,
@@ -219,8 +230,11 @@ class PlotCountsSeries:
 
         major = self.counts[~mask].copy()
         minor = self.counts[mask]
-
         grouped = major.copy()
+
+        if len(minor) < 2:
+            return self.counts, pd.Series(dtype=self.counts.dtype)
+
         if not minor.empty:
             grouped[self.other_label] = minor.sum()
         return grouped, minor
@@ -254,10 +268,100 @@ class PlotCountsSeries:
                 labels.append(item)
         return handles, labels
 
-    def _save_fig(self,
-                  fig: mpl.figure.Figure
-                  ) -> None:
-        """Save figure"""
-        plt.tight_layout()
-        fout: str = self.data_name.replace(' ', '_')
-        fig.savefig(fname=f'{fout}.jpeg')
+
+def save_fig(fig: mpl.figure.Figure,
+             fname: str
+             ) -> None:
+    """Save figure"""
+    plt.tight_layout()
+    fig.savefig(fname=f'{fname}.jpeg')
+
+
+class GridPlot:
+    """Plot skills in grids"""
+    row_nr: int
+    col_nr: int
+
+    def __init__(self,
+                 row_nr: int = 3,
+                 col_nr: int = 2
+                 ) -> None:
+        self.row_nr = row_nr
+        self.col_nr = col_nr
+
+    def normalize_data(self,
+                       data: defaultdict[str, pd.Series],
+                       log: logger.logging.Logger
+                       ) -> defaultdict[str, pd.Series]:
+        """
+        Normalize the data based on the number of the
+        requested grid size.
+        Total grid is nr_grid = row_nr × col_nr.
+        If the number of the keys in the skills is more than
+        nr_grid, the first nr_grid - 1 keys with the most
+        number of entries are kept, and the rest are combined
+        into one key named 'Other'.
+
+        Steps:
+        1. Check if the number of grids is less than the
+        number of keys.
+        If so:
+              2. Order the data.
+              3. Keep the first nr_grid - 1 keys.
+              4. Combine the rest into one key as 'Other'.
+              5. Return the updated data.
+        Else:
+           1. Update the nr_col and nr_row to the closest
+              values to match the length of the data.
+           2. Return the input data without any change.
+        """
+        nr_grid = self.row_nr * self.col_nr
+
+        if len(data) > nr_grid:
+            major_data = self._get_major_data(data, nr_grid)
+            return major_data
+
+        else:
+            # Adjust row_nr and col_nr to fit the data
+            total_items = len(data)
+            self.row_nr = int(np.ceil(total_items / self.col_nr))
+            log.info(f'\nThe number of row changed to {self.row_nr}')
+            return data
+
+    def mk_grids(self,
+                 data: defaultdict[str, pd.Series]
+                ) -> None:
+        """make the grids and plots"""
+        plt.close('all')
+        x_size: float = self.col_nr * 10
+        y_size: float = self.row_nr * 6
+        fig = plt.figure(figsize=(x_size, y_size))
+        gs = gridspec.GridSpec(self.row_nr, self.col_nr, figure=fig)
+        data_items = list(data.items())
+        for idx, (key, series) in enumerate(data_items[:-1]):
+            row, col = divmod(idx, self.col_nr)
+            if row >= self.row_nr:
+                break
+            ax = fig.add_subplot(gs[row, col])
+            plotter = PlotCountsSeries(threshold=0.02, angle_threshold=15)
+            plotter.plot_series(series, data_name=key, ax=ax, ax_return=True)
+        save_fig(fig, fname='detail')
+
+    @staticmethod
+    def _get_major_data(data: defaultdict[str, pd.Series],
+                        nr_grid: int
+                        ) -> defaultdict[str, pd.Series]:
+        """get the data based on the nr of grids"""
+        # Order the data by the size of the Series
+        sorted_data = sorted(
+                data.items(), key=lambda x: x[1].sum(), reverse=True)
+        # Keep the first nr_grid - 1 keys
+        major_data = defaultdict(pd.Series, dict(sorted_data[:nr_grid - 1]))
+        # Combine the rest into 'Other'
+        other_series = pd.concat(
+            [item[1] for item in sorted_data[nr_grid - 1:]])
+        other_series = other_series.groupby(
+            other_series.index).sum().sort_values(ascending=False)
+
+        major_data['Other'] = other_series.groupby(other_series.index).sum()
+        return major_data

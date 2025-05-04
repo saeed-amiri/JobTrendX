@@ -219,7 +219,10 @@ def anlz_for_details(col: pd.Series,
         category: str | None = skill_to_category.get(skill)
         if category:
             nested_dict[category][skill] += 1
-
+    # Sort each category's skills by count in descending order
+    for category, skills in nested_dict.items():
+        nested_dict[category] = \
+            dict(sorted(skills.items(), key=lambda x: x[1], reverse=True))
     # Convert to defaultdict of Series
     dict_series: defaultdict[str, pd.Series] = defaultdict(
         pd.Series, {k: pd.Series(v) for k, v in nested_dict.items()}
