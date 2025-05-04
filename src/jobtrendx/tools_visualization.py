@@ -232,7 +232,7 @@ class PlotCountsSeries:
         minor = self.counts[mask]
 
         grouped = major.copy()
-        if not minor.empty:
+        if len(minor) >= 2:
             grouped[self.other_label] = minor.sum()
         return grouped, minor
 
