@@ -90,7 +90,11 @@ class Visualizer:
                        log: logger.logging.Logger
                        ) -> None:
         """plot the nested pie"""
+        try:
+            girds_plot = tools.GridPlot(row_nr=4, col_nr=2)
+            normalized_data: defaultdict[str, pd.Series] = \
+                girds_plot.normalize_data(self.stats.skills_detail, log=log)
 
-        girds_plot = tools.GridPlot(row_nr=3, col_nr=2)
-        normalized_data: defaultdict[str, pd.Series] = \
-            girds_plot.normalize_data(self.stats.skills_detail, log=log)
+            girds_plot.mk_grids(normalized_data)
+        except Exception as err:
+                log.info(f'\nNot posssible to plot `Skills Detail`!\n{err}')

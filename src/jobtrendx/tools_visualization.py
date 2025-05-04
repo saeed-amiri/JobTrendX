@@ -332,7 +332,9 @@ class GridPlot:
                 ) -> None:
         """make the grids and plots"""
         plt.close('all')
-        fig = plt.figure(figsize=(20, 20))
+        x_size: float = self.col_nr * 10
+        y_size: float = self.row_nr * 6
+        fig = plt.figure(figsize=(x_size, y_size))
         gs = gridspec.GridSpec(self.row_nr, self.col_nr, figure=fig)
         data_items = list(data.items())
         for idx, (key, series) in enumerate(data_items[:-1]):
