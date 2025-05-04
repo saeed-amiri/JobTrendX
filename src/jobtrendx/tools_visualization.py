@@ -2,6 +2,7 @@
 Plotting tools for visualizaing the data from statistics
 """
 
+from collections import defaultdict
 from dataclasses import dataclass
 
 import numpy as np
@@ -10,6 +11,8 @@ import seaborn as sns
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+
+from . import logger
 
 
 @dataclass
@@ -261,3 +264,70 @@ class PlotCountsSeries:
         plt.tight_layout()
         fout: str = self.data_name.replace(' ', '_')
         fig.savefig(fname=f'{fout}.jpeg')
+
+
+class GridPlot:
+    """Plot skills in grids"""
+    row_nr: int
+    col_nr: int
+
+    def __init__(self,
+                 row_nr: int = 3,
+                 col_nr: int = 2
+                 ) -> None:
+        self.row_nr = row_nr
+        self.col_nr = col_nr
+
+    def normalize_data(self,
+                       data: defaultdict[str, pd.Series],
+                       log: logger.logging.Logger
+                       ) -> defaultdict[str, pd.Series]:
+        """
+        Normalize the data based on the number of the
+        requested grid size.
+        Total grid is nr_grid = row_nr × col_nr.
+        If the number of the keys in the skills is more than
+        nr_grid, the first nr_grid - 1 keys with the most
+        number of entries are kept, and the rest are combined
+        into one key named 'Other'.
+
+        Steps:
+        1. Check if the number of grids is less than the
+        number of keys.
+        If so:
+              2. Order the data.
+              3. Keep the first nr_grid - 1 keys.
+              4. Combine the rest into one key as 'Other'.
+              5. Return the updated data.
+        Else:
+           1. Update the nr_col and nr_row to the closest
+              values to match the length of the data.
+           2. Return the input data without any change.
+        """
+        nr_grid = self.row_nr * self.col_nr
+
+        if len(data) > nr_grid:
+            major_data = self._get_major_data(data, nr_grid)
+            return major_data
+
+        else:
+            # Adjust row_nr and col_nr to fit the data
+            total_items = len(data)
+            self.row_nr = int(np.ceil(total_items / self.col_nr))
+            return data
+
+    @staticmethod
+    def _get_major_data(data: defaultdict[str, pd.Series],
+                        nr_grid: int
+                        ) -> defaultdict[str, pd.Series]:
+        """get the data based on the nr of grids"""
+        # Order the data by the size of the Series
+        sorted_data = sorted(
+                data.items(), key=lambda x: x[1].sum(), reverse=True)
+        # Keep the first nr_grid - 1 keys
+        major_data = defaultdict(pd.Series, dict(sorted_data[:nr_grid - 1]))
+        # Combine the rest into 'Other'
+        other_series = pd.concat(
+            [item[1] for item in sorted_data[nr_grid - 1:]])
+        major_data['Other'] = other_series.groupby(other_series.index).sum()
+        return major_data
