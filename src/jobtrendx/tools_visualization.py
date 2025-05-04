@@ -360,5 +360,8 @@ class GridPlot:
         # Combine the rest into 'Other'
         other_series = pd.concat(
             [item[1] for item in sorted_data[nr_grid - 1:]])
+        other_series = other_series.groupby(
+            other_series.index).sum().sort_values(ascending=False)
+
         major_data['Other'] = other_series.groupby(other_series.index).sum()
         return major_data
