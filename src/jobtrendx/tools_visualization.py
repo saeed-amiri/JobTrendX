@@ -57,7 +57,8 @@ class PlotCountsSeries:
     def plot_series(self,
                     counts: pd.Series,
                     data_name: str = 'counts',
-                    ax_return: bool = False
+                    ax_return: bool = False,
+                    ax: mpl.axes._axes.Axes | None = None
                     ) -> None | tuple[mpl.figure.Figure, mpl.axes._axes.Axes]:
         """
         Plot a professional pie chart for counts, grouping
