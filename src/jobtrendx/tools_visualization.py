@@ -230,9 +230,12 @@ class PlotCountsSeries:
 
         major = self.counts[~mask].copy()
         minor = self.counts[mask]
-
         grouped = major.copy()
-        if len(minor) >= 2:
+
+        if len(minor) < 2:
+            return self.counts, pd.Series(dtype=self.counts.dtype)
+
+        if not minor.empty:
             grouped[self.other_label] = minor.sum()
         return grouped, minor
 
