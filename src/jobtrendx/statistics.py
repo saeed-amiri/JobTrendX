@@ -11,9 +11,9 @@ from . import logger
 from . import tools_statistics as tools
 
 
-
 class StatisticsManager:
     """do the math"""
+    # pylint: disable=too-many-instance-attributes
 
     __slots__: list[str] = [
         'df_info',
@@ -21,6 +21,7 @@ class StatisticsManager:
         'skills_count',
         'skills_category',
         'skills_detail',
+        'skills_per_job',
         'lang_count',
         'salary_min',
         'salary_max',
@@ -35,6 +36,7 @@ class StatisticsManager:
     salary_max: pd.Series
     skills_category: pd.Series
     skills_detail: pd.DataFrame
+    skills_per_job: pd.Series
     log: logger.logging.Logger
 
     def __init__(self,
@@ -57,6 +59,7 @@ class StatisticsManager:
         """Look at the data by the catogory each belong to"""
         self._analyze_skills_category(cfg)
         self._analyze_skills_details(cfg)
+        self._analyze_job_need_skills()
 
     def _analyze_job_titles(self) -> None:
         """analyzing the job titles"""
@@ -107,3 +110,8 @@ class StatisticsManager:
         self.skills_detail = \
             tools.anlz_for_details(self.df_info['skills'], cfg, 'skills')
         self.log.info('Analyzing each category of skills.\n')
+
+    def _analyze_job_need_skills(self) -> None:
+        """analyze the skills needed based on the job title"""
+        self.skills_per_job = tools.anlz_for_job_skils(
+            df=self.df_info, group_col='job_title', combine_col='skills')
