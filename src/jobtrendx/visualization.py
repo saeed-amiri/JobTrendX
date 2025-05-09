@@ -36,6 +36,7 @@ class Visualizer:
         self._skills(log)
         self._skills_category(log)
         self._skills_detail(log)
+        self._skills_job_needed(log)
 
     def _job_titles(self,
                     log: logger.logging.Logger
@@ -89,7 +90,7 @@ class Visualizer:
     def _skills_detail(self,
                        log: logger.logging.Logger
                        ) -> None:
-        """plot the nested pie"""
+        """plot the details of each skill"""
         try:
             girds_plot = tools.GridPlot(row_nr=4, col_nr=2)
             normalized_data: defaultdict[str, pd.Series] = \
@@ -98,3 +99,16 @@ class Visualizer:
             girds_plot.mk_grids(normalized_data)
         except Exception as err:
                 log.info(f'\nNot posssible to plot `Skills Detail`!\n{err}')
+
+    def _skills_job_needed(self,
+                           log: logger.logging.Logger
+                           ) -> None:
+        """plot the skills based on the job title"""
+        try:
+            girds_plot = tools.GridPlot(row_nr=4, col_nr=2)
+            normalized_data: defaultdict[str, pd.Series] = \
+                girds_plot.normalize_data(self.stats.skills_per_job, log=log)
+
+            girds_plot.mk_grids(normalized_data, 'skill_per_job')
+        except Exception as err:
+                log.info(f'\nNot posssible to plot `Skills per job`!\n{err}')
