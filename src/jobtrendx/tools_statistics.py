@@ -12,7 +12,8 @@ __all__ = [
     'anlz_list_cols',
     'anlz_numerical_cols',
     'anlz_by_category',
-    'anlz_for_details'
+    'anlz_for_details',
+    'anlz_for_job_skils'
 ]
 
 
@@ -228,3 +229,65 @@ def anlz_for_details(col: pd.Series,
         pd.Series, {k: pd.Series(v) for k, v in nested_dict.items()}
     )
     return dict_series
+
+
+def anlz_for_job_skils(df: pd.DataFrame,
+                       group_col: str,
+                       combine_col: str
+                       ) -> defaultdict[str, pd.Series]:
+    """
+    Group the DataFrame by the group_col and combine the
+    values in the combine_col into a list.
+
+    Then analyze for each job, which is now in the rows,
+    the statistics of the skills, i.e., how many times a skill
+    is repeated in the updated combined skill list.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame.
+        group_col (str): The column to group by.
+        combine_col (str): The column whose values will be
+        combined and analyzed.
+
+    Returns:
+        pd.DataFrame: A DataFrame with grouped and analyzed
+        skill statistics for each job.
+    """
+    grouped: pd.DataFrame = _group_with_combine(df, group_col, combine_col)
+
+    # Analyze the combined skills for each job
+    skill_analysis: defaultdict[str, pd.Series] = defaultdict(pd.Series)
+    for _, row in grouped.iterrows():
+        job_title = row[group_col]
+        if job_title == 'nan':
+            continue
+        skill_counts = pd.Series(row[combine_col]).value_counts()
+        skill_analysis[job_title] = skill_counts
+
+    return skill_analysis
+
+
+def _group_with_combine(df: pd.DataFrame,
+                        group_col: str,
+                        combine_col: str
+                        ) -> pd.DataFrame:
+    """Group the DataFrame by the group_col and combine the
+    values in the combine_col into a list.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame.
+        group_col (str): The column to group by.
+        combine_col (str): The column whose values will be
+        combined.
+
+    Returns:
+        pd.DataFrame: A DataFrame with grouped and combined
+        values.
+    """
+    grouped = df.groupby(group_col)[combine_col].apply(
+        lambda x: list(x.dropna())
+    ).reset_index()
+    grouped[combine_col] = grouped[combine_col].apply(
+        lambda x: list(chain.from_iterable(x))
+    )
+    return grouped
