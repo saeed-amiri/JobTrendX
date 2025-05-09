@@ -197,7 +197,7 @@ def anlz_for_details(col: pd.Series,
                      subjest: str
                      ) -> defaultdict[str, pd.Series]:
     """
-    Get the data for the nested pie
+    Get the data for separate the details of skills
     """
     # Load taxonomy
     taxonomy = sub.fetch_from_yaml(cfg.taxonomy_path,
