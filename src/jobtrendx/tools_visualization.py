@@ -330,6 +330,8 @@ class GridPlot:
 
     def mk_grids(self,
                  data: defaultdict[str, pd.Series],
+                 threshold: float = 0.02,
+                 angle_threshold: float = 15,
                  fout: str = 'detail'
                 ) -> None:
         """make the grids and plots"""
@@ -344,7 +346,8 @@ class GridPlot:
             if row >= self.row_nr:
                 break
             ax = fig.add_subplot(gs[row, col])
-            plotter = PlotCountsSeries(threshold=0.02, angle_threshold=15)
+            plotter = PlotCountsSeries(threshold=threshold,
+                                       angle_threshold=angle_threshold)
             plotter.plot_series(series, data_name=key, ax=ax, ax_return=True)
         save_fig(fig, fname=fout)
 

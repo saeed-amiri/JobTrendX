@@ -109,6 +109,9 @@ class Visualizer:
             normalized_data: defaultdict[str, pd.Series] = \
                 girds_plot.normalize_data(self.stats.skills_per_job, log=log)
 
-            girds_plot.mk_grids(normalized_data, 'skill_per_job')
+            girds_plot.mk_grids(normalized_data,
+                                threshold=0.035,
+                                angle_threshold=15,
+                                fout='skill_per_job')
         except Exception as err:
                 log.info(f'\nNot posssible to plot `Skills per job`!\n{err}')
