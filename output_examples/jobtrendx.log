@@ -1,8 +1,8 @@
-2025-05-04 18:21:43
+2025-06-29 18:40:18
 /home/santiago/Documents/working_dirs/jobtrendx
 
 INFO: [email_processor in email_processor.py]
-	- EmailProcessor: Processed 953 emails successfully.
+	- EmailProcessor: Processed 1278 emails successfully.
 
 INFO: [analysis in analysis.py]
 	- 
@@ -18,78 +18,78 @@ The DataFrame columns terms are unified
 INFO: [statistics in statistics.py]
 	- Job title summary:
    Total  Valid  Missing  Unique col
-0    656    650        6          10job_title
-Data Scientist                      241
-Data Engineer                       167
-Data Analyst                        146
-Business Intelligence                24
-Machine Learning Engineer            23
-Business Analyst                     19
-Data Architect                       17
+0    893    865       28          10job_title
+Data Scientist                      299
+Data Engineer                       245
+Data Analyst                        195
+Business Intelligence                36
+Machine Learning Engineer            28
+Data Architect                       23
+Business Analyst                     21
+Artificial Intelligence Engineer     10
 Scientist                             6
-Artificial Intelligence Engineer      6
-Software Developer                    1
+Software Developer                    2
 Name: count, dtype: int64
 
 
 INFO: [statistics in statistics.py]
 	- Skills summary:
    Total  Valid  Missing  Unique Items
-0    656    656        0           121Python                     422
-Computer Science           383
-SQL                        369
-IT                         269
-Mathematics                261
-Machine Learning           220
-Artificial Intelligence    200
-Optimization               193
+0    893    893        0           124Python                     589
+Computer Science           523
+SQL                        523
+IT                         380
+Mathematics                350
+Artificial Intelligence    279
+Machine Learning           274
+Optimization               269
 Name: count, dtype: int64
 
 
 INFO: [statistics in statistics.py]
 	- Languages summary:
    Total  Valid  Missing  Unique Items
-0    656    656        0             2German     593
-English    255
+0    893    893        0             2German     815
+English    344
 Name: count, dtype: int64
 
 
 INFO: [statistics in statistics.py]
 	- Salary_min Summary:
-   Total  Valid  Missing          Mean    Std Dev      Min      Max
-0    656    560       96  55538.749104  8530.8204  32760.0  88400.0
+   Total  Valid  Missing          Mean      Std Dev      Min      Max
+0    893    770      123  55197.541667  8486.487078  32760.0  97000.0
 
 INFO: [statistics in statistics.py]
 	- Salary_max Summary:
    Total  Valid  Missing          Mean       Std Dev      Min       Max
-0    656    560       96  77742.284946  10164.456108  48000.0  110500.0
+0    893    770      123  77176.777344  10379.531596  48000.0  123000.0
 
 INFO: [statistics in statistics.py]
 	- Skills category summary:
    Total  Valid  Missing  Unique Categories
-0    656    656        0                 23Majors                             1318
-Languages                          1115
-Optimization                        418
-Machine Learning                    382
-AI                                  378
-Cloud Platforms                     336
-Data Engineering                    285
-Business Intelligence Platforms     266
-Version Control                     179
-Project Management                  137
-Databases                           133
-Statistical Tools                   103
-Soft Skills                          96
-Data Processing                      86
-Data Exchange                        74
-Big Data                             55
-Data Science Methods                 48
-Academic Degrees                     39
-Operating Systems                    32
-Ethics and Law                       16
-Python Visualization Libraries       15
+0    893    893        0                 23Majors                             1796
+Languages                          1541
+Optimization                        571
+AI                                  506
+Cloud Platforms                     473
+Machine Learning                    456
+Business Intelligence Platforms     384
+Data Engineering                    375
+Version Control                     227
+Databases                           192
+Project Management                  179
+Soft Skills                         135
+Statistical Tools                   130
+Data Processing                     107
+Data Exchange                        96
+Big Data                             87
+Data Science Methods                 59
+Academic Degrees                     53
+Operating Systems                    37
+Ethics and Law                       24
+Python Visualization Libraries       20
+Dev Tools                            10
 Natural Language                     10
-Dev Tools                             8
 Name: Count, dtype: int64
 
 
